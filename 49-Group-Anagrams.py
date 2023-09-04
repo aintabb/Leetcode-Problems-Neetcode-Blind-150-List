@@ -27,8 +27,9 @@ strs[i] consists of lowercase English letters.
 
 '''
 
+# Time Complexity:  O(N)
+# Space Complexity: O(N)
 from collections import defaultdict
-
 
 class GroupAnagrams:
   def __init__(self) -> None:
@@ -66,7 +67,6 @@ class GroupAnagrams:
       result[tuple(count)].append(s)
 
     return list(result.values())
-
 
 
 group_anagrmas = GroupAnagrams()

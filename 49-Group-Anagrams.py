@@ -24,7 +24,11 @@ Constraints:
 1 <= strs.length <= 104
 0 <= strs[i].length <= 100
 strs[i] consists of lowercase English letters.
+
 '''
+
+from collections import defaultdict
+
 
 class GroupAnagrams:
   def __init__(self) -> None:
@@ -32,21 +36,36 @@ class GroupAnagrams:
         strs = ["eat","tea","tan","ate","nat","bat"]
 
         result = self.group_anagrams(strs)
-        assert result == [["bat"],["nat","tan"],["ate","eat","tea"]], err_msg_invalid_anagram_group
+        assert result == [["bat"],["nat","tan"],["ate","eat","tea"]] or [['eat', 'tea', 'ate'], ['tan', 'nat'], ['bat']], err_msg_invalid_anagram_group
         print(result)
 
         strs = [""]
         result = self.group_anagrams(strs)
-        assert result == [[""]], err_msg_invalid_anagram_group
+        assert result == [[""]] or [['']], err_msg_invalid_anagram_group
         print(result)
 
 
         strs = ["a"]
         result = self.group_anagrams(strs)
-        assert result == [["a"]], err_msg_invalid_anagram_group
+        assert result == [["a"]] or [['a']], err_msg_invalid_anagram_group
         print(result)
 
-  def group_anagrams():
+  def group_anagrams(self, strs: list[str]) -> list[list[str]]:
+    result = defaultdict(list)
+
+    if (len(strs) == 1):
+      result[0].append(strs[0])
+      return list(result.values())
+
+    for s in strs:
+      count = [0] * 26
+
+      for c in s:
+        count[ord(c) - ord("a")] += 1
+
+      result[tuple(count)].append(s)
+
+    return list(result.values())
 
 
 

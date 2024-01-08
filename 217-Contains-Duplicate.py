@@ -1,15 +1,17 @@
 '''
   Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.
 
-  Example 1:
+  # Example 1:
 
   Input: nums = [1,2,3,1]
   Output: true
-  Example 2:
+
+  # Example 2:
 
   Input: nums = [1,2,3,4]
   Output: false
-  Example 3:
+
+  # Example 3:
 
   Input: nums = [1,1,1,3,3,4,3,2,4,2]
   Output: true
@@ -25,36 +27,36 @@ class ContainsDuplicate:
     err_msg_duplicates = "There should be duplicates. Something is wrong!"
     nums = [1, 2, 3, 1]
 
-    result = self.find_duplcates_with_map(nums)
+    result = self.find_duplicates_with_map(nums)
     assert result == True, err_msg_duplicates
     print(result)
 
-    result = self.find_duplcates_with_set(nums)
+    result = self.find_duplicates_with_set(nums)
     assert result == True, err_msg_duplicates
     print(result)
 
-    err_msg_no_duplicates = "There should be duplicates. Something is wrong!"
+    err_msg_no_duplicates = "There should not be duplicates. Something is wrong!"
     nums = [1,2,3,4]
 
-    result = self.find_duplcates_with_map(nums)
+    result = self.find_duplicates_with_map(nums)
     assert result == False, err_msg_no_duplicates
     print(result)
 
-    result = self.find_duplcates_with_set(nums)
+    result = self.find_duplicates_with_set(nums)
     assert result == False, err_msg_no_duplicates
     print(result)
 
     nums = [1,1,1,3,3,4,3,2,4,2]
 
-    result = self.find_duplcates_with_map(nums)
+    result = self.find_duplicates_with_map(nums)
     assert result == True, err_msg_duplicates
     print(result)
 
-    result = self.find_duplcates_with_set(nums)
+    result = self.find_duplicates_with_set(nums)
     assert result == True, err_msg_duplicates
     print(result)
 
-  def find_duplcates_with_map(self, nums: list) -> bool:
+  def find_duplicates_with_map(self, nums: list) -> bool:
     if not isinstance(nums, list) or len(nums) <= 1:
       return False
 
@@ -66,7 +68,7 @@ class ContainsDuplicate:
 
     return False
 
-  def find_duplcates_with_set(self, nums: list) -> bool:
+  def find_duplicates_with_set(self, nums: list) -> bool:
     if not isinstance(nums, list) or len(nums) <= 1:
       return False
 

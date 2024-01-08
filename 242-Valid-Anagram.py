@@ -9,6 +9,7 @@ Example 1:
 
 Input: s = "anagram", t = "nagaram"
 Output: true
+
 Example 2:
 
 Input: s = "rat", t = "car"
@@ -20,7 +21,6 @@ Constraints:
 
 1 <= s.length, t.length <= 5 * 104
 s and t consist of lowercase English letters.
-
 
 Follow up: What if the inputs contain Unicode characters? How would you adapt your solution to such a case?
 '''
@@ -55,19 +55,20 @@ class ValidAnagram:
 		if (len_of_s != len_of_t):
 			return False
 
-		letter_map = {}
+		letter_map = dict()
 		for letter in s:
-			if letter in letter_map.keys():
+			if letter in letter_map:
 				letter_map[letter] += 1
 			else:
 				letter_map[letter] = 1
 
 		for letter in t:
-			if letter not in letter_map.keys() or letter_map[letter] == 0:
+			if letter not in letter_map or letter_map[letter] == 0:
 				return False
-			else:
-				letter_map[letter] -= 1
+			letter_map[letter] -= 1
+
 		return True
+
 
 # Create an instance of the class
 valid_anagram_checker = ValidAnagram()

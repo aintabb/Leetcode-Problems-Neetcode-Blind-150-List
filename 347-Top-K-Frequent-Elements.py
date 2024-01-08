@@ -2,16 +2,15 @@
 Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.
 
 
-
 Example 1:
 
 Input: nums = [1,1,1,2,2,3], k = 2
 Output: [1,2]
+
 Example 2:
 
 Input: nums = [1], k = 1
 Output: [1]
-
 
 Constraints:
 
@@ -22,22 +21,6 @@ It is guaranteed that the answer is unique.
 
 
 Follow up: Your algorithm's time complexity must be better than O(n log n), where n is the array's size.
-
-----------
-
-[1, 1, 1, 2, 2, 3], k = 2
-
-{ 3: 1, 2: 2, 1: 3}
-
-
-freq_map = defaultdict(list)
-result = list()
-if len(nums) == 1
-  result.append(nums[0])
-  return result
-
-loop through nums
-add frequencies as the keys and elements as the values
 
 '''
 
@@ -85,6 +68,5 @@ class TopKFrequentElements:
           return top_k_elements
 
     return top_k_elements
-
 
 topKFrequent = TopKFrequentElements()

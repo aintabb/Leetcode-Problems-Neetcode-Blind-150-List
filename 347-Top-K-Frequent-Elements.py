@@ -69,4 +69,4 @@ class TopKFrequentElements:
 
     return top_k_elements
 
-topKFrequent = TopKFrequentElements()
+top_k_frequent = TopKFrequentElements()

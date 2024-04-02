@@ -35,6 +35,8 @@ Only one valid answer exists.
 Follow-up: Can you come up with an algorithm that is less than O(n2) time complexity?
 '''
 
+# Time Complexity:  O(N)
+# Space Complexity: O(N)
 class TwoSum:
     def __init__(self) -> None:
         err_msg_invalid_indices = "Provided indices do not add up to the target value. Something is wrong!"

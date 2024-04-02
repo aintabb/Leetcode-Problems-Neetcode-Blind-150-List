@@ -29,7 +29,7 @@ strs[i] consists of lowercase English letters.
 
 '''
 
-# Time Complexity:  O(N)
+# Time Complexity:  O(N*k)
 # Space Complexity: O(N)
 from collections import defaultdict
 
@@ -47,27 +47,27 @@ class GroupAnagrams:
         assert result == [[""]] or [['']], err_msg_invalid_anagram_group
         print(result)
 
-
         strs = ["a"]
         result = self.group_anagrams(strs)
         assert result == [["a"]] or [['a']], err_msg_invalid_anagram_group
         print(result)
 
   def group_anagrams(self, strs: list[str]) -> list[list[str]]:
+    anagram_map = defaultdict(list)
 
     if (len(strs) == 1):
-      return list(list(strs[0]))
-
-    result = defaultdict(list)
+      anagram_map[0].append(strs[0])
+      return list(anagram_map.values())
 
     for s in strs:
       count = [0] * 26
 
-      for c in s:
-        count[ord(c) - ord("a")] += 1
+      for ch in s:
+        pos_value = ord(ch) - ord("a")
+        count[pos_value] += 1
 
-      result[tuple(count)].append(s)
+      anagram_map[tuple(count)].append(s)
 
-    return list(result.values())
+    return list(anagram_map.values())
 
-group_anagrmas = GroupAnagrams()
+group_anagrams = GroupAnagrams()

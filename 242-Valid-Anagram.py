@@ -25,6 +25,8 @@ s and t consist of lowercase English letters.
 Follow up: What if the inputs contain Unicode characters? How would you adapt your solution to such a case?
 '''
 
+# Time Complexity:  O(N)
+# Space Complexity: O(N)
 class ValidAnagram:
 	def __init__(self) -> None:
 		err_msg_anagram = "Given string should be anagrams of each other. Something is wrong!"

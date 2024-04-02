@@ -4,17 +4,18 @@ Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be val
 Each row must contain the digits 1-9 without repetition.
 Each column must contain the digits 1-9 without repetition.
 Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
-Note:
 
+Note:
 A Sudoku board (partially filled) could be valid but is not necessarily solvable.
 Only the filled cells need to be validated according to the mentioned rules.
 
 Example 1:
 
 Input: board =
-[["5","3",".",".","7",".",".",".","."]
-,["6",".",".","1","9","5",".",".","."]
-,[".","9","8",".",".",".",".","6","."]
+     00  01  02
+00 [["5","3",".",".","7",".",".",".","."]
+10,["6",".",".","1","9","5",".",".","."]
+20,[".","9","8",".",".",".",".","6","."]
 ,["8",".",".",".","6",".",".",".","3"]
 ,["4",".",".","8",".","3",".",".","1"]
 ,["7",".",".",".","2",".",".",".","6"]
@@ -48,9 +49,9 @@ board[i][j] is a digit 1-9 or '.'.
 
 '''
 
-# Time Complexity:
-# Space Complexity:
-from collections import defaultdict
+# Time Complexity: O(9^2) -->> O(N)
+# Space Complexity: O(9) -->> O(N)
+import collections
 
 class ValidSudoku:
   def __init__(self) -> None:
@@ -85,7 +86,24 @@ class ValidSudoku:
 
 
   def is_valid_sudoku(self, nums: list[list[str]]) -> bool:
-      for i in nums:
-        for j in nums[i]
+    rows  = collections.defaultdict(set)
+    cols  = collections.defaultdict(set)
+    grids = collections.defaultdict(set)
+
+    for row in range(9):
+      for col in range(9):
+        if (nums[row][col] == "."):
+          continue
+
+        if (nums[row][col] in rows[row] or
+            nums[row][col] in cols[col] or
+            nums[row][col] in grids[(row // 3, col // 3)]):
+            return False
+
+        rows[row].add(nums[row][col])
+        cols[col].add(nums[row][col])
+        grids[(row // 3, col // 3)].add(nums[row][col])
+
+    return True
 
 valid_sudoku = ValidSudoku()

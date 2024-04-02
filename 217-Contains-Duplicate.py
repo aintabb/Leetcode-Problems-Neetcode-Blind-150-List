@@ -22,6 +22,8 @@
   -109 <= nums[i] <= 109
 '''
 
+# Time Complexity:  O(N)
+# Space Complexity: O(N)
 class ContainsDuplicate:
   def __init__(self) -> None:
     err_msg_duplicates = "There should be duplicates. Something is wrong!"

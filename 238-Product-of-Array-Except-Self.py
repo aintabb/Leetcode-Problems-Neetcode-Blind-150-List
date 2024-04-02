@@ -26,6 +26,8 @@ The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit int
 Follow up: Can you solve the problem in O(1) extra space complexity? (The output array does not count as extra space for space complexity analysis.)
 '''
 
+# Time Complexity:  O(N)
+# Space Complexity: O(N)
 class ProductsOfArrayExceptSelf:
   def __init__(self) -> None:
     err_msg_invalid_products_array = "The products array does not seem to be correct. Something is wrong!"

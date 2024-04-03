@@ -85,24 +85,24 @@ class ValidSudoku:
         print(result)
 
 
-  def is_valid_sudoku(self, nums: list[list[str]]) -> bool:
+  def is_valid_sudoku(self, board: list[list[str]]) -> bool:
     rows  = collections.defaultdict(set)
     cols  = collections.defaultdict(set)
     grids = collections.defaultdict(set)
 
     for row in range(9):
       for col in range(9):
-        if (nums[row][col] == "."):
+        if (board[row][col] == "."):
           continue
 
-        if (nums[row][col] in rows[row] or
-            nums[row][col] in cols[col] or
-            nums[row][col] in grids[(row // 3, col // 3)]):
+        if (board[row][col] in rows[row] or
+            board[row][col] in cols[col] or
+            board[row][col] in grids[(row // 3, col // 3)]):
             return False
 
-        rows[row].add(nums[row][col])
-        cols[col].add(nums[row][col])
-        grids[(row // 3, col // 3)].add(nums[row][col])
+        rows[row].add(board[row][col])
+        cols[col].add(board[row][col])
+        grids[(row // 3, col // 3)].add(board[row][col])
 
     return True
 

@@ -46,15 +46,15 @@ class ProductsOfArrayExceptSelf:
   def product_except_self(self, nums: list) -> list[int]:
     result = [1] * (len(nums))
 
-    prefix = 1
+    product = 1
     for i in range(len(nums)):
-      result[i] = prefix
-      prefix *= nums[i]
+      result[i] = product
+      product *= nums[i]
 
-    postfix = 1
+    product = 1
     for i in range(len(nums) - 1, -1, -1):
-      result[i] *= postfix
-      postfix *= nums[i]
+      result[i] *= product
+      product *= nums[i]
 
     return result
 

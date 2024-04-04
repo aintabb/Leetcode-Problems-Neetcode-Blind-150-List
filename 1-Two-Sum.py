@@ -45,10 +45,11 @@ class TwoSum:
         print(result)
 
     def find_indices(self, nums: list[int], target: int) -> list[int]:
-        if (len(nums) < 2):
+        len_of_nums = len(nums)
+        if (len_of_nums < 2):
           return []
 
-        if (len(nums) == 2):
+        if (len_of_nums == 2):
           return [0, 1]
 
         remaining_map = {}

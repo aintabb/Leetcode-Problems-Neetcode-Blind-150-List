@@ -57,12 +57,9 @@ class ValidAnagram:
 		if (len_of_s != len_of_t):
 			return False
 
-		letter_map = dict()
+		letter_map = {}
 		for letter in s:
-			if letter in letter_map:
-				letter_map[letter] += 1
-			else:
-				letter_map[letter] = 1
+			letter_map[letter] = letter_map.get(letter, 0) + 1
 
 		for letter in t:
 			if letter not in letter_map or letter_map[letter] == 0:

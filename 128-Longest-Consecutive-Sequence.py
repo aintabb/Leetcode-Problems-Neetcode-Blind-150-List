@@ -20,8 +20,8 @@ Constraints:
 -109 <= nums[i] <= 109
 '''
 
-# Time Complexity:
-# Space Complexity:
+# Time Complexity:  O(N)
+# Space Complexity: O(N)
 class LongestConsecutiveSequence:
     def __init__(self) -> None:
         err_msg_invalid_length = "Provided length is not correct. Something is wrong!"
@@ -46,14 +46,15 @@ class LongestConsecutiveSequence:
 
 
     def longest_consecutive(self, nums: list[int]) -> int:
-      len_of_nums = len(nums)
+      len_of_nums     = len(nums)
+      longest_seq_len = 0
+
       if len_of_nums == 0:
         return 0
 
       # Convert input array to a set
       num_set = set(nums)
 
-      longest_seq_len = 0
       for num in nums:
         # If there is no previous number, meaning it is the start of a sequence
         if num - 1 not in num_set:

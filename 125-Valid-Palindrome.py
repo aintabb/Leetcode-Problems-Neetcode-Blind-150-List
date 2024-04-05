@@ -100,8 +100,6 @@ class ValidPalindrome:
 
       return True
 
-
-
     """
       A function that checks if a given string is a valid palindrome with memory.
 

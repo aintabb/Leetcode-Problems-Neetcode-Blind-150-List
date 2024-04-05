@@ -23,7 +23,7 @@ strs[i] contains only UTF-8 characters.
 
 '''
 
-# Time Complexity: O(N)
+# Time Complexity:  O(N)
 # Space Complexity: O(N)
 class EncodeDecodeStrings:
     def __init__(self) -> None:

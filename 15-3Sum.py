@@ -65,7 +65,7 @@ class ThreeSum:
 
 
     def three_sum(self, nums: list[int]) -> list[list[int]]:
-      res = []
+      result = []
       nums.sort()
 
       for i, val in enumerate(nums):
@@ -79,13 +79,13 @@ class ThreeSum:
 
         while (l < r):
           three_sum = val + nums[l] + nums[r]
-          # Narrow down pointers if the sum is too large or too small
+          # Adjust pointers if the sum is too large or too small
           if (three_sum > 0):
             r -= 1
           elif (three_sum < 0):
             l += 1
           else:
-            res.append([val, nums[l], nums[r]])
+            result.append([val, nums[l], nums[r]])
 
             # Increment left pointer until it is unique (not equal to the previous value)
             # See, [-2, -2, 0, 0, 2, 2] for an example
@@ -93,7 +93,7 @@ class ThreeSum:
             while (nums[l] == nums[l - 1] and l < r):
               l += 1
 
-      return res
+      return result
 
 
 # Create an instance of the class

@@ -43,11 +43,6 @@ class TopKFrequentElements:
         print(result)
 
 
-        nums = ["a"]
-        result = self.top_k_frequent(nums, k)
-        assert result == [["a"]] or [['a']], err_msg_invalid_frequent_elements
-        print(result)
-
   def top_k_frequent(self, nums: list[int], k: int) -> list[int]:
     # Step 1: Count the frequency of each number
     count_map = {}

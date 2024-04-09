@@ -26,7 +26,6 @@ Follow up: Your algorithm's time complexity must be better than O(n log n), wher
 
 # Time Complexity:  O(N)
 # Space Complexity: O(N+k)
-from collections import defaultdict
 
 class TopKFrequentElements:
   def __init__(self) -> None:

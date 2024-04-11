@@ -29,10 +29,8 @@ s consists of parentheses only '()[]{}'.
 '''
 
 
-# Time Complexity:
-# Space Complexity:
-from collections import deque
-
+# Time Complexity:  O(N)
+# Space Complexity: O(N)
 class ValidParentheses:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"

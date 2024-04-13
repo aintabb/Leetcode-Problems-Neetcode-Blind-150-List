@@ -16,8 +16,14 @@ Constraints:
 1 <= n <= 8
 '''
 
-# Time Complexity:
-# Space Complexity:
+""""
+# Time Complexity:  O(4^n / sqrt(n))
+
+This time complexity arises from the recursive backtracking approach used to generate valid parentheses combinations. At each recursive call, there are two choices: either add an opening parenthesis or add a closing parenthesis. Since we have to generate all valid combinations of parentheses for a given n, the total number of function calls made is proportional to the number of valid combinations.
+
+The number of valid combinations is given by the n-th Catalan number, which is approximately 4^n / (n * sqrt(n)). This is because for a given n, there are 2n positions where we can place either an opening or a closing parenthesis, leading to a total of 2^(2n) possible combinations. However, because we need well-formed parentheses, we divide by n+1 to get the n-th Catalan number, which is O(4^n / sqrt(n)).
+"""
+# Space Complexity: O(N)
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"

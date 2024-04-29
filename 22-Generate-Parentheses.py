@@ -1,4 +1,4 @@
-'''
+"""
 Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
 
 
@@ -14,9 +14,9 @@ Output: ["()"]
 
 Constraints:
 1 <= n <= 8
-'''
+"""
 
-""""
+"""
 # Time Complexity:  O(4^n / sqrt(n))
 
 This time complexity arises from the recursive backtracking approach used to generate valid parentheses combinations. At each recursive call, there are two choices: either add an opening parenthesis or add a closing parenthesis. Since we have to generate all valid combinations of parentheses for a given n, the total number of function calls made is proportional to the number of valid combinations.

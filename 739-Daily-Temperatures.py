@@ -53,9 +53,12 @@ class Solution:
         temp_stack = [] # pair of [temp, index]
 
         for i, t in enumerate(temperatures):
+            # Navigate back temps in the stack
             while temp_stack and t > temp_stack[-1][0]:
-                s_temp, s_index = temp_stack.pop()
+                _, s_index = temp_stack.pop()
                 result[s_index] = i - s_index
+            # If the stack is empty or given temp is lower than what we have in the stack,
+            # add it to the stack
             temp_stack.append([t, i])
 
         return result

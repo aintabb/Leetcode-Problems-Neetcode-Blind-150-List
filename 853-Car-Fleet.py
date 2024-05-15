@@ -12,21 +12,6 @@ If a car catches up to a car fleet right at the destination point, it will still
 Return the number of car fleets that will arrive at the destination.
 
 
-#################
-# Notes:
-- len(position) == len(speed) == n
-- a car can never pass another car ahead of it
-- the faster car will slow down to match the slower car's speed
-- a car fleet can be consist of only one car
-- return the number of car fleets
-
-# Edge Cases:
-- len(position) == len(speed), check
-- if n == 1, return 1
-- if target == 0, return 0?? or maybe 1
--
-#################
-
 Example 1:
 Input: target = 12, position = [10,8,0,5,3], speed = [2,4,1,1,3]
 Output: 3

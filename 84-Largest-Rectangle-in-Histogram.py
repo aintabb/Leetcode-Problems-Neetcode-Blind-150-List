@@ -13,29 +13,14 @@ Example 2:
 Input: heights = [2,4]
 Output: 4
 
-######################
-heights = [3, 5, 12]
-Output: 4
-
-# Edge Cases:
-- if len of heights is 1, return heights[0]
-
-# Approach:
-- use a variable to keep the max area ~ max_area
-- loop through the array
-- check i and i + 1
-- get either max(height[i], height[i + 1]) or min(....) * 2. Whichever is the greatest
-
-######################
 
 Constraints:
 1 <= heights.length <= 105
 0 <= heights[i] <= 104
 """
 
-# Time Complexity:
-# Space Complexity:
-
+# Time Complexity:  O(N)
+# Space Complexity: O(N)
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"

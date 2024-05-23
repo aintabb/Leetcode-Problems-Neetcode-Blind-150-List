@@ -23,12 +23,16 @@ output: -1
 Constraints:
 
 - [time limit] 5000ms
+
 - [input] string source
-- 1 ≤ source.length ≤ 20
+  1 ≤ source.length ≤ 20
+
 - [input] string target
-- 1 ≤ target.length ≤ 20
+  1 ≤ target.length ≤ 20
+
 - [input] array.string words
-- 1 ≤ words.length ≤ 20
+  1 ≤ words.length ≤ 20
+
 - [output] array.integer
 """
 

@@ -62,6 +62,7 @@ class Solution:
         print(result, end=" - Iterative BFS\n")
 
 
+    # Recursive
     def max_depth_recursive(self, root: Optional[TreeNode]) -> int:
         if not root:
             return 0

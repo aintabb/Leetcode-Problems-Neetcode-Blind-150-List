@@ -18,7 +18,7 @@ def insert(root: Optional[TreeNode], key: int) -> TreeNode:
 
   return root
 
-def insert_no_order(root: Optional[TreeNode], left_key: int, right_key: int) -> None:
+def insert_no_order(root: Optional[TreeNode], left_key: int | None, right_key: int | None) -> None:
   if root is None:
     return
 

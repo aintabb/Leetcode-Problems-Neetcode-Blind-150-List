@@ -23,7 +23,7 @@ The number of nodes in the tree is in the range [0, 5000].
 
 
 from typing import Optional
-from data_structures.binary_search_tree import TreeNode, insert, insert_no_order
+from data_structures.binary_search_tree import TreeNode, insert_no_order
 
 
 # Time Complexity:  O(N)

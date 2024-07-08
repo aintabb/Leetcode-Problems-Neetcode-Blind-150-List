@@ -61,7 +61,7 @@ class Solution:
         min_heap = arr[:k+1]
         heapq.heapify(min_heap)
 
-        for i in range(k + 1, len_of_arr, 1):
+        for i in range(k + 1, len_of_arr):
             arr[i-(k + 1)] = heapq.heappop(min_heap)
 
             heapq.heappush(min_heap, arr[i])

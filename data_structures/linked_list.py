@@ -1,27 +1,38 @@
-from typing import Optional
+from typing import Optional, Union
 
 class ListNode:
     def __init__(self, val = 0, next = None) -> None:
         self.val  = val   # Store data
         self.next = next  # Store reference to the next node
 
+
+class Node:
+    def __init__(self, x: int, next = None, random = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+
+
 class LinkedList:
   def __init__(self) -> None:
     self.head = None  # Initialize the head of the list
 
-  # Method to add a node at the end of the list
-  def append(self, data) -> None:
-    new_node = ListNode(data)
+  # Method to add a list node or a node at the end of the list
+  def append(self, data, **kwargs) -> Union[ListNode, Node]:
+    new_node = ListNode(data) if 'random' not in kwargs else Node(data, None, kwargs['random'])
 
     if not self.head:
       self.head = new_node
-      return
+
+      return self.head
 
     curr_node = self.head
     while (curr_node.next):
       curr_node = curr_node.next
 
     curr_node.next = new_node
+
+    return new_node
 
   # Method to insert a node at the beginning of the linked list
   def prepend(self, data) -> None:
@@ -49,7 +60,7 @@ class LinkedList:
     current = None
 
   # Method to print all the nodes in a linked list
-  def print_list(self, head: Optional[ListNode]) -> None:
+  def print_list(self, head)-> None:
         if not head:
             print("None")
             return
@@ -57,17 +68,25 @@ class LinkedList:
         curr = head
         while (curr):
             print(curr.val, end = " -> ")
+
+            if isinstance(curr, Node) and curr.random:
+              print("random:", curr.random.val, end = " -> ")
             curr = curr.next
 
         print("None")
 
   # Method to compare equality between two linked list
-  def compare_lists(self, head_one: Optional[ListNode], head_two: Optional[ListNode]) -> bool:
+  def compare_lists(self, head_one, head_two) -> bool:
       current_one = head_one
       current_two = head_two
 
       while (current_one and current_two):
           if (current_one.val != current_two.val):
+              return False
+
+          if (isinstance(current_one, Node) and isinstance(current_two, Node)):
+            if ((current_one.random and current_two.random and current_one.random.val != current_two.random.val) or
+             (not current_one.random) != (not current_two.random)):
               return False
 
           current_one = current_one.next

@@ -112,16 +112,16 @@ class Solution:
         if not head:
             return head
 
-        def reverse(curr, prev):
-            if curr is None:
+        def reverse(prev: Optional[ListNode], curr: Optional[ListNode]) -> Optional[ListNode]:
+            if not curr:
                 return prev
             else:
                 temp = curr.next
                 curr.next = prev
 
-                return reverse(temp, curr)
+                return reverse(curr, temp)
 
-        return reverse(head, None)
+        return reverse(None, head)
 
 
 # Create an instance of the class

@@ -76,34 +76,37 @@ class Solution:
 
 
     def merge_two_lists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
-        if (list1 is None):
+        if not list1:
             return list2
-        if (list2 is None):
+
+        if not list2:
             return list1
 
-        temp = ListNode()
-        head = temp
+        head = ListNode()
+        curr = head
 
-        while (list1 and list2):
+        while list1 and list2:
             if (list1.val > list2.val):
-                head.next = list2
-                list2     = list2.next
+                curr.next = list2
+                list2 = list2.next
             else:
-                head.next = list1
-                list1     = list1.next
-            head = head.next
+                curr.next = list1
+                list1 = list1.next
 
-        while (list1):
-            head.next = list1
-            list1     = list1.next
-            head      = head.next
+            curr = curr.next
 
-        while (list2):
-            head.next = list2
-            list2     = list2.next
-            head      = head.next
+        while list1:
+            curr.next = list1
+            list1 = list1.next
+            curr = curr.next
 
-        return temp.next
+        while list2:
+            curr.next = list2
+            list2 = list2.next
+            curr = curr.next
+
+        return head.next
+
 
 # Create an instance of the class
 solution = Solution()

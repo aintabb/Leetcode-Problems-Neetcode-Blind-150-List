@@ -104,7 +104,8 @@ class Solution:
         max_depth = 0
 
         while (tree_queue):
-            for i in range(len(tree_queue)):
+            n = len(tree_queue)
+            for _ in range(n):
                 node = tree_queue.popleft()
                 if node.left:
                     tree_queue.append(node.left)

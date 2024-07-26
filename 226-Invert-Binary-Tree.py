@@ -23,7 +23,7 @@ The number of nodes in the tree is in the range [0, 100].
 
 
 from typing import Optional
-from data_structures.binary_search_tree import TreeNode, insert, insert_no_order, compare_trees
+from data_structures.binary_search_tree import TreeNode, insert, insert_no_order, compare_trees, print_tree
 
 # Time Complexity:  R -> O(N), I -> O(N)
 # Space Complexity: R -> O(N), I -> O(N)
@@ -45,7 +45,9 @@ class Solution:
         insert_no_order(inverted_b_tree.right, 3, 1)
 
         result = self.invert_tree_recursive(b_tree)
-        assert compare_trees(inverted_b_tree, result), err_msg_invalid_result
+        assert compare_trees(inverted_b_tree, result) == True, err_msg_invalid_result
+        print_tree(result)
+        print("#" * 10)
 
         b_tree = TreeNode(4)
         insert(b_tree, 2)
@@ -56,23 +58,31 @@ class Solution:
         insert(b_tree, 9)
 
         result = self.invert_tree_iterative(b_tree)
-        assert compare_trees(inverted_b_tree, result), err_msg_invalid_result
+        assert compare_trees(inverted_b_tree, result) == True, err_msg_invalid_result
+        print_tree(result)
+        print("#" * 10)
 
         b_tree = TreeNode(2, TreeNode(1), TreeNode(3))
         inverted_b_tree = TreeNode(2, TreeNode(3), TreeNode(1))
 
         result = self.invert_tree_recursive(b_tree)
-        assert compare_trees(inverted_b_tree, result), err_msg_invalid_result
+        assert compare_trees(inverted_b_tree, result) == True, err_msg_invalid_result
+        print_tree(result)
+        print("#" * 10)
 
         b_tree = TreeNode(2, TreeNode(1), TreeNode(3))
         result = self.invert_tree_iterative(b_tree)
-        assert compare_trees(inverted_b_tree, result), err_msg_invalid_result
+        assert compare_trees(inverted_b_tree, result) == True, err_msg_invalid_result
+        print_tree(result)
 
         result = self.invert_tree_recursive(None)
-        assert compare_trees(None, result), err_msg_invalid_result
+        assert compare_trees(None, result) == True, err_msg_invalid_result
+        print_tree(result)
+        print("#" * 10)
 
         result = self.invert_tree_iterative(None)
-        assert compare_trees(None, result), err_msg_invalid_result
+        assert compare_trees(None, result) == True, err_msg_invalid_result
+        print_tree(result)
 
 
     def invert_tree_recursive(self, root: Optional[TreeNode]) -> Optional[TreeNode]:

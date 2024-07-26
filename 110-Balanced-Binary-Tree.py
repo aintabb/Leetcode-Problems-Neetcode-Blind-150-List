@@ -25,7 +25,6 @@ The number of nodes in the tree is in the range [0, 5000].
 from typing import Optional
 from data_structures.binary_search_tree import TreeNode, insert_no_order
 
-
 # Time Complexity:  O(N)
 # Space Complexity: O(N) -> Worst Case, Unbalanced Tree, O(log(N)) -> Best\Average, Balanced Tree
 class Solution:
@@ -37,7 +36,7 @@ class Solution:
         insert_no_order(b_tree.right, 15, 7)
 
         result = self.is_balanced(b_tree)
-        assert result, err_msg_invalid_result
+        assert result == True, err_msg_invalid_result
         print(result)
 
         b_tree = TreeNode(1)
@@ -46,27 +45,27 @@ class Solution:
         insert_no_order(b_tree.left.left, 4, 4)
 
         result = self.is_balanced(b_tree)
-        assert not result, err_msg_invalid_result
+        assert result == False, err_msg_invalid_result
         print(result)
 
 
     def is_balanced(self, root: Optional[TreeNode]) -> bool:
         if not root:
-            return False
+            return True
 
         self.balanced = True
 
-        def dfs(node: Optional[TreeNode]):
-            if not node:
+        def check_balance(root: Optional[TreeNode]) -> int:
+            if not root:
                 return 0
 
-            left, right = dfs(node.left), dfs(node.right)
+            left, right = check_balance(root.left), check_balance(root.right)
             if (abs(left - right) > 1):
                 self.balanced = False
 
             return 1 + max(left, right)
 
-        dfs(root)
+        check_balance(root)
 
         return self.balanced
 

@@ -37,9 +37,6 @@ Constraints:
 At most 2 * 105 calls will be made to get and put.
 """
 
-from collections import OrderedDict
-
-
 class Node:
     # Doubly-linked list
     def __init__(self, key: int, val: int) -> None:

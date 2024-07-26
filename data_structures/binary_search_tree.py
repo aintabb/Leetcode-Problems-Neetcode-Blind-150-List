@@ -1,4 +1,4 @@
-
+from collections import deque
 from typing import Optional
 
 class TreeNode:
@@ -22,8 +22,8 @@ def insert_no_order(root: Optional[TreeNode], left_key: int | None, right_key: i
   if root is None:
     return
 
-  root.left  = TreeNode(left_key)
-  root.right = TreeNode(right_key)
+  root.left  = TreeNode(left_key) if left_key != None else None
+  root.right = TreeNode(right_key) if right_key != None else None
 
 def inorder_traversal(root):
   if root:
@@ -39,6 +39,14 @@ def compare_trees(root_one: Optional[TreeNode], root_two: Optional[TreeNode]) ->
     return False
 
   return compare_trees(root_one.left, root_two.left) and compare_trees(root_one.right, root_two.right)
+
+# Method to horizontally print all the nodes in a tree
+def print_tree(root: Optional[TreeNode], level = 0)-> None:
+  if root:
+        print_tree(root.right, level + 1)
+        print(' ' * 4 * level + '-> ' + str(root.val))
+        print_tree(root.left, level + 1)
+
 
 # # Example usage:
 # root = TreeNode(50)

@@ -40,7 +40,7 @@ class Solution:
         insert_no_order(b_tree_two, 2, 3)
 
         result = self.is_same_tree(b_tree_one, b_tree_two)
-        assert result, err_msg_invalid_result
+        assert result == True, err_msg_invalid_result
         print(result)
 
         b_tree_one = TreeNode(1)
@@ -50,7 +50,7 @@ class Solution:
         insert_no_order(b_tree_two, None, 2)
 
         result = self.is_same_tree(b_tree_one, b_tree_two)
-        assert not result, err_msg_invalid_result
+        assert result == False, err_msg_invalid_result
         print(result)
 
         b_tree_one = TreeNode(1)
@@ -60,7 +60,14 @@ class Solution:
         insert_no_order(b_tree_two, 1, 2)
 
         result = self.is_same_tree(b_tree_one, b_tree_two)
-        assert not result, err_msg_invalid_result
+        assert result == False, err_msg_invalid_result
+        print(result)
+
+        b_tree_one = TreeNode()
+        b_tree_two = TreeNode()
+
+        result = self.is_same_tree(b_tree_one, b_tree_two)
+        assert result == True, err_msg_invalid_result
         print(result)
 
 
@@ -71,8 +78,7 @@ class Solution:
         if not p or not q or p.val != q.val:
             return False
 
-        return (self.is_same_tree(p.left, q.left) and self.is_same_tree(p.right, q.right))
-
+        return self.is_same_tree(p.left, q.left) and self.is_same_tree(p.right, q.right)
 
 # Create an instance of the class
 solution = Solution()

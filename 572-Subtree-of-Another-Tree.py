@@ -39,13 +39,13 @@ class Solution:
         insert_no_order(sub_root, 1, 2)
 
         result = self.is_sub_tree(root, sub_root)
-        assert result, err_msg_invalid_result
+        assert result == True, err_msg_invalid_result
         print(result)
 
         insert_no_order(root.left.right, 0, None)
 
         result = self.is_sub_tree(root, sub_root)
-        assert not result, err_msg_invalid_result
+        assert result == False, err_msg_invalid_result
         print(result)
 
 
@@ -56,20 +56,24 @@ class Solution:
         if not root:
             return False
 
-        if (self.is_same(root, sub_root)):
+        if self.is_same(root, sub_root):
             return True
 
-        return (self.is_sub_tree(root.left, sub_root) or self.is_sub_tree(root.right, sub_root))
+        return self.is_sub_tree(root.left, sub_root) or self.is_sub_tree(root.right, sub_root)
 
-    def is_same(self, tree_node_one: Optional[TreeNode], tree_node_two: Optional[TreeNode]) -> bool:
-        if not tree_node_one and not tree_node_two:
+    def is_same(
+        self, root_one: Optional[TreeNode], root_two: Optional[TreeNode]
+    ) -> bool:
+        if not root_one and not root_two:
             return True
 
-        if tree_node_one and tree_node_two and tree_node_one.val == tree_node_two.val:
-            return (self.is_same(tree_node_one.left, tree_node_two.left)
-                    and self.is_same(tree_node_one.right, tree_node_two.right))
+        if root_one and root_two and root_one.val == root_two.val:
+            return self.is_same(root_one.left, root_two.left) and self.is_same(
+                root_one.right, root_two.right
+            )
 
         return False
+
 
 # Create an instance of the class
 solution = Solution()

@@ -7,8 +7,8 @@ Output: false
 
 Explanation:
 (0,30),(5,10) and (0,30),(15,20) will conflict
-Example 2:
 
+Example 2:
 Input: intervals = [(5,8),(9,15)]
 Output: true
 Note:

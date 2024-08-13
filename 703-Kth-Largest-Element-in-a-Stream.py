@@ -35,7 +35,7 @@ It is guaranteed that there will be at least k elements in the array when you se
 '''
 
 
-# Time Complexity:  O(n) -> for the constructor, O(log k) -> for the add method
+# Time Complexity:  O(n) -> for the constructor, O(log(k)) -> for the add method
 # Space Complexity: O(k)
 
 import heapq

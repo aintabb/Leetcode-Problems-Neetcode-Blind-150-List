@@ -31,7 +31,7 @@ Constraints:
 """
 
 
-# Time Complexity:  O(n \ log(n))
+# Time Complexity:  O(n*log(n))
 # Space Complexity: O(n)
 import heapq
 
@@ -51,10 +51,12 @@ class Solution:
         assert result == 1, err_msg_invalid_result
         print(result)
 
+
     def last_stone_weight(self, stones: list[int]) -> int:
         if (len(stones) == 1):
-            return 1
+            return stones[0]
 
+        # Construct a max heap
         stones = [-s for s in stones]
         heapq.heapify(stones)
 
@@ -63,7 +65,8 @@ class Solution:
             y = -heapq.heappop(stones)
 
             if (x >= y):
-                heapq.heappush(stones, y - x) # Because of the negative values in the heap, we do (y - x)
+                # We try to keep max heap feature. That's why we do (y - x) to have a negative value
+                heapq.heappush(stones, y - x)
 
         return -stones[0]
 

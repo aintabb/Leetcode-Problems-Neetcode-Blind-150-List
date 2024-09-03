@@ -6,17 +6,14 @@ An Anagram is a word or phrase formed by rearranging the letters of a different 
 
 
 # Example 1:
-
 Input: strs = ["eat","tea","tan","ate","nat","bat"]
 Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
 
 # Example 2:
-
 Input: strs = [""]
 Output: [[""]]
 
 # Example 3:
-
 Input: strs = ["a"]
 Output: [["a"]]
 
@@ -53,20 +50,19 @@ class GroupAnagrams:
         print(result)
 
   def group_anagrams(self, strs: list[str]) -> list[list[str]]:
+    if (len(strs) <= 1):
+      return [strs]
+
     anagram_map = defaultdict(list)
 
-    if (len(strs) == 1):
-      anagram_map[0].append(strs[0])
-      return list(anagram_map.values())
+    for str in strs:
+      char_count = [0] * 26
 
-    for s in strs:
-      count = [0] * 26
+      for ch in str:
+        ch_order = ord(ch) - ord("a")
+        char_count[ch_order] += 1
 
-      for ch in s:
-        pos_value = ord(ch) - ord("a")
-        count[pos_value] += 1
-
-      anagram_map[tuple(count)].append(s)
+      anagram_map[tuple(char_count)].append(str)
 
     return list(anagram_map.values())
 

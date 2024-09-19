@@ -33,8 +33,8 @@ Constraints:
 """
 
 
-# Time Complexity:  O(2^N) -> R - O(N) -> M, T, T no space
-# Space Complexity: O(N) -> R, M, T -  O(1) - T no space
+# Time Complexity:  O(2^N) -> R # O(N) -> M, T, T no space
+# Space Complexity: O(N) -> R, M, T # O(1) - T no space
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"

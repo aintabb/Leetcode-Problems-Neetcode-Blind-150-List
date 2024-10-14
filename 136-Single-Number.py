@@ -48,11 +48,10 @@ class Solution:
 
 
     def single_number(self, nums: list[int]) -> int:
-        n = len(nums)
-        result = nums[0]
+        result = 0
 
-        for i in range(1, n):
-            result ^= nums[i]
+        for num in nums:
+            result ^= num
 
         return result
 

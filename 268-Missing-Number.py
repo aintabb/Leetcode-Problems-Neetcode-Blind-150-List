@@ -38,24 +38,36 @@ class Solution:
 
         nums = [3, 0, 1]
 
-        result = self.missing_number(nums)
+        result = self.missing_number_solution_one(nums)
+        assert result == 2, err_msg_invalid_result
+        print(result)
+
+        result = self.missing_number_solution_two(nums)
         assert result == 2, err_msg_invalid_result
         print(result)
 
         nums = [0, 1]
 
-        result = self.missing_number(nums)
+        result = self.missing_number_solution_one(nums)
+        assert result == 2, err_msg_invalid_result
+        print(result)
+
+        result = self.missing_number_solution_two(nums)
         assert result == 2, err_msg_invalid_result
         print(result)
 
         nums = [9,6,4,2,3,5,7,0,1]
 
-        result = self.missing_number(nums)
+        result = self.missing_number_solution_one(nums)
+        assert result == 8, err_msg_invalid_result
+        print(result)
+
+        result = self.missing_number_solution_two(nums)
         assert result == 8, err_msg_invalid_result
         print(result)
 
 
-    def missing_number(self, nums: list[int]) -> int:
+    def missing_number_solution_one(self, nums: list[int]) -> int:
         result = len(nums)
 
         for i in range(len(nums)):
@@ -63,7 +75,13 @@ class Solution:
 
         return result
 
+    def missing_number_solution_two(self, nums: list[int]) -> int:
+        n = len(nums)
 
+        nums_sum = sum(nums)
+        total = n * (n + 1) // 2
+
+        return total - nums_sum
 
 # Create an instance of the class
 solution = Solution()

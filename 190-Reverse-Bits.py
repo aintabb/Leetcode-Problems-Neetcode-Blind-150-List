@@ -47,9 +47,13 @@ class Solution:
         result = 0
 
         for i in range(32):
+            '''
+            Shifts the bits of n to the right by i positions, effectively isolating the bit at the i-th position.
+            Uses the bitwise AND operation with 1 to keep only the least significant bit (i.e., the bit at the i-th position) and discards all other bits. This gives us the i-th bit of n.
+            '''
             bit_to_reverse = (n >> i) & 1
+            # Shifts the bit_to_reverse left by (31 - i) positions. This places the i-th bit of n in its reversed position.
             result |= (bit_to_reverse << (31 - i))
-
 
         return result
 

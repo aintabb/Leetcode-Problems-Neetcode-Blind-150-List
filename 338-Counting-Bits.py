@@ -43,42 +43,31 @@ class Solution:
 
         n = 2
 
-        result = self.count_bits_dp(n)
-        assert result == [0, 1, 1], err_msg_invalid_result
-        print(result)
-
-        result = self.count_bits_shifting(n)
+        result = self.count_bits(n)
         assert result == [0, 1, 1], err_msg_invalid_result
         print(result)
 
         n = 5
 
-        result = self.count_bits_dp(n)
-        assert result == [0, 1, 1, 2, 1, 2], err_msg_invalid_result
-        print(result)
-
-        result = self.count_bits_shifting(n)
+        result = self.count_bits(n)
         assert result == [0, 1, 1, 2, 1, 2], err_msg_invalid_result
         print(result)
 
 
-    def count_bits_dp(self, n: int) -> list[int]:
-        dp = [0] * (n + 1)
-        offset = 1
+    def count_bits(self, n: int) -> list[int]:
+        if (n == 0):
+            return [0]
 
-        for i in range(1, n + 1):
-            if (offset * 2 == i):
-                offset = i
+        if (n == 1):
+            return [0, 1]
 
-            dp[i] = 1 + dp[i - offset]
+        result = [0, 1]
 
-        return dp
-
-    def count_bits_shifting(self, n: int) -> list[int]:
-        result = [0] * (n + 1)
-
-        for i in range(n + 1):
-            result[i] = result[i >> 1] + (i & 1)
+        for i in range(2, n + 1):
+            if (i % 2 == 0):
+                result.append(result[i // 2])
+            else:
+                result.append(result[i // 2] + 1)
 
         return result
 

@@ -66,9 +66,9 @@ class Solution:
 
 
     def plus_one(self, digits: list[int]) -> list[int]:
-        n = len(digits)
+        len_digits = len(digits)
 
-        for i in range(n - 1, -1, -1):
+        for i in range(len_digits - 1, -1, -1):
             if (digits[i] + 1 == 10):
                 digits[i] = 0
             else:

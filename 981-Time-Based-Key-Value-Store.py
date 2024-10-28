@@ -64,7 +64,6 @@ class TimeMap:
         return result
 
 
-
 # Your TimeMap object will be instantiated and called as such:
 # obj = TimeMap()
 # obj.set(key,value,timestamp)

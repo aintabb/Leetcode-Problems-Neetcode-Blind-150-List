@@ -23,53 +23,54 @@ ai != bi
 There are no self-loops or repeated edges.
 """
 
-
 # Time Complexity:  O(N)
 # Space Complexity: O(N)
 
 import collections
+
+
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        n, edges = 5, [[0,1],[0,2],[0,3],[1,4]]
+        n, edges = 5, [[0, 1], [0, 2], [0, 3], [1, 4]]
 
         result = self.valid_tree(n, edges)
         assert result == True, err_msg_invalid_result
         print(result)
 
-        n, edges = 5, [[0,1],[1,2],[2,3],[1,3],[1,4]]
+        n, edges = 5, [[0, 1], [1, 2], [2, 3], [1, 3], [1, 4]]
 
         result = self.valid_tree(n, edges)
         assert result == False, err_msg_invalid_result
         print(result)
-
 
     """
         in a tree there should be n - 1 edges
         there should not be loops,
         all nodes should be reachable
     """
+
     def valid_tree(self, n: int, edges: list[list[int]]) -> bool:
-        if (len(edges) != n - 1):
+        if len(edges) != n - 1:
             return False
 
-        graph_map = collections.defaultdict(list)
-        for node, edge in edges:
-            graph_map[node].append(edge)
-            graph_map[edge].append(node)
+        graph = collections.defaultdict(list)
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
 
-        visited_set = set()
+        visited = set()
 
         def dfs(node: int) -> None:
-            visited_set.add(node)
+            visited.add(node)
 
-            for neighbor in graph_map[node]:
-                if neighbor not in visited_set:
-                    dfs(neighbor)
+            for neigh in graph[node]:
+                if neigh not in visited:
+                    dfs(neigh)
 
         dfs(0)
-        return len(visited_set) == n
+        return len(visited) == n
 
 
 # Create an instance of the class

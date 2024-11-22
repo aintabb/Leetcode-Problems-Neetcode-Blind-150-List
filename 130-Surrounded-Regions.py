@@ -32,62 +32,72 @@ board[i][j] is 'X' or 'O'.
 # Space Complexity: O(m*n)
 class Solution:
     def __init__(self) -> None:
-       err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
+        err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-       board = [
-              ["X","X","X","X"],
-              ["X","O","O","X"],
-              ["X","X","O","X"],
-              ["X","O","X","X"]
-       ]
+        board = [
+            ["X", "X", "X", "X"],
+            ["X", "O", "O", "X"],
+            ["X", "X", "O", "X"],
+            ["X", "O", "X", "X"],
+        ]
 
-       self.solve(board)
-       assert board == [["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X","O","X","X"]], err_msg_invalid_result
-       print(board)
+        self.solve(board)
+        assert board == [
+            ["X", "X", "X", "X"],
+            ["X", "X", "X", "X"],
+            ["X", "X", "X", "X"],
+            ["X", "O", "X", "X"],
+        ], err_msg_invalid_result
+        print(board)
 
-       board = [["X"]]
+        board = [["X"]]
 
-       self.solve(board)
-       assert board == [["X"]], err_msg_invalid_result
-       print(board)
+        self.solve(board)
+        assert board == [["X"]], err_msg_invalid_result
+        print(board)
 
+        board = [["O"]]
+
+        self.solve(board)
+        assert board == [["O"]], err_msg_invalid_result
+        print(board)
 
     def solve(self, board: list[list[str]]) -> None:
-        if not board:
+        if not board or not board[0]:
             return
 
         rows, cols = len(board), len(board[0])
         dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
-        def capture(row: int, col: int) -> None:
+        def dfs(row: int, col: int) -> None:
             if (
-                row < 0 or
-                row == rows or
-                col < 0 or
-                col == cols or
-                board[row][col] != "O"
+                row < 0
+                or row == rows
+                or col < 0
+                or col == cols
+                or board[row][col] != "O"
             ):
                 return
 
             board[row][col] = "T"
 
-            for r_offset, c_offset in dirs:
-                new_r, new_c = row + r_offset, col + c_offset
-                capture(new_r, new_c)
+            for dy, dx in dirs:
+                new_row, new_col = row + dy, col + dx
+                dfs(new_row, new_col)
 
         for row in range(rows):
-            capture(row, 0)
-            capture(row, cols - 1)
+            dfs(row, 0)
+            dfs(row, cols - 1)
 
         for col in range(cols):
-            capture(0, col)
-            capture(rows - 1, col)
+            dfs(0, col)
+            dfs(rows - 1, col)
 
         for row in range(rows):
             for col in range(cols):
-                if (board[row][col] == "O"):
+                if board[row][col] == "O":
                     board[row][col] = "X"
-                elif (board[row][col] == "T"):
+                elif board[row][col] == "T":
                     board[row][col] = "O"
 
 

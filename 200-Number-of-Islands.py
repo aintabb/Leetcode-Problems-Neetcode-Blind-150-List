@@ -97,14 +97,14 @@ class Solution:
         return num_of_islands
 
     def num_islands_with_set(self, grid: list[list[str]]) -> int:
-        if not grid:
+        if not grid or not grid[0]:
             return 0
 
         rows, cols = len(grid), len(grid[0])
         visited_set = set()
 
         def traverse(row: int, col: int) -> None:
-            for row_offset, col_offset in ((0, 1), (1, 0), (0, -1), (-1, 0)):
+            for row_offset, col_offset in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
                 new_r, new_c = row + row_offset, col + col_offset
 
                 if (

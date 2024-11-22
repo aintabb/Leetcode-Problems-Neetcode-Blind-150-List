@@ -50,21 +50,29 @@ class Solution:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
         heights = [
-            [1,2,2,3,5],
-            [3,2,3,4,4],
-            [2,4,5,3,1],
-            [6,7,1,4,5],
-            [5,1,1,2,4]
+            [1, 2, 2, 3, 5],
+            [3, 2, 3, 4, 4],
+            [2, 4, 5, 3, 1],
+            [6, 7, 1, 4, 5],
+            [5, 1, 1, 2, 4],
         ]
 
         result = self.pacific_atlantic(heights)
-        assert result == [[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]], err_msg_invalid_result
+        assert result == [
+            [0, 4],
+            [1, 3],
+            [1, 4],
+            [2, 2],
+            [3, 0],
+            [3, 1],
+            [4, 0],
+        ], err_msg_invalid_result
         print(result)
 
         heights = [[1]]
 
         result = self.pacific_atlantic(heights)
-        assert result == [[0,0]], err_msg_invalid_result
+        assert result == [[0, 0]], err_msg_invalid_result
         print(result)
 
     # top, left -> pacific
@@ -72,46 +80,45 @@ class Solution:
     def pacific_atlantic(self, heights: list[list[int]]) -> list[list[int]]:
         result = []
 
-        if not heights:
+        if not heights or not heights[0]:
             return result
 
         rows, cols = len(heights), len(heights[0])
         pacific_set, atlantic_set = set(), set()
+        dirs = [(0, 1), (1, 0), (-1, 0), (0, -1)]
 
-        def traverse(row: int, col: int, visited_set: set, prev_height: int) -> None:
+        def dfs(row: int, col: int, flow_set: set, prev_height: int) -> None:
             if (
-                row < 0 or
-                row == rows or
-                col < 0 or
-                col == cols or
-                (row, col) in visited_set or
-                heights[row][col] < prev_height
+                row < 0
+                or row == rows
+                or col < 0
+                or col == cols
+                or (row, col) in flow_set
+                or heights[row][col] < prev_height
             ):
                 return
 
-            visited_set.add((row, col))
+            flow_set.add((row, col))
 
-            dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
             for r_offset, c_offset in dirs:
-                new_r, new_c = row + r_offset, col + c_offset
-                traverse(new_r, new_c, visited_set, heights[row][col])
-
+                new_row, new_col = row + r_offset, col + c_offset
+                dfs(new_row, new_col, flow_set, heights[row][col])
 
         for row in range(rows):
-            traverse(row, 0, pacific_set, heights[row][0])
-            traverse(row, cols - 1, atlantic_set, heights[row][cols - 1])
+            dfs(row, 0, pacific_set, heights[row][0])
+            dfs(row, cols - 1, atlantic_set, heights[row][cols - 1])
 
         for col in range(cols):
-            traverse(0, col, pacific_set, heights[0][col])
-            traverse(rows - 1, col, atlantic_set, heights[rows - 1][col])
-
+            dfs(0, col, pacific_set, heights[0][col])
+            dfs(rows - 1, col, atlantic_set, heights[rows - 1][col])
 
         for row in range(rows):
             for col in range(cols):
-                if ((row, col) in pacific_set and (row, col) in atlantic_set):
+                if (row, col) in pacific_set and (row, col) in atlantic_set:
                     result.append([row, col])
 
         return result
+
 
 # Create an instance of the class
 solution = Solution()

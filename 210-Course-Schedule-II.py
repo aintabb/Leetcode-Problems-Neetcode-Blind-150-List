@@ -31,68 +31,62 @@ ai != bi
 All the pairs [ai, bi] are distinct.
 """
 
-
 # Time Complexity:  O(V+E)
 # Space Complexity: O(V)
 
 import collections
+
+
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        num_courses, prerequisites = 2, [[1,0]]
+        num_courses, prerequisites = 2, [[1, 0]]
 
         result = self.find_order(num_courses, prerequisites)
-        assert result == [0,1], err_msg_invalid_result
+        assert result == [0, 1], err_msg_invalid_result
         print(result)
 
-        num_courses, prerequisites = 4, [[1,0],[2,0],[3,1],[3,2]]
+        num_courses, prerequisites = 4, [[1, 0], [2, 0], [3, 1], [3, 2]]
 
         result = self.find_order(num_courses, prerequisites)
         assert result == [0, 1, 2, 3], err_msg_invalid_result
         print(result)
 
     def find_order(self, num_courses: int, prerequisites: list[list[int]]) -> list[int]:
-        orders = []
+        graph = collections.defaultdict(list)
+        for course, prereq in prerequisites:
+            graph[prereq].append(course)
 
-        if not num_courses:
-            return orders
-
-        graph_map = collections.defaultdict(list)
-        for node, edge in prerequisites:
-            graph_map[node].append(edge)
+        order = []
 
         UNVISITED = 0
         VISITING = 1
         VISITED = 2
 
-        states = [UNVISITED] * num_courses
+        visit = [UNVISITED] * num_courses
 
-        def dfs(node: int) -> bool:
-            state = states[node]
-
-            if (state == VISITED):
-                return True
-            if (state == VISITING):
+        def dfs(course: int) -> bool:
+            if visit[course] == VISITING:
                 return False
+            if visit[course] == VISITED:
+                return True
 
-            states[node] = VISITING
-
-            for neighbor in graph_map[node]:
-                if not dfs(neighbor):
+            visit[course] = VISITING
+            for neigh in graph[course]:
+                if not dfs(neigh):
                     return False
+            visit[course] = VISITED
 
-            states[node] = VISITED
-            orders.append(node)
+            order.append(course)
 
             return True
 
-
-        for i in range(num_courses):
-            if not dfs(i):
+        for course in range(num_courses):
+            if not dfs(course):
                 return []
 
-        return orders
+        return order[::-1]
 
 
 # Create an instance of the class

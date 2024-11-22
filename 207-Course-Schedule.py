@@ -27,11 +27,12 @@ prerequisites[i].length == 2
 All the pairs prerequisites[i] are unique.
 """
 
-
 # Time Complexity:  O(V+E)
 # Space Complexity: O(V)
 
 import collections
+
+
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
@@ -42,47 +43,51 @@ class Solution:
         assert result == True, err_msg_invalid_result
         print(result)
 
-        num_courses, prerequisites = 2, [[1,0], [0,1]]
+        num_courses, prerequisites = 2, [[1, 0], [0, 1]]
 
         result = self.can_finish(num_courses, prerequisites)
         assert result == False, err_msg_invalid_result
         print(result)
 
+        num_courses, prerequisites = 1, [[]]
+
+        result = self.can_finish(num_courses, prerequisites)
+        assert result == True, err_msg_invalid_result
+        print(result)
 
     def can_finish(self, num_courses: int, prerequisites: list[list[int]]) -> bool:
-        graph_map = collections.defaultdict(list)
+        if not prerequisites or not prerequisites[0]:
+            return True
 
-        for node, edge in prerequisites:
-            graph_map[node].append(edge)
+        graph = collections.defaultdict(list)
+        for course, prereq in prerequisites:
+            graph[prereq].append(course)
 
         UNVISITED = 0
         VISITING = 1
         VISITED = 2
 
-        states = [UNVISITED] * num_courses
+        visit = [UNVISITED] * num_courses
 
-        def dfs(node: int) -> bool:
-            state = states[node]
-
-            if (state == VISITED):
-                return True
-            if (state == VISITING):
+        def dfs(course: int) -> bool:
+            if visit[course] == VISITING:
                 return False
+            if visit[course] == VISITED:
+                return True
 
-            states[node] = VISITING
-            for neighbor in graph_map[node]:
-                if not dfs(neighbor):
+            visit[course] = VISITING
+            for neigh in graph[course]:
+                if not dfs(neigh):
                     return False
+            visit[course] = VISITED
 
-            states[node] = VISITED
             return True
 
-        for i in range(num_courses):
-            if not dfs(i):
+        for course in range(num_courses):
+            if not dfs(course):
                 return False
 
         return True
-
 
 
 # Create an instance of the class

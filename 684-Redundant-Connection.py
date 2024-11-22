@@ -27,50 +27,63 @@ The given graph is connected.
 """
 
 
-# Time Complexity:  O(N)
-# Space Complexity: O(N)
+# Time Complexity:  O(V)
+# Space Complexity: O(V)
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        edges = [[1,2],[1,3],[2,3]]
+        edges = [[1, 2], [1, 3], [2, 3]]
 
         result = self.find_redundant_connection(edges)
-        assert result == [2,3], err_msg_invalid_result
+        assert result == [2, 3], err_msg_invalid_result
         print(result)
 
-        edges = [[1,2],[2,3],[3,4],[1,4],[1,5]]
+        edges = [[1, 2], [2, 3], [3, 4], [1, 4], [1, 5]]
 
         result = self.find_redundant_connection(edges)
-        assert result == [1,4], err_msg_invalid_result
+        assert result == [1, 4], err_msg_invalid_result
         print(result)
 
+        edges = [
+            [7, 8],
+            [2, 6],
+            [2, 8],
+            [1, 4],
+            [9, 10],
+            [1, 7],
+            [3, 9],
+            [6, 9],
+            [3, 5],
+            [3, 10],
+        ]
+
+        result = self.find_redundant_connection(edges)
+        assert result == [3, 10], err_msg_invalid_result
+        print(result)
 
     def find_redundant_connection(self, edges: list[list[int]]) -> list[int]:
-        if not edges:
+        if not edges or not edges[0]:
             return []
 
-        # Union-Find
         len_edges = len(edges)
         parents = [i for i in range(len_edges + 1)]
         ranks = [1] * (len_edges + 1)
 
         def find(node: int) -> int:
-            curr_parent = parents[node]
+            while node != parents[node]:
+                parents[node] = parents[parents[node]]
+                node = parents[node]
 
-            while (curr_parent != parents[curr_parent]):
-                parents[curr_parent] = parents[parents[curr_parent]]
-                curr_parent = parents[curr_parent]
-
-            return curr_parent
+            return node
 
         def union(node_one: int, node_two: int) -> bool:
             parent_one, parent_two = find(node_one), find(node_two)
 
-            if (parent_one == parent_two):
+            if parent_one == parent_two:
                 return False
 
-            if (ranks[parent_one] > ranks[parent_two]):
+            if ranks[parent_one] > ranks[parent_two]:
                 ranks[parent_one] += ranks[parent_two]
                 parents[parent_two] = parent_one
             else:
@@ -79,9 +92,9 @@ class Solution:
 
             return True
 
-        for node, edge in edges:
-            if not union(node, edge):
-                return [node, edge]
+        for u, v in edges:
+            if not union(u, v):
+                return [u, v]
 
         return []
 

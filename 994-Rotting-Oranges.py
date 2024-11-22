@@ -32,75 +32,73 @@ n == grid[i].length
 grid[i][j] is 0, 1, or 2.
 """
 
-
 # Time Complexity:  O(m*n)
 # Space Complexity: O(m*n)
-from collections import deque
-from re import L
+import collections
+
 
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        grid = [[2,1,1],[1,1,0],[0,1,1]]
+        grid = [[2, 1, 1], [1, 1, 0], [0, 1, 1]]
 
         result = self.oranges_rotting(grid)
         assert result == 4, err_msg_invalid_result
         print(result)
 
-        grid = [[2,1,1],[0,1,1],[1,0,1]]
+        grid = [[2, 1, 1], [0, 1, 1], [1, 0, 1]]
 
         result = self.oranges_rotting(grid)
         assert result == -1, err_msg_invalid_result
         print(result)
 
-        grid = [[0,2]]
+        grid = [[0, 2]]
 
         result = self.oranges_rotting(grid)
         assert result == 0, err_msg_invalid_result
         print(result)
 
-
     def oranges_rotting(self, grid: list[list[int]]) -> int:
-        FRESH, ROTTEN = 1, 2
-        rows, cols = len(grid), len(grid[0])
-        fresh_count, time = 0, 0
+        if not grid or not grid[0]:
+            return 0
 
-        queue = deque()
+        rows, cols = len(grid), len(grid[0])
+        FRESH, ROTTEN = 1, 2
+        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+
+        queue = collections.deque()
+        fresh_count = 0
 
         for row in range(rows):
             for col in range(cols):
-                if (grid[row][col] == ROTTEN):
-                    queue.append((row, col))
-
-                if (grid[row][col] == FRESH):
+                if grid[row][col] == ROTTEN:
+                    queue.appendleft((row, col, 0))
+                elif grid[row][col] == FRESH:
                     fresh_count += 1
 
-        if (fresh_count == 0):
-            return time
+        if fresh_count == 0:
+            return 0
 
-        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        min_minutes_spent = 0
         while queue and fresh_count > 0:
-            q_len = len(queue)
+            row, col, minutes_spent = queue.pop()
 
-            for _ in range(q_len):
-                row, col = queue.pop()
+            for dy, dx in dirs:
+                new_row, new_col = row + dy, col + dx
 
-                for r_offset, c_offset in dirs:
-                    new_r, new_c = row + r_offset, col + c_offset
+                if (
+                    0 <= new_row < rows
+                    and 0 <= new_col < cols
+                    and grid[new_row][new_col] == FRESH
+                ):
+                    grid[new_row][new_col] = ROTTEN
+                    queue.appendleft((new_row, new_col, minutes_spent + 1))
+                    fresh_count -= 1
 
-                    if (
-                        0 <= new_r < rows and
-                        0 <= new_c < cols and
-                        grid[new_r][new_c] == FRESH
-                    ):
-                        grid[new_r][new_c] = ROTTEN
-                        queue.append((new_r, new_c))
-                        fresh_count -= 1
+                    min_minutes_spent = minutes_spent + 1
 
-            time += 1
-
-        return time if fresh_count == 0 else -1
+        return min_minutes_spent if fresh_count == 0 else -1
 
 
 # Create an instance of the class

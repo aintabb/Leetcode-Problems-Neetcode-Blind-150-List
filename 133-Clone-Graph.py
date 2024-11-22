@@ -49,8 +49,9 @@ The Graph is connected and all nodes can be visited starting from the given node
 
 from typing import Optional
 
+
 class Node:
-    def __init__(self, val = 0, neighbors = None) -> None:
+    def __init__(self, val=0, neighbors=None) -> None:
         self.val = val
         self.neighbors = neighbors if neighbors is not None else []
 
@@ -89,9 +90,8 @@ class Solution:
         assert self.are_graphs_equal(node_one, result), err_msg_invalid_result
         self.print_graph(result)
 
-
     def clone_graph(self, node: Optional[Node]) -> Optional[Node]:
-        if not node or len(node.neighbors) == 1:
+        if not node:
             return node
 
         old_to_new_map = {}
@@ -110,8 +110,9 @@ class Solution:
 
         return clone(node)
 
-
-    def are_graphs_equal(self, node_one: Optional[Node], node_two: Optional[Node]) -> bool:
+    def are_graphs_equal(
+        self, node_one: Optional[Node], node_two: Optional[Node]
+    ) -> bool:
         if not node_one and not node_two:
             return True
         if not node_one or not node_two:

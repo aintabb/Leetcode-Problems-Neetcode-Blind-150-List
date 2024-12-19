@@ -1,4 +1,4 @@
-'''
+"""
 Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence.
 
 You must write an algorithm that runs in O(n) time.
@@ -18,7 +18,8 @@ Output: 9
 Constraints:
 0 <= nums.length <= 105
 -109 <= nums[i] <= 109
-'''
+"""
+
 
 # Time Complexity:  O(N)
 # Space Complexity: O(N)
@@ -26,13 +27,13 @@ class LongestConsecutiveSequence:
     def __init__(self) -> None:
         err_msg_invalid_length = "Provided length is not correct. Something is wrong!"
 
-        nums = [100,4,200,1,3,2]
+        nums = [100, 4, 200, 1, 3, 2]
 
         result = self.longest_consecutive(nums)
         assert result == 4, err_msg_invalid_length
         print(result)
 
-        nums = [0,3,7,2,5,8,4,6,0,1]
+        nums = [0, 3, 7, 2, 5, 8, 4, 6, 0, 1]
 
         result = self.longest_consecutive(nums)
         assert result == 9, err_msg_invalid_length
@@ -44,29 +45,29 @@ class LongestConsecutiveSequence:
         assert result == 0, err_msg_invalid_length
         print(result)
 
-
     def longest_consecutive(self, nums: list[int]) -> int:
-      len_of_nums     = len(nums)
-      longest_seq_len = 0
+        len_of_nums = len(nums)
+        longest_seq_len = 0
 
-      if len_of_nums == 0:
-        return 0
+        if len_of_nums == 0:
+            return 0
 
-      # Convert input array to a set
-      num_set = set(nums)
+        # Convert input array to a set
+        num_set = set(nums)
 
-      for num in nums:
-        # If there is no previous number, meaning it is the start of a sequence
-        if num - 1 not in num_set:
-          # Reset the sequence length
-          curr_seq_length = 0
-          # Get the next number in the sequence
-          while num + curr_seq_length in num_set:
-            curr_seq_length += 1
-          # Update the longest sequence length
-          longest_seq_len = max(curr_seq_length, longest_seq_len)
+        for num in nums:
+            # If there is no previous number, meaning it is the start of a sequence
+            if num - 1 not in num_set:
+                # Reset the sequence length
+                curr_seq_length = 0
+                # Get the next number in the sequence
+                while num + curr_seq_length in num_set:
+                    curr_seq_length += 1
+                # Update the longest sequence length
+                longest_seq_len = max(curr_seq_length, longest_seq_len)
 
-      return longest_seq_len
+        return longest_seq_len
+
 
 # Create an instance of the class
 longest_consecutive_sequence = LongestConsecutiveSequence()

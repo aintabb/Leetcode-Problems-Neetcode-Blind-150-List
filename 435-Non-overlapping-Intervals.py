@@ -84,8 +84,6 @@ class Solution:
         if not intervals or len(intervals) == 1:
             return 0
 
-        # intervals = [[1, 2], [2, 3], [3, 4], [1, 3]]
-        # intervals = [[1, 2], [1, 3], [2, 3], [3, 4]]
         intervals.sort(key=lambda i: i[0])
 
         end = intervals[0][1]

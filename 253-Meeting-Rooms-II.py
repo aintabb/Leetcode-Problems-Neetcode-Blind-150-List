@@ -20,7 +20,7 @@ Constraints:
 import heapq
 
 
-# Time Complexity:  O(N*log*N)
+# Time Complexity:  O(N*logN)
 # Space Complexity: O(N)
 class Solution:
     def __init__(self) -> None:

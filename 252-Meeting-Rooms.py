@@ -21,37 +21,41 @@ Constraints:
 """
 
 
-# Time Complexity:  O(NlogN)
+# Time Complexity:  O(N*logN)
 # Space Complexity: O(1)
 class Solution:
-
-    class Interval:
-        def __init__(self, start: int, end: int) -> None:
-            self.start = start
-            self.end = end
-
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        intervals = [self.Interval(0, 30), self.Interval(5, 10), self.Interval(15, 20)]
+        intervals = [[0, 30], [5, 10], [15, 20]]
+
         result = self.can_attend_meetings(intervals)
         assert result == False, err_msg_invalid_result
         print(result)
 
-        intervals = [self.Interval(5, 8), self.Interval(9, 15)]
+        intervals = [[5, 8], [9, 15]]
+
         result = self.can_attend_meetings(intervals)
         assert result == True, err_msg_invalid_result
         print(result)
 
+        intervals = [[5, 8], [6, 8]]
 
-    def can_attend_meetings(self, intervals: list[Interval]) -> bool:
-        intervals.sort(key = lambda i : i.start)
+        result = self.can_attend_meetings(intervals)
+        assert result == False, err_msg_invalid_result
+        print(result)
+
+    def can_attend_meetings(self, intervals: list[list[int]]) -> bool:
+        if not intervals or len(intervals) == 0:
+            return True
+
+        intervals.sort(key=lambda i: i[0])
 
         for i in range(1, len(intervals)):
             first = intervals[i - 1]
             second = intervals[i]
 
-            if first.end > second.start:
+            if first[1] > second[0]:
                 return False
 
         return True

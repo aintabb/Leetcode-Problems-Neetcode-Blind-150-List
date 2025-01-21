@@ -1,4 +1,4 @@
-'''
+"""
 Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
 
 You may assume that each input would have exactly one solution, and you may not use the same element twice.
@@ -31,13 +31,16 @@ Only one valid answer exists.
 
 
 Follow-up: Can you come up with an algorithm that is less than O(n2) time complexity?
-'''
+"""
+
 
 # Time Complexity:  O(N)
 # Space Complexity: O(N)
 class TwoSum:
     def __init__(self) -> None:
-        err_msg_invalid_indices = "Provided indices do not add up to the target value. Something is wrong!"
+        err_msg_invalid_indices = (
+            "Provided indices do not add up to the target value. Something is wrong!"
+        )
         nums, target = [2, 7, 11, 15], 9
 
         result = self.find_indices(nums, target)
@@ -57,21 +60,21 @@ class TwoSum:
         print(result)
 
     def find_indices(self, nums: list[int], target: int) -> list[int]:
-        len_of_nums = len(nums)
-        if (len_of_nums < 2):
-          return []
+        if not nums:
+            return []
 
-        if (len_of_nums == 2):
-          return [0, 1]
+        if len(nums) == 2:
+            return [0, 1]
 
-        remaining_map = {}
+        num_map = {}
         for index, num in enumerate(nums):
-          complement = target - num
-          if complement in remaining_map:
-            return [index, remaining_map[complement]]
-          remaining_map[num] = index
+            complement = target - num
+            if complement in num_map:
+                return [index, num_map[complement]]
+            num_map[num] = index
 
         return []
+
 
 # Create an instance of the class
 two_sum = TwoSum()

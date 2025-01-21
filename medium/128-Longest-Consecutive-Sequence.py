@@ -46,27 +46,27 @@ class LongestConsecutiveSequence:
         print(result)
 
     def longest_consecutive(self, nums: list[int]) -> int:
-        len_of_nums = len(nums)
-        longest_seq_len = 0
-
-        if len_of_nums == 0:
+        if not nums:
             return 0
 
-        # Convert input array to a set
-        num_set = set(nums)
+        longest = 0
+        nums_set = set(nums)
 
-        for num in nums:
+        for num in nums_set:
+            curr_num = num
+
             # If there is no previous number, meaning it is the start of a sequence
-            if num - 1 not in num_set:
-                # Reset the sequence length
-                curr_seq_length = 0
-                # Get the next number in the sequence
-                while num + curr_seq_length in num_set:
-                    curr_seq_length += 1
-                # Update the longest sequence length
-                longest_seq_len = max(curr_seq_length, longest_seq_len)
+            if curr_num - 1 not in nums_set:
+                curr_streak = 1
 
-        return longest_seq_len
+                while curr_num + 1 in nums_set:
+                    curr_num += 1
+                    curr_streak += 1
+
+                # Update the longest sequence length
+                longest = max(longest, curr_streak)
+
+        return longest
 
 
 # Create an instance of the class

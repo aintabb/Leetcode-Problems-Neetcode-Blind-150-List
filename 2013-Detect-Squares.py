@@ -39,11 +39,12 @@ point.length == 2
 At most 3000 calls in total will be made to add and count.
 """
 
-
 # Time Complexity:  O(N)
 # Space Complexity: O(N)
 
 import collections
+
+
 class DetectSquares:
 
     def __init__(self):
@@ -59,10 +60,14 @@ class DetectSquares:
         points = list(self.points_map.keys())
 
         for x, y in points:
-            if (abs(px - x) != abs(py - y) or x == px or y == py):
+            if abs(px - x) != abs(py - y) or x == px or y == py:
                 continue
 
-            result += self.points_map[(x, y)] * self.points_map[(x, py)] * self.points_map[(px, y)]
+            result += (
+                self.points_map[(x, y)]
+                * self.points_map[(x, py)]
+                * self.points_map[(px, y)]
+            )
 
         return result
 
@@ -81,7 +86,16 @@ err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
 # Test Case
 ops = ["DetectSquares", "add", "add", "add", "count", "count", "add", "count"]
-vals = [[], [[3, 10]], [[11, 2]], [[3, 2]], [[11, 10]], [[14, 8]], [[11, 2]], [[11, 10]]]
+vals = [
+    [],
+    [[3, 10]],
+    [[11, 2]],
+    [[3, 2]],
+    [[11, 10]],
+    [[14, 8]],
+    [[11, 2]],
+    [[11, 10]],
+]
 
 expected_results = [None, None, None, None, 1, 0, None, 2]
 
@@ -89,7 +103,7 @@ for op, val, expected_result in zip(ops, vals, expected_results):
     if op == "DetectSquares":
         detect_squares = DetectSquares()
     else:
-        if (op == "add"):
+        if op == "add":
             result = detect_squares.add(val[0])
         else:
             result = detect_squares.count(val[0])

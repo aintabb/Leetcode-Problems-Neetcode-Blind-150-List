@@ -1,4 +1,4 @@
-'''
+"""
 Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number. Let these two numbers be numbers[index1] and numbers[index2] where 1 <= index1 < index2 <= numbers.length.
 
 Return the indices of the two numbers, index1 and index2, added by one as an integer array [index1, index2] of length 2.
@@ -33,23 +33,34 @@ Constraints:
 numbers is sorted in non-decreasing order.
 -1000 <= target <= 1000
 The tests are generated such that there is exactly one solution.
-'''
+"""
+
 
 # Time Complexity:  O(N)
 # Space Complexity: O(1)
 class TwoSumTwo:
     def __init__(self) -> None:
-        err_msg_invalid_number_pair = "Provided numbers does not add up to the sum. Something is wrong!"
+        err_msg_invalid_number_pair = (
+            "Provided numbers does not add up to the sum. Something is wrong!"
+        )
 
-        numbers, target = [2,7,11,15], 9
+        numbers, target = [2, 7, 11, 15], 9
 
         result = self.two_sum(numbers, target)
         assert result == [1, 2], err_msg_invalid_number_pair
         print(result)
 
-        numbers, target = [2,3,4], 6
+        result = self.two_sum_more_efficient(numbers, target)
+        assert result == [1, 2], err_msg_invalid_number_pair
+        print(result)
+
+        numbers, target = [2, 3, 4], 6
 
         result = self.two_sum(numbers, target)
+        assert result == [1, 3], err_msg_invalid_number_pair
+        print(result)
+
+        result = self.two_sum_more_efficient(numbers, target)
         assert result == [1, 3], err_msg_invalid_number_pair
         print(result)
 
@@ -59,24 +70,47 @@ class TwoSumTwo:
         assert result == [1, 2], err_msg_invalid_number_pair
         print(result)
 
+        result = self.two_sum_more_efficient(numbers, target)
+        assert result == [1, 2], err_msg_invalid_number_pair
+        print(result)
 
     def two_sum(self, numbers: list[int], target: int) -> list[int]:
-      len_of_numbers = len(numbers)
+        if len(numbers) == 2:
+            return [1, 2]
 
-      if (len_of_numbers == 2):
-        return [1, 2]
+        l, r = 0, len(numbers) - 1
+        while l < r:
+            curr_sum = numbers[l] + numbers[r]
+            if curr_sum > target:
+                r -= 1
+            elif curr_sum < target:
+                l += 1
+            else:
+                return [l + 1, r + 1]
 
-      l, r = 0, len_of_numbers - 1
-      while (l < r):
-        curr_sum = numbers[l] + numbers[r]
-        if (curr_sum > target):
-          r -= 1
-        elif (curr_sum < target):
-          l += 1
-        else:
-          return [l + 1, r + 1]
+        return []
 
-      return []
+    def two_sum_more_efficient(self, numbers: list[int], target: int) -> list[int]:
+        if len(numbers) == 2:
+            return [1, 2]
+
+        left, right = 0, len(numbers) - 1
+
+        while left < right:
+            curr_sum = numbers[left] + numbers[right]
+
+            if curr_sum == target:
+                return [left + 1, right + 1]
+
+            while curr_sum > target:
+                right -= 1
+                curr_sum = numbers[left] + numbers[right]
+
+            while curr_sum < target:
+                left += 1
+                curr_sum = numbers[left] + numbers[right]
+
+        return []
 
 
 # Create an instance of the class

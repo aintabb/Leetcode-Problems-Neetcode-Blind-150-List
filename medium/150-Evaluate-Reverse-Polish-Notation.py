@@ -1,4 +1,4 @@
-'''
+"""
 You are given an array of strings tokens that represents an arithmetic expression in a Reverse Polish Notation.
 
 Evaluate the expression. Return an integer that represents the value of the expression.
@@ -38,7 +38,8 @@ Explanation: ((10 * (6 / ((9 + 3) * -11))) + 17) + 5
 Constraints:
 1 <= tokens.length <= 104
 tokens[i] is either an operator: "+", "-", "*", or "/", or an integer in the range [-200, 200].
-'''
+"""
+
 
 # Time Complexity:  O(N)
 # Space Complexity: O(N)
@@ -46,44 +47,48 @@ class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        tokens = ["2","1","+","3","*"]
+        tokens = ["2", "1", "+", "3", "*"]
 
         result = self.evalRPN(tokens)
         assert result == 9, err_msg_invalid_result
         print(result)
 
-        tokens = ["4","13","5","/","+"]
+        tokens = ["4", "13", "5", "/", "+"]
 
         result = self.evalRPN(tokens)
         assert result == 6, err_msg_invalid_result
         print(result)
 
-        tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]
+        tokens = ["10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"]
 
         result = self.evalRPN(tokens)
         assert result == 22, err_msg_invalid_result
         print(result)
 
-
     def evalRPN(self, tokens: list[str]) -> int:
-      token_stack = []
+        if not tokens:
+            return 0
 
-      for token in tokens:
-        match token:
-          case "+":
-            token_stack.append(token_stack.pop() + token_stack.pop())
-          case "-":
-            token_one, token_two = token_stack.pop(), token_stack.pop()
-            token_stack.append(token_two - token_one)
-          case "*":
-            token_stack.append(token_stack.pop() * token_stack.pop())
-          case "/":
-            token_one, token_two = token_stack.pop(), token_stack.pop()
-            token_stack.append(int(token_two  / token_one))
-          case _:
-            token_stack.append(int(token))
+        token_stack = []
 
-      return token_stack[0]
+        for token in tokens:
+            match token:
+                case "+":
+                    num_one, num_two = int(token_stack.pop()), int(token_stack.pop())
+                    token_stack.append(num_one + num_two)
+                case "-":
+                    num_one, num_two = int(token_stack.pop()), int(token_stack.pop())
+                    token_stack.append(num_two - num_one)
+                case "*":
+                    num_one, num_two = int(token_stack.pop()), int(token_stack.pop())
+                    token_stack.append(num_one * num_two)
+                case "/":
+                    num_one, num_two = int(token_stack.pop()), int(token_stack.pop())
+                    token_stack.append(int(num_two / num_one))
+                case _:
+                    token_stack.append(int(token))
+
+        return token_stack[-1]
 
 
 # Create an instance of the class

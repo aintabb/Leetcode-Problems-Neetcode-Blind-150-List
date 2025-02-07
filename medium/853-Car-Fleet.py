@@ -46,41 +46,60 @@ All the values of position are unique.
 0 < speed[i] <= 106
 """
 
-# Time Complexity:  O(NLogN)
+# Time Complexity:  O(N*LogN)
 # Space Complexity: O(N)
+
 
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        target = 12; position = [10,8,0,5,3]; speed = [2,4,1,1,3]
+        target = 12
+        position = [10, 8, 0, 5, 3]
+        speed = [2, 4, 1, 1, 3]
 
         result = self.car_fleet(target, position, speed)
         assert result == 3, err_msg_invalid_result
         print(result)
 
-        target = 10; position = [3]; speed = [3]
+        target = 10
+        position = [3]
+        speed = [3]
 
         result = self.car_fleet(target, position, speed)
         assert result == 1, err_msg_invalid_result
         print(result)
 
-        target = 100; position = [0,2,4]; speed = [4,2,1]
+        target = 100
+        position = [0, 2, 4]
+        speed = [4, 2, 1]
 
         result = self.car_fleet(target, position, speed)
         assert result == 1, err_msg_invalid_result
         print(result)
-
 
     def car_fleet(self, target: int, position: list[int], speed: list[int]) -> int:
-        pair = [[p, s] for p, s in zip(position, speed)]
+        if len(position) != len(speed):
+            return 0
 
+        # Pair each car's position with its speed and sort by position in desc order
+        cars = sorted(zip(position, speed), reverse=True)
         fleet_stack = []
-        for p, s in sorted(pair)[::-1]:
-            fleet_stack.append((target - p) / s)
-            if (len(fleet_stack) >= 2 and fleet_stack[-1] <= fleet_stack[-2]):
-                fleet_stack.pop()
 
+        for pos, spd in cars:
+            # Calculate the time to reach the target
+            time_to_target = (target - pos) / spd
+
+            # If the stack is not empty and the current car's time to target is less than
+            # or equal to the top of the stack, it means this car will catch up to the
+            # fleet represented by the top car
+            if fleet_stack and time_to_target <= fleet_stack[-1]:
+                continue
+
+            # Otherwise, this car forms a new fleet
+            fleet_stack.append(time_to_target)
+
+        # The number of fleets is the number of unique times to target in the stack
         return len(fleet_stack)
 
 

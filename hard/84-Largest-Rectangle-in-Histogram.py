@@ -21,46 +21,53 @@ Constraints:
 
 # Time Complexity:  O(N)
 # Space Complexity: O(N)
+
+
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        heights = [2,1,5,6,2,3]
+        heights = [2, 1, 5, 6, 2, 3]
 
         result = self.largest_rectangle_area(heights)
         assert result == 10, err_msg_invalid_result
         print(result)
 
-        heights = [2,4]
+        heights = [2, 4]
 
         result = self.largest_rectangle_area(heights)
         assert result == 4, err_msg_invalid_result
         print(result)
 
-        heights = [2,1,2]
+        heights = [2, 1, 2]
 
         result = self.largest_rectangle_area(heights)
         assert result == 3, err_msg_invalid_result
         print(result)
 
-
     def largest_rectangle_area(self, heights: list[int]) -> int:
-        max_area   = 0
-        pair_stack = [] # pair: (index, height)
+        if len(heights) == 1:
+            return heights[0]
 
-        for i, h in enumerate(heights):
-            start = i
-            while (pair_stack and pair_stack[-1][1] > h):
-                index, height = pair_stack.pop()
-                max_area = max(max_area, height * (i - index))
-                start = index
+        # To keep indices of bars in increasing order
+        bar_idx_stack = []
+        max_area = 0
 
-            pair_stack.append((start, h))
+        # Append "0" to handle the last bar
+        heights.append(0)
 
-        for i, h in pair_stack:
-            max_area = max(max_area, h * (len(heights) - i))
+        for idx, h in enumerate(heights):
+            while bar_idx_stack and heights[bar_idx_stack[-1]] > h:
+                last_bar_idx = bar_idx_stack.pop()
+                last_height = heights[last_bar_idx]
+                width = idx if not bar_idx_stack else idx - bar_idx_stack[-1] - 1
+
+                max_area = max(max_area, last_height * width)
+
+            bar_idx_stack.append(idx)
 
         return max_area
+
 
 # Create an instance of the class
 solution = Solution()

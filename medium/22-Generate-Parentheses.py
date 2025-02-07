@@ -23,6 +23,8 @@ This time complexity arises from the recursive backtracking approach used to gen
 
 The number of valid combinations is given by the n-th Catalan number, which is approximately 4^n / (n * sqrt(n)). This is because for a given n, there are 2n positions where we can place either an opening or a closing parenthesis, leading to a total of 2^(2n) possible combinations. However, because we need well-formed parentheses, we divide by n+1 to get the n-th Catalan number, which is O(4^n / sqrt(n)).
 """
+
+
 # Space Complexity: O(N)
 class Solution:
     def __init__(self) -> None:
@@ -31,13 +33,19 @@ class Solution:
         n = 3
 
         result = self.generate_parenthesis(n)
-        assert result == ["((()))","(()())","(())()","()(())","()()()"], err_msg_invalid_result
+        assert result == [
+            "((()))",
+            "(()())",
+            "(())()",
+            "()(())",
+            "()()()",
+        ], err_msg_invalid_result
         print(result)
 
         n = 2
 
         result = self.generate_parenthesis(n)
-        assert result == ["(())","()()"], err_msg_invalid_result
+        assert result == ["(())", "()()"], err_msg_invalid_result
         print(result)
 
         n = 1
@@ -46,31 +54,34 @@ class Solution:
         assert result == ["()"], err_msg_invalid_result
         print(result)
 
-
     def generate_parenthesis(self, n: int) -> list[str]:
-        result  = []
+        if n == 1:
+            return ["()"]
+
+        result = []
         p_stack = []
 
-        def backtrack(open_n, close_n):
-            # Valid if n == open == closed, terminate
-            if (n == open_n == close_n):
+        def backtrack(open: int, close: int) -> None:
+            # Valid if open count == n == closed count, terminate
+            if open == n == close:
                 result.append("".join(p_stack))
                 return
 
             # Only add a opening parenthesis if open < n
-            if (open_n < n):
+            if open < n:
                 p_stack.append("(")
-                backtrack(open_n + 1, close_n)
+                backtrack(open + 1, close)
                 p_stack.pop()
 
             # Only add a closing parenthesis if closing < opening
-            if (close_n < open_n):
+            if close < open:
                 p_stack.append(")")
-                backtrack(open_n, close_n + 1)
+                backtrack(open, close + 1)
                 p_stack.pop()
 
         backtrack(0, 0)
         return result
+
 
 # Create an instance of the class
 solution = Solution()

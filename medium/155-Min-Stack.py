@@ -1,4 +1,4 @@
-'''
+"""
 Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
 
 Implement the MinStack class:
@@ -42,30 +42,30 @@ Constraints:
 - -231 <= val <= 231 - 1
 - Methods pop, top and getMin operations will always be called on non-empty stacks.
 - At most 3 * 104 calls will be made to push, pop, top, and getMin.
-'''
+"""
 
 
 # Time Complexity:  O(1)
 # Space Complexity: O(N)
 class MinStack:
     def __init__(self) -> None:
-      self.item_stack = []
-      self.min_stack  = []
+        self.val_stack = []
+        self.min_stack = []
 
     def push(self, val: int) -> None:
-      self.item_stack.append(val)
-      val = min(val, self.min_stack[-1] if self.min_stack else val)
-      self.min_stack.append(val)
+        self.val_stack.append(val)
+        min_val = min(val, self.min_stack[-1] if self.min_stack else val)
+        self.min_stack.append(min_val)
 
     def pop(self) -> None:
-      self.item_stack.pop()
-      self.min_stack.pop()
+        self.val_stack.pop()
+        self.min_stack.pop()
 
     def top(self) -> int:
-      return self.item_stack[-1]
+        return self.val_stack[-1]
 
     def getMin(self) -> int:
-      return self.min_stack[-1]
+        return self.min_stack[-1]
 
 
 # Your MinStack object will be instantiated and called as such:
@@ -76,44 +76,61 @@ class MinStack:
 # param_4 = obj.getMin()
 
 ops_dict = {
-  "MinStack": MinStack,
-  "push": MinStack.push,
-  "pop": MinStack.pop,
-  "top": MinStack.top,
-  "getMin": MinStack.getMin
+    "MinStack": MinStack,
+    "push": MinStack.push,
+    "pop": MinStack.pop,
+    "top": MinStack.top,
+    "getMin": MinStack.getMin,
 }
 
-err_msg_invalid_result = "Provided result is not correct for the given function. Something is wrong!"
+err_msg_invalid_result = (
+    "Provided result is not correct for the given function. Something is wrong!"
+)
 
-test_cases  = []
+test_cases = []
 
 # Test Case - 1
-ops_one   = ["MinStack","push","push","push","getMin","pop","top","getMin"]
-vals_one  = [[],[-2],[0],[-3],[],[],[],[]]
+ops_one = ["MinStack", "push", "push", "push", "getMin", "pop", "top", "getMin"]
+vals_one = [[], [-2], [0], [-3], [], [], [], []]
 expected_results = [None, None, None, None, -3, None, 0, -2]
 
 test_cases.append((ops_one, vals_one, expected_results))
 
 # Test Case - 2
-ops_two = ["MinStack","push","push","push","push","push","push","push", "pop", "pop", "pop", "getMin"]
-vals_two = [[],[8],[2],[3],[4],[0],[1],[5], [], [], [], []]
+ops_two = [
+    "MinStack",
+    "push",
+    "push",
+    "push",
+    "push",
+    "push",
+    "push",
+    "push",
+    "pop",
+    "pop",
+    "pop",
+    "getMin",
+]
+vals_two = [[], [8], [2], [3], [4], [0], [1], [5], [], [], [], []]
 expected_results = [None, None, None, None, None, None, None, None, None, None, None, 2]
 
 test_cases.append((ops_two, vals_two, expected_results))
 
 for i in range(len(test_cases)):
-  # Not a clever way to test this, but it works for our purposes
-  for op, val, expected_result in zip(test_cases[i][0], test_cases[i][1], test_cases[i][2]):
-    if op == "MinStack":
-      min_stack = MinStack()
-      # Update the "min_stack" instance
-      ops_dict[op] = min_stack
-      continue
+    # Not a clever way to test this, but it works for our purposes
+    for op, val, expected_result in zip(
+        test_cases[i][0], test_cases[i][1], test_cases[i][2]
+    ):
+        if op == "MinStack":
+            min_stack = MinStack()
+            # Update the "min_stack" instance
+            ops_dict[op] = min_stack
+            continue
 
-    if (op == "push"):
-      result = ops_dict[op](min_stack, val[0])
-    else:
-      result = ops_dict[op](min_stack)
+        if op == "push":
+            result = ops_dict[op](min_stack, val[0])
+        else:
+            result = ops_dict[op](min_stack)
 
-    assert result == expected_result, err_msg_invalid_result
-    print(result)
+        assert result == expected_result, err_msg_invalid_result
+        print(result)

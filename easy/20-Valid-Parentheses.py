@@ -74,25 +74,23 @@ class ValidParentheses:
         if not s or len(s) == 1 or len(s) % 2 != 0:
             return False
 
-        char_stack = []
+        p_stack = []
         # Map closing parenthesis
-        char_map = {"}": "{", ")": "(", "]": "["}
+        p_map = {"}": "{", ")": "(", "]": "["}
 
         for ch in s:
             # If we came across to a closing parenthesis
-            if ch in char_map:
+            if ch in p_map:
                 # Make sure if the stack is not empty and parenthesis matches
-                if char_stack and char_stack[-1] == char_map[ch]:
-                    # Only pop if the current char has a matching opening parenthesis in the stack
-                    char_stack.pop()
-                else:
-                    return False
+                if p_stack and p_stack.pop() == p_map[ch]:
+                    continue
+                return False
             else:
                 # Add opening parenthesis to the stack
-                char_stack.append(ch)
+                p_stack.append(ch)
 
         # At the end, the stack should be empty since we pop every matching parenthesis
-        return True if not char_stack else False
+        return not p_stack
 
 
 # Create an instance of the class

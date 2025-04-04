@@ -61,19 +61,21 @@ class Solution:
         assert result == 11, err_msg_invalid_result
         print(result)
 
-
     def find_min(self, nums: list[int]) -> int:
+        if len(nums) == 1:
+            return nums[0]
+
         left, right = 0, len(nums) - 1
 
-        while (left < right):
+        while left < right:
             mid = left + (right - left) // 2
 
-            if (nums[mid] > nums[right]):
+            if nums[mid] > nums[right]:
                 left = mid + 1
             else:
                 right = mid
 
-        return nums[right]
+        return nums[left]
 
 
 # Create an instance of the class

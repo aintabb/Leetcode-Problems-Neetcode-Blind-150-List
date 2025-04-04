@@ -37,26 +37,27 @@ At most 2 * 105 calls will be made to set and get.
 # Space Complexity: O(N) -> for the overall structure, O(1) -> for set() and get()
 class TimeMap:
     def __init__(self) -> None:
-        self.time_map = {}
+        self.store_map = {}
 
     def set(self, key: str, value: str, timestamp: int) -> None:
-        if key not in self.time_map:
-            self.time_map[key] = []
+        if key not in self.store_map:
+            self.store_map[key] = []
 
-        self.time_map[key].append([value, timestamp])
+        self.store_map[key].append([value, timestamp])
 
     def get(self, key: str, timestamp: int) -> str:
+        if key not in self.store_map:
+            return ""
+
+        pairs = self.store_map[key]
         result = ""
-        values = self.time_map.get(key, [])
+        left, right = 0, len(pairs) - 1
 
-        # Binary Search
-        left, right = 0, len(values) - 1
-
-        while (left <= right):
+        while left <= right:
             mid = left + (right - left) // 2
 
-            if (values[mid][1] <= timestamp):
-                result = values[mid][0]
+            if pairs[mid][1] <= timestamp:
+                result = pairs[mid][0]
                 left = mid + 1
             else:
                 right = mid - 1
@@ -75,20 +76,48 @@ time_map = TimeMap()
 
 err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-# Test Case
+test_cases = []
+
+# Test Case - 1
 ops = ["TimeMap", "set", "get", "get", "set", "get", "get"]
-vals = [[], ["foo", "bar", 1], ["foo", 1], ["foo", 3], ["foo", "bar2", 4], ["foo", 4], ["foo", 5]]
+vals = [
+    [],
+    ["foo", "bar", 1],
+    ["foo", 1],
+    ["foo", 3],
+    ["foo", "bar2", 4],
+    ["foo", 4],
+    ["foo", 5],
+]
 
 expected_results = [None, None, "bar", "bar", None, "bar2", "bar2"]
+test_cases.append(list(zip(ops, vals, expected_results)))
 
-for op, val, expected_result in zip(ops, vals, expected_results):
-    if op == "TimeMap":
-        time_map = TimeMap()
-    else:
-        if (op == "set"):
-            result = time_map.set(val[0], val[1], val[2])
+# Test Case - 2
+ops = ["TimeMap", "set", "set", "get", "get", "get", "get", "get"]
+vals = [
+    [],
+    ["love", "high", 10],
+    ["love", "low", 20],
+    ["love", 5],
+    ["love", 10],
+    ["love", 15],
+    ["love", 20],
+    ["love", 25],
+]
+
+expected_results = [None, None, None, "", "high", "high", "low", "low"]
+test_cases.append(list(zip(ops, vals, expected_results)))
+
+for test_case in test_cases:
+    for op, val, expected_result in test_case:
+        if op == "TimeMap":
+            time_map = TimeMap()
         else:
-            result = time_map.get(val[0], val[1])
+            if op == "set":
+                result = time_map.set(val[0], val[1], val[2])
+            else:
+                result = time_map.get(val[0], val[1])
 
-        assert result == expected_result, err_msg_invalid_result
-        print(result)
+            assert result == expected_result, err_msg_invalid_result
+            print(result)

@@ -24,34 +24,43 @@ nums is sorted in ascending order.
 
 # Time Complexity:  O(logN)
 # Space Complexity: O(1)
+
+
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        nums, target = [-1,0,3,5,9,12], 9
+        nums, target = [-1, 0, 3, 5, 9, 12], 9
 
         result = self.search_with_recursion(nums, target)
         assert result == 4, err_msg_invalid_result
         print(result)
 
-        nums, target = [-1,0,3,5,9,12], 2
+        result = self.search_with_iteration(nums, target)
+        assert result == 4, err_msg_invalid_result
+        print(result)
+
+        nums, target = [-1, 0, 3, 5, 9, 12], 2
 
         result = self.search_with_recursion(nums, target)
         assert result == -1, err_msg_invalid_result
         print(result)
 
+        result = self.search_with_iteration(nums, target)
+        assert result == -1, err_msg_invalid_result
+        print(result)
 
     def search_with_recursion(self, nums: list[int], target: int) -> int:
         left, right = 0, len(nums) - 1
 
         def binary_search(left, right):
-            if (right >= left):
+            if right >= left:
                 # To prevent integer overflow. It usually don't happen in Python
                 middle = left + (right - left) // 2
 
-                if (nums[middle] > target):
+                if nums[middle] > target:
                     return binary_search(left, middle - 1)
-                elif (nums[middle] < target):
+                elif nums[middle] < target:
                     return binary_search(middle + 1, right)
                 else:
                     return middle
@@ -61,19 +70,25 @@ class Solution:
         return binary_search(left, right)
 
     def search_with_iteration(self, nums: list[int], target: int) -> int:
-        left, right = 0, len(nums) - 1
+        if len(nums) == 1:
+            return 0 if nums[0] == target else -1
 
-        while (right >= left):
-            middle = left + (right - left) // 2
+        left = 0
+        right = len(nums) - 1
 
-            if (nums[middle] > target):
-                right = middle - 1
-            elif (nums[middle] < target):
-                left = middle + 1
+        while left <= right:
+            mid = left + (right - left) // 2
+
+            if nums[mid] == target:
+                return mid
+
+            if nums[mid] > target:
+                right = mid - 1
             else:
-                return middle
+                left = mid + 1
 
         return -1
+
 
 # Create an instance of the class
 solution = Solution()

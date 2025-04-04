@@ -28,10 +28,10 @@ piles.length <= h <= 109
 1 <= piles[i] <= 109
 """
 
-
-# Time Complexity:  O(M log N) -> M is the number of piles, N is the range of possible speeds k during binary search
+# Time Complexity:  O(n*logM) where n is the number of piles and M is the maximum pile size
 # Space Complexity: O(1)
 from math import ceil
+
 
 class Solution:
     def __init__(self) -> None:
@@ -55,25 +55,25 @@ class Solution:
         assert result == 23, err_msg_invalid_result
         print(result)
 
-
     def min_eating_speed(self, piles: list[int], h: int) -> int:
-        left, right = ceil(sum(piles) / h), max(piles)
-        result = right
-
-        while (left <= right):
-            k = (left + right) // 2
-            hours = 0
-
+        def can_finish_all(k: int) -> bool:
+            hours_spent = 0
             for pile in piles:
-                hours += ceil(pile / k)
+                hours_spent += ceil(pile / k)
 
-            if (hours <= h):
-                right = k - 1
-                result = k
+            return hours_spent <= h
+
+        left, right = 1, max(piles)
+
+        while left < right:
+            mid = left + (right - left) // 2
+
+            if can_finish_all(mid):
+                right = mid
             else:
-                left = k + 1
+                left = mid + 1
 
-        return result
+        return left
 
 
 # Create an instance of the class

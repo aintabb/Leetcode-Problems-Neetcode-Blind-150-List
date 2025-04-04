@@ -34,49 +34,50 @@ There will be at most 2 dots in word for search queries.
 At most 104 calls will be made to addWord and search.
 """
 
-class TrieNode :
-  def __init__(self) -> None:
-    self.end_word = False
-    self.children = {}
+
+class TrieNode:
+    def __init__(self) -> None:
+        self.end_word = False
+        self.children = {}
+
 
 class WordDictionary:
-  def __init__(self) -> None:
-    self.root = TrieNode()
+    def __init__(self) -> None:
+        self.root = TrieNode()
 
-  def addWord(self, word: str) -> None:
-    curr = self.root
+    def addWord(self, word: str) -> None:
+        curr = self.root
 
-    for ch in word:
-      if ch not in curr.children:
-        curr.children[ch] = TrieNode()
-
-      curr = curr.children[ch]
-
-    curr.end_word = True
-
-  def search(self, word: str) -> bool:
-      def dfs(j: int, root: TrieNode) -> bool:
-        curr = root
-
-        for i in range(j, len(word)):
-          ch = word[i]
-
-          if (ch == '.'):
-            for child in curr.children.values():
-              if (dfs(i + 1, child)):
-                return True
-
-            return False
-          else:
+        for ch in word:
             if ch not in curr.children:
-              return False
+                curr.children[ch] = TrieNode()
 
             curr = curr.children[ch]
 
-        return curr.end_word
+        curr.end_word = True
 
-      return dfs(0, self.root)
+    def search(self, word: str) -> bool:
+        def dfs(j: int, root: TrieNode) -> bool:
+            curr = root
 
+            for i in range(j, len(word)):
+                ch = word[i]
+
+                if ch == ".":
+                    for child in curr.children.values():
+                        if dfs(i + 1, child):
+                            return True
+
+                    return False
+                else:
+                    if ch not in curr.children:
+                        return False
+
+                    curr = curr.children[ch]
+
+            return curr.end_word
+
+        return dfs(0, self.root)
 
 
 # Your WordDictionary object will be instantiated and called as such:
@@ -85,40 +86,61 @@ class WordDictionary:
 # param_2 = obj.search(word)
 
 ops_dict = {
-  "WordDictionary": WordDictionary,
-  "addWord": WordDictionary.addWord,
-  "search": WordDictionary.search
+    "WordDictionary": WordDictionary,
+    "addWord": WordDictionary.addWord,
+    "search": WordDictionary.search,
 }
 
-err_msg_invalid_result = "Provided result is not correct for the given function. Something is wrong!"
+err_msg_invalid_result = (
+    "Provided result is not correct for the given function. Something is wrong!"
+)
 
-test_cases  = []
+test_cases = []
 
 # Test Case - 1
-ops_one   = ["WordDictionary","addWord","addWord","addWord","search","search","search","search"]
-vals_one  = [[],["bad"],["dad"],["mad"],["pad"],["bad"],[".ad"],["b.."]]
+ops_one = [
+    "WordDictionary",
+    "addWord",
+    "addWord",
+    "addWord",
+    "search",
+    "search",
+    "search",
+    "search",
+]
+vals_one = [[], ["bad"], ["dad"], ["mad"], ["pad"], ["bad"], [".ad"], ["b.."]]
 expected_results_one = [None, None, None, None, False, True, True, True]
 
-test_cases.append((ops_one, vals_one, expected_results_one))
+test_cases.append(list(zip(ops_one, vals_one, expected_results_one)))
 
 # Test Case - 2
-ops_two = ["WordDictionary","addWord","addWord","search","search","search","search","search","search"]
-vals_two = [[],["a"],["a"],["."],["a"],["aa"],["a"],[".a"],["a."]]
+ops_two = [
+    "WordDictionary",
+    "addWord",
+    "addWord",
+    "search",
+    "search",
+    "search",
+    "search",
+    "search",
+    "search",
+]
+vals_two = [[], ["a"], ["a"], ["."], ["a"], ["aa"], ["a"], [".a"], ["a."]]
 expected_results_two = [None, None, None, True, True, False, True, False, False]
 
-test_cases.append((ops_two, vals_two, expected_results_two))
+test_cases.append(list(zip(ops_two, vals_two, expected_results_two)))
 
 
 for test_case in test_cases:
-  # Not a clever way to test this, but it works for our purposes
-  for op, val, expected_result in zip(test_case[0], test_case[1], test_case[2]):
-      if op == "WordDictionary":
-        trie = WordDictionary()
-        # Update the "trie" instance
-        ops_dict[op] = trie
-        continue
+    # Not a clever way to test this, but it works for our purposes
+    for op, val, expected_result in test_case:
+        if op == "WordDictionary":
+            trie = WordDictionary()
+            # Update the "trie" instance
+            ops_dict[op] = trie
+            continue
 
-      result = ops_dict[op](trie, val[0])
+        result = ops_dict[op](trie, val[0])
 
-      assert result == expected_result, err_msg_invalid_result
-      print(result)
+        assert result == expected_result, err_msg_invalid_result
+        print(result)

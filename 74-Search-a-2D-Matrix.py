@@ -24,61 +24,51 @@ n == matrix[i].length
 -104 <= matrix[i][j], target <= 104
 """
 
-
 # Time Complexity:  O(log(m*n))
 # Space Complexity: O(1)
+
+
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        matrix, target = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], 3
+        matrix, target = [[1, 3, 5, 7], [10, 11, 16, 20], [23, 30, 34, 60]], 3
 
         result = self.search_matrix(matrix, target)
         assert result == True, err_msg_invalid_result
         print(result)
 
-        matrix, target = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], 13
+        matrix, target = [[1, 3, 5, 7], [10, 11, 16, 20], [23, 30, 34, 60]], 13
 
         result = self.search_matrix(matrix, target)
         assert result == False, err_msg_invalid_result
         print(result)
 
-        matrix, target = [[1,3]], 3
+        matrix, target = [[1, 3]], 3
 
         result = self.search_matrix(matrix, target)
         assert result == True, err_msg_invalid_result
         print(result)
 
-
     def search_matrix(self, matrix: list[list[int]], target: int) -> bool:
-        rows, cols = len(matrix), len(matrix[0])
-
-        bottom_r, top_r = 0, rows - 1
-
-        while (bottom_r <= top_r):
-            row = bottom_r + (top_r - bottom_r) // 2
-
-            if (target < matrix[row][0]):
-                top_r = row - 1
-            elif (target > matrix[row][-1]):
-                bottom_r = row + 1
-            else:
-                break
-
-        if (bottom_r > top_r):
+        if not matrix or not matrix[0]:
             return False
 
-        left, right = 0, cols - 1
+        rows, cols = len(matrix), len(matrix[0])
+        left, right = 0, (rows * cols) - 1
 
-        while (left <= right):
+        while left <= right:
             mid = left + (right - left) // 2
+            mid_row = mid // cols
+            mid_col = mid % cols
 
-            if (target < matrix[row][mid]):
-                right = mid - 1
-            elif (target > matrix[row][mid]):
-                left = mid + 1
-            else:
+            if matrix[mid_row][mid_col] == target:
                 return True
+
+            if matrix[mid_row][mid_col] > target:
+                right = mid - 1
+            else:
+                left = mid + 1
 
         return False
 

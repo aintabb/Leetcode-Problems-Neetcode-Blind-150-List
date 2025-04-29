@@ -49,22 +49,26 @@ class Solution:
         assert result == 3, err_msg_invalid_result
         print(result)
 
-
-
     def length_of_longest_substring(self, s: str) -> int:
-        char_set = set()
+        if not s or len(s) < 1:
+            return 0
 
-        left = max_len = 0
+        len_s = len(s)
+        if len_s == 1:
+            return 1
+
+        left = longest = 0
+        seen_set = set()
 
         for right in range(len(s)):
-            while s[right] in char_set:
-                char_set.remove(s[left])
+            while s[right] in seen_set:
+                seen_set.remove(s[left])
                 left += 1
 
-            char_set.add(s[right])
-            max_len = max(max_len, right - left + 1)
+            seen_set.add(s[right])
+            longest = max(longest, right - left + 1)
 
-        return max_len
+        return longest
 
 
 # Create an instance of the class

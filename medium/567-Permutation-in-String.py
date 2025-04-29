@@ -39,30 +39,32 @@ class Solution:
         assert result == False, err_msg_invalid_result
         print(result)
 
-
-
     def character_replacement(self, s1: str, s2: str) -> bool:
-        n1 = len(s1)
-        n2 = len(s2)
-
-        if (n1 > n2):
-            return False
-
-        s1_counts = [0] * 26
-        s2_counts = [0] * 26
-
-        for i in range(n1):
-            s1_counts[ord(s1[i]) - ord('a')] += 1
-            s2_counts[ord(s2[i]) - ord('a')] += 1
-
-        if (s1_counts == s2_counts):
+        if not s1 or not s2:
             return True
 
-        for i in range(n1, n2):
-            s2_counts[ord(s2[i]) - ord('a')] += 1
-            s2_counts[ord(s2[i - n1]) - ord('a')] -= 1
+        len_s1 = len(s1)
+        len_s2 = len(s2)
 
-            if (s1_counts == s2_counts):
+        if len_s1 > len_s2:
+            return False
+
+        s1_char_freq = [0] * 26
+        s2_char_freq = [0] * 26
+
+        for idx in range(len_s1):
+            s1_char_freq[ord(s1[idx]) - ord("a")] += 1
+            s2_char_freq[ord(s2[idx]) - ord("a")] += 1
+
+        if s1_char_freq == s2_char_freq:
+            return True
+
+        # Try every combination by moving the window
+        for idx in range(len_s1, len_s2):
+            s2_char_freq[ord(s2[idx]) - ord("a")] += 1
+            s2_char_freq[ord(s2[idx - len_s1]) - ord("a")] -= 1
+
+            if s1_char_freq == s2_char_freq:
                 return True
 
         return False

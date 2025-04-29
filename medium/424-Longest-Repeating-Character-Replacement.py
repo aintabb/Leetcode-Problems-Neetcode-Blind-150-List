@@ -43,17 +43,25 @@ class Solution:
         assert result == 4, err_msg_invalid_result
         print(result)
 
-
     def character_replacement(self, s: str, k: int) -> int:
-        longest, left = 0, 0
+        if not s or len(s) == 0:
+            return 0
 
-        counts = [0] * 26
+        len_s = len(s)
+        if len_s == 1:
+            return 1
 
-        for right in range(len(s)):
-            counts[ord(s[right]) - ord('A')] += 1
+        left = longest = 0
+        char_freq = [0] * 26
 
-            while (right - left + 1) - max(counts) > k:
-                counts[ord(s[left]) - ord('A')] -= 1
+        for right in range(len_s):
+            right_index = ord(s[right]) - ord("A")
+            char_freq[right_index] += 1
+
+            # Find the length of the character to replace
+            while (right - left + 1) - max(char_freq) > k:
+                left_index = ord(s[left]) - ord("A")
+                char_freq[left_index] -= 1
                 left += 1
 
             longest = max(longest, right - left + 1)

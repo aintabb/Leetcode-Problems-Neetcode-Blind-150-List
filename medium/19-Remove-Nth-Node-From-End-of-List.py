@@ -26,9 +26,14 @@ The number of nodes in the list is sz.
 Follow up: Could you do this in one pass?
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from typing import Optional
 from data_structures.linked_list import ListNode, LinkedList
+
 
 # Time Complexity:  O(N)
 # Space Complexity: O(1)
@@ -79,26 +84,30 @@ class Solution:
         assert ll.compare_lists(result_ll.head, result), err_msg_invalid_result
         ll.print_list(result)
 
+    def remove_nth_from_end(
+        self, head: Optional[ListNode], n: int
+    ) -> Optional[ListNode]:
+        if not head or n == 0:
+            return head
 
-    def remove_nth_from_end(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
-        dummy = ListNode(0, head)
+        dummy = ListNode(0)
+        dummy.next = head
+        fast = slow = dummy
 
-        left = dummy
-        right = head
+        # Move fast n steps ahead
+        for _ in range(n):
+            fast = fast.next
 
-        # Setting up the offset, n.
-        while n > 0:
-            right = right.next
-            n -= 1
+        # Move both until fast reaches the end
+        while fast.next:
+            fast = fast.next
+            slow = slow.next
 
-        # Moving up the nodes while keep the offset same.
-        while right:
-            right = right.next
-            left = left.next
-
-        left.next = left.next.next
+        # Remove the nth node from the end
+        slow.next = slow.next.next
 
         return dummy.next
+
 
 # Create an instance of the class
 solution = Solution()

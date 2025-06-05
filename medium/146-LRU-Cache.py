@@ -37,60 +37,65 @@ Constraints:
 At most 2 * 105 calls will be made to get and put.
 """
 
-class Node:
-    # Doubly-linked list
-    def __init__(self, key: int, val: int) -> None:
-        self.key, self.val = key, val
+
+class DoublyNode:
+    def __init__(self, key: int = 0, value: int = 0) -> None:
+        self.key, self.value = key, value
         self.prev = self.next = None
+
 
 # Time Complexity:  O(1) -> for both get and put methods
 # Space Complexity: O(capacity)
 class LRUCache:
-    def __init__(self, capacity: int):
-        self.capacity = capacity
-        self.cache = { } # { key: Node }
+    def __init__(self, capacity: int) -> None:
+        if capacity == 0:
+            return
 
-        self.left, self.right = Node(0, 0), Node(0, 0)
+        self.capacity = capacity
+        self.cache = {}  # { key: DoublyNode }
+
+        # Initialize the doubly-linked list
+        self.left, self.right = DoublyNode(), DoublyNode()
         self.left.next, self.right.prev = self.right, self.left
 
-
-    # Remove a node
-    def remove(self, node: Node) -> None:
+    # Remove a node from the doubly-linked list
+    def remove(self, node: DoublyNode) -> None:
         node_prev, node_next = node.prev, node.next
-
         node_prev.next, node_next.prev = node_next, node_prev
 
-    # Insert a new node to the right
-    # Make it MRU, LRU -> ....... -> MRU
-    def insert(self, node: Node) -> None:
-        node_prev, node_next = self.right.prev, self.right
-        node_prev.next = node_next.prev = node
-        node.prev, node.next = node_prev, node_next
-
+    # Insert a new node to the right (most recently used)
+    # Make the new node MRU, LRU ->.......-> MRU
+    def insert(self, node: DoublyNode) -> None:
+        node_end_prev, node_end = self.right.prev, self.right
+        node_end_prev.next = node_end.prev = node
+        node.prev, node.next = node_end_prev, node_end
 
     def get(self, key: int) -> int:
         if key in self.cache:
-            # Remove and insert so that it becomes MRU.
-            # We are inserting most recently used nodes to the right
-            self.remove(self.cache[key])
-            self.insert(self.cache[key])
+            # Remove and insert so that the node becomes MRU
+            node = self.cache[key]
+            self.remove(node)
+            self.insert(node)
 
-            return self.cache[key].val
+            return node.value
 
         return -1
 
     def put(self, key: int, value: int) -> None:
+        # If the node is already in the doubly-linked list, remove it so that we can update it
+        # with the new data
         if key in self.cache:
             self.remove(self.cache[key])
 
-        self.cache[key] = Node(key, value)
-        self.insert(self.cache[key])
+        new_node = DoublyNode(key, value)
+        self.cache[key] = new_node
+        self.insert(new_node)
 
-        if (len(self.cache) > self.capacity):
+        # If the number of keys exceeds the capacity, evict the LRU
+        if len(self.cache) > self.capacity:
             lru = self.left.next
             self.remove(lru)
             del self.cache[lru.key]
-
 
 
 # Your LRUCache object will be instantiated and called as such:
@@ -114,7 +119,7 @@ for op, val, expected_result in zip(ops, vals, expected_results):
     if op == "LRUCache":
         lru_cache = LRUCache(int(val[0]))
     else:
-        if (op == "put"):
+        if op == "put":
             result = lru_cache.put(int(val[0]), int(val[1]))
         else:
             result = lru_cache.get(int(val[0]))

@@ -25,9 +25,14 @@ The number of nodes in each linked list is in the range [1, 100].
 It is guaranteed that the list represents a number that does not have leading zeros.
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from typing import Optional, cast
 from data_structures.linked_list import ListNode, LinkedList
+
 
 # Time Complexity:  O(N)
 # Space Complexity: O(1)
@@ -51,7 +56,9 @@ class Solution:
         result_ll.append(8)
 
         result = self.add_two_numbers(cast(ListNode, l1.head), cast(ListNode, l2.head))
-        assert result_ll.compare_lists(result_ll.head, result) == True, err_msg_invalid_result
+        assert (
+            result_ll.compare_lists(result_ll.head, result) == True
+        ), err_msg_invalid_result
         result_ll.print_list(result)
 
         l1 = LinkedList()
@@ -64,7 +71,9 @@ class Solution:
         result_ll.append(0)
 
         result = self.add_two_numbers(cast(ListNode, l1.head), cast(ListNode, l2.head))
-        assert result_ll.compare_lists(result_ll.head, result) == True, err_msg_invalid_result
+        assert (
+            result_ll.compare_lists(result_ll.head, result) == True
+        ), err_msg_invalid_result
         result_ll.print_list(result)
 
         l1 = LinkedList()
@@ -93,30 +102,31 @@ class Solution:
         result_ll.append(1)
 
         result = self.add_two_numbers(cast(ListNode, l1.head), cast(ListNode, l2.head))
-        assert result_ll.compare_lists(result_ll.head, result) == True, err_msg_invalid_result
+        assert (
+            result_ll.compare_lists(result_ll.head, result) == True
+        ), err_msg_invalid_result
         result_ll.print_list(result)
 
-
-    def add_two_numbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+    def add_two_numbers(
+        self, l1: Optional[ListNode], l2: Optional[ListNode]
+    ) -> Optional[ListNode]:
         dummy = ListNode()
         curr = dummy
-
         carry = 0
 
         while l1 or l2 or carry:
-            # Calculate digits
-            value_one = l1.val if l1 else 0
-            value_two = l2.val if l2 else 0
+            first_val = l1.val if l1 else 0
+            second_val = l2.val if l2 else 0
 
-            sum_of_two = value_one + value_two + carry
-            carry = sum_of_two // 10
-            sum_of_two = sum_of_two % 10
+            curr_sum = first_val + second_val + carry
+            carry = curr_sum // 10
+            curr_digit = curr_sum % 10
 
-            curr.next = ListNode(sum_of_two)
+            curr.next = ListNode(curr_digit)
 
-            # Update pointers
             l1 = l1.next if l1 else None
             l2 = l2.next if l2 else None
+
             curr = curr.next
 
         return dummy.next

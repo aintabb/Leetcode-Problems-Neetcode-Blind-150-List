@@ -32,9 +32,14 @@ pos is -1 or a valid index in the linked-list.
 Follow up: Can you solve it using O(1) (i.e. constant) memory?
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from typing import Optional
 from data_structures.linked_list import ListNode, LinkedList
+
 
 # Time Complexity:  O(N)
 # Space Complexity: O(1)
@@ -51,7 +56,7 @@ class Solution:
         pos = 1
 
         temp = ll.head
-        while (temp.val != -4):
+        while temp.val != -4:
             temp = temp.next
 
         temp.next = ll.head.next
@@ -81,7 +86,6 @@ class Solution:
         assert result == False, err_msg_invalid_result
         print(result)
 
-
     def has_cycle(self, head: Optional[ListNode]) -> bool:
         if not head:
             return False
@@ -89,14 +93,15 @@ class Solution:
         # Floyd's Tortoise & Hare Algorithm
         slow, fast = head, head
 
-        while (fast and fast.next):
+        while fast and fast.next:
             fast = fast.next.next
             slow = slow.next
 
-            if (fast == slow):
+            if fast == slow:
                 return True
 
         return False
+
 
 # Create an instance of the class
 solution = Solution()

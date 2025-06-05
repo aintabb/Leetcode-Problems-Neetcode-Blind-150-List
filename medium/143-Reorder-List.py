@@ -30,9 +30,14 @@ The number of nodes in the list is in the range [1, 5 * 104].
 - continue until exhausting of the linked list
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from typing import Optional
 from data_structures.linked_list import ListNode, LinkedList
+
 
 # Time Complexity:  O(N)
 # Space Complexity: O(1)
@@ -76,10 +81,10 @@ class Solution:
         assert ll.compare_lists(ll.head, result_ll.head) == True, err_msg_invalid_result
         ll.print_list(ll.head)
 
-
     """
         Do not return anything, modify head in-place instead.
     """
+
     def reorder_list(self, head: Optional[ListNode]) -> None:
         if not head:
             return
@@ -92,14 +97,14 @@ class Solution:
             fast = fast.next.next
 
         # Reverse the other half
-        second = slow.next
+        curr = slow.next
         prev = slow.next = None
 
-        while second:
-            temp = second.next
-            second.next = prev
-            prev = second
-            second = temp
+        while curr:
+            temp = curr.next
+            curr.next = prev
+            prev = curr
+            curr = temp
 
         # Merge halves
         first, second = head, prev

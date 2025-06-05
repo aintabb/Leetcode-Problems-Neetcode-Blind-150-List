@@ -42,10 +42,15 @@ Constraints:
 Node.random is null or is pointing to some node in the linked list.
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from typing import cast
 from typing import Optional
-from data_structures.linked_list import LinkedList, Node
+from data_structures.linked_list import LinkedList, ListNode, Node
+
 
 # Time Complexity:  O(N)
 # Space Complexity: O(N)
@@ -55,11 +60,11 @@ class Solution:
 
         ll = LinkedList()
 
-        node_seven = ll.append(7, random = None)
-        ll.append(13, random = node_seven)
+        node_seven = ll.append(7, random=None)
+        ll.append(13, random=node_seven)
         node_one = Node(1, None, node_seven)
-        node_eleven = ll.append(11, random = node_one)
-        node_ten = ll.append(10, random = node_eleven)
+        node_eleven = ll.append(11, random=node_one)
+        node_ten = ll.append(10, random=node_eleven)
         node_ten.next = node_one
 
         result = self.copy_random_list(cast(Node, ll.head))
@@ -68,8 +73,8 @@ class Solution:
 
         ll = LinkedList()
 
-        node_one = ll.append(1, random = None)
-        node_two = ll.append(2, random = None)
+        node_one = ll.append(1, random=None)
+        node_two = ll.append(2, random=None)
         node_one.next = node_two
         node_one.random = node_two
         node_two.random = node_two
@@ -80,42 +85,39 @@ class Solution:
 
         ll = LinkedList()
 
-        node_one = ll.append(3, random = None)
-        node_two = ll.append(3, random = node_one)
+        node_one = ll.append(3, random=None)
+        node_two = ll.append(3, random=node_one)
         node_one.next = node_two
         node_two.random = node_one
-        node_three = ll.append(3, random = None)
+        node_three = ll.append(3, random=None)
         node_two.next = node_three
 
         result = self.copy_random_list(cast(Node, ll.head))
         assert ll.compare_lists(ll.head, result) == True, err_msg_invalid_result
         ll.print_list(ll.head)
 
-
     def copy_random_list(self, head: Optional[Node]) -> Optional[Node]:
         if not head:
             return head
 
-        old_to_copy = { None: None }
+        old_to_copy_map = {None: None}
 
         curr = head
-
         while curr:
-            copy = Node(x = curr.val)
-            old_to_copy[curr] = copy
+            copy = ListNode(curr.val)
+            old_to_copy_map[curr] = copy
+
             curr = curr.next
 
         curr = head
-
         while curr:
-            copy = old_to_copy[curr]
-            copy.next = old_to_copy[curr.next]
-            copy.random = old_to_copy[curr.random]
+            copy = old_to_copy_map[curr]
+            copy.next = old_to_copy_map[curr.next]
+            copy.random = old_to_copy_map[curr.random]
 
             curr = curr.next
 
-        return old_to_copy[head]
-
+        return old_to_copy_map[head]
 
 
 # Create an instance of the class

@@ -34,7 +34,7 @@ Can you solve the problem in linear runtime complexity?
 
 
 # Time Complexity:  O(N)
-# Space Complexity: O(N)
+# Space Complexity: O(1)
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
@@ -57,22 +57,23 @@ class Solution:
         assert result == 3, err_msg_invalid_result
         print(result)
 
-
     def find_duplicate(self, nums: list[int]) -> int:
+        # Floyd's Tortoise and Hare Algorithm
         slow, fast = nums[0], nums[nums[0]]
 
-        # Finding the cycle
+        # Phase 1: Detect the cycle
         while slow != fast:
             slow = nums[slow]
             fast = nums[nums[fast]]
 
-        # Finding the duplicate
-        fast = 0
+        # Phase 2: Find the entrance to the cycle (duplicate number)
+        slow = 0
         while slow != fast:
-            fast = nums[fast]
             slow = nums[slow]
+            fast = nums[fast]
 
         return slow
+
 
 # Create an instance of the class
 solution = Solution()

@@ -26,9 +26,14 @@ The number of nodes in both lists is in the range [0, 50].
 Both list1 and list2 are sorted in non-decreasing order.
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from typing import Optional
 from data_structures.linked_list import ListNode, LinkedList
+
 
 # Time Complexity:  O(N)
 # Space Complexity: O(1)
@@ -58,8 +63,8 @@ class Solution:
         assert ll_result.compare_lists(result, ll_result.head), err_msg_invalid_result
         ll_result.print_list(result)
 
-        ll_one.head    = None
-        ll_two.head    = None
+        ll_one.head = None
+        ll_two.head = None
         ll_result.head = None
 
         result = self.merge_two_lists(ll_one.head, ll_two.head)
@@ -74,8 +79,9 @@ class Solution:
         assert ll_result.compare_lists(result, ll_result.head), err_msg_invalid_result
         ll_result.print_list(result)
 
-
-    def merge_two_lists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+    def merge_two_lists(
+        self, list1: Optional[ListNode], list2: Optional[ListNode]
+    ) -> Optional[ListNode]:
         if not list1:
             return list2
 
@@ -86,7 +92,7 @@ class Solution:
         curr = head
 
         while list1 and list2:
-            if (list1.val > list2.val):
+            if list1.val > list2.val:
                 curr.next = list2
                 list2 = list2.next
             else:

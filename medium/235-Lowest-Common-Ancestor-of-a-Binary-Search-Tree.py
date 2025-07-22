@@ -28,9 +28,14 @@ p != q
 p and q will exist in the BST.
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from typing import Optional
 from data_structures.binary_search_tree import TreeNode, insert
+
 
 # Time Complexity:  O(logN) or O(H)
 # Space Complexity: O(1)
@@ -61,10 +66,12 @@ class Solution:
         assert result.val == 2, err_msg_invalid_result
         print(result.val)
 
-
     def lowest_common_ancestor(
         self, root: TreeNode, p: TreeNode, q: TreeNode
     ) -> Optional[TreeNode]:
+        if not root:
+            return root
+
         curr_node = root
 
         while curr_node:
@@ -76,6 +83,7 @@ class Solution:
                 return curr_node
 
         return curr_node
+
 
 # Create an instance of the class
 solution = Solution()

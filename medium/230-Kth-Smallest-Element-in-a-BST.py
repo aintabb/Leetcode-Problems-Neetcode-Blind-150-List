@@ -20,8 +20,14 @@ The number of nodes in the tree is n.
 Follow up: If the BST is modified often (i.e., we can do insert and delete operations) and you need to find the kth smallest frequently, how would you optimize?
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from typing import Optional
 from data_structures.binary_search_tree import TreeNode, insert
+
 
 # Time Complexity:  O(N) -> for both
 # Space Complexity: O(N) -> for both
@@ -61,7 +67,6 @@ class Solution:
         assert result == 3, err_msg_invalid_result
         print(result)
 
-
     def kth_smallest_iterative(self, root: Optional[TreeNode], k: int) -> int:
         n = 0
         n_stack, curr = [], root
@@ -81,19 +86,21 @@ class Solution:
             curr = curr.right
 
     def kth_smallest_recursive(self, root: Optional[TreeNode], k: int) -> int:
-        in_order_vals = []
+        if not root:
+            return -1
 
-        def traverse(tree_node: Optional[TreeNode]) -> None:
-            if not tree_node:
+        values = []
+
+        def in_order_traverse(curr_node: Optional[TreeNode]) -> None:
+            if not curr_node:
                 return
 
-            traverse(tree_node.left)
-            in_order_vals.append(tree_node.val)
-            traverse(tree_node.right)
+            in_order_traverse(curr_node.left)
+            values.append(curr_node.val)
+            in_order_traverse(curr_node.right)
 
-        traverse(root)
-        return in_order_vals[k - 1]
-
+        in_order_traverse(root)
+        return values[k - 1]
 
 
 # Create an instance of the class

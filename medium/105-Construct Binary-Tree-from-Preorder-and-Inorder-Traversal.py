@@ -21,9 +21,19 @@ preorder is guaranteed to be the preorder traversal of the tree.
 inorder is guaranteed to be the inorder traversal of the tree.
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from typing import Optional
-from data_structures.binary_search_tree import TreeNode, compare_trees, insert_no_order, print_tree
+from data_structures.binary_search_tree import (
+    TreeNode,
+    compare_trees,
+    insert_no_order,
+    print_tree,
+)
+
 
 # Time Complexity:  O(N)
 # Space Complexity: O(N) -> Worst case, O(logN) -> best case when tree is balanced
@@ -31,7 +41,7 @@ class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        preorder, inorder = [3,9,20,15,7], [9,3,15,20,7]
+        preorder, inorder = [3, 9, 20, 15, 7], [9, 3, 15, 20, 7]
         root = TreeNode(3)
         insert_no_order(root, 9, 20)
         insert_no_order(root.right, 15, 7)
@@ -49,22 +59,28 @@ class Solution:
 
     """
     preorder = [3, 9, 20, 15, 7]
-                Ro L  Ro   L  R
+                Ro L  R\Ro L  R
 
     inorder = [9, 3, 15, 20, 7]
-               L  Ro  L  Ro   R
+               L  Ro R\L Ro  R
     """
+
     def build_tree(self, preorder: list[int], inorder: list[int]) -> Optional[TreeNode]:
         if not preorder or not inorder:
             return None
 
         root = TreeNode(preorder[0])
-        mid = inorder.index(preorder[0])
+        root_index = inorder.index(preorder[0])
 
-        root.left = self.build_tree(preorder[1 : mid + 1], inorder[:mid])
-        root.right = self.build_tree(preorder[mid + 1:], inorder[mid + 1:])
+        root.left = self.build_tree(
+            preorder[1 : root_index + 1], inorder[: root_index + 1]
+        )
+        root.right = self.build_tree(
+            preorder[root_index + 1 :], inorder[root_index + 1 :]
+        )
 
         return root
+
 
 # Create an instance of the class
 solution = Solution()

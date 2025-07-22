@@ -30,8 +30,14 @@ The number of nodes in the binary tree is in the range [1, 10^5].
 Each node's value is between [-10^4, 10^4].
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from typing import Optional
 from data_structures.binary_search_tree import TreeNode, insert_no_order
+
 
 # Time Complexity:  O(N)
 # Space Complexity: O(H)
@@ -62,20 +68,23 @@ class Solution:
         assert result == 1, err_msg_invalid_result
         print(result)
 
-
     def good_nodes(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
 
-        def traverse(tree_node: Optional[TreeNode], max_val: int) -> int:
-            if not tree_node:
+        def traverse(curr_node: Optional[TreeNode], curr_max_val: int) -> int:
+            if not curr_node:
                 return 0
 
-            result = 1 if (tree_node.val >= max_val) else 0
-            max_val = max(max_val, tree_node.val)
+            count = 0
+            if curr_node.val >= curr_max_val:
+                count = 1
 
-            result += traverse(tree_node.left, max_val)
-            result += traverse(tree_node.right, max_val)
+            curr_max_val = max(curr_max_val, curr_node.val)
+            count += traverse(curr_node.left, curr_max_val)
+            count += traverse(curr_node.right, curr_max_val)
 
-            return result
+            return count
 
         return traverse(root, root.val)
 

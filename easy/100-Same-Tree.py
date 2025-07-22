@@ -22,6 +22,10 @@ The number of nodes in both trees is in the range [0, 100].
 -104 <= Node.val <= 104
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from typing import Optional
 from data_structures.binary_search_tree import TreeNode, insert_no_order
@@ -70,7 +74,6 @@ class Solution:
         assert result == True, err_msg_invalid_result
         print(result)
 
-
     def is_same_tree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
         if not p and not q:
             return True
@@ -79,6 +82,7 @@ class Solution:
             return False
 
         return self.is_same_tree(p.left, q.left) and self.is_same_tree(p.right, q.right)
+
 
 # Create an instance of the class
 solution = Solution()

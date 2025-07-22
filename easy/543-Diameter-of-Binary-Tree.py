@@ -22,9 +22,15 @@ The number of nodes in the tree is in the range [1, 104].
 -100 <= Node.val <= 100
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 
 from typing import Optional
 from data_structures.binary_search_tree import TreeNode, insert, insert_no_order
+
 
 # Time Complexity:  O(N)
 # Space Complexity: O(H) -> Average, O(N) -> Worst Case, Unbalanced Tree, O(log(N)) -> Best, Balanced Tree
@@ -54,27 +60,26 @@ class Solution:
         /       \
     4               5
     """
+
     def diameter_of_binary_tree(self, root: Optional[TreeNode]) -> int:
         if not root:
             return 0
 
-        self.largest_diameter = 0
+        self.diameter = 0
 
-        def diameter(root: Optional[TreeNode]) -> int:
-            if not root:
+        def traverse(node: Optional[TreeNode]) -> int:
+            if not node:
                 return 0
 
-            left, right = diameter(root.left), diameter(root.right)
-            # Calculate the current diameter
-            curr_diameter = left + right
+            L = traverse(node.left)
+            R = traverse(node.right)
 
-            self.largest_diameter = max(self.largest_diameter, curr_diameter)
+            self.diameter = max(self.diameter, L + R)
 
-            # Calculate the max height and return
-            return 1 + max(left, right)
+            return 1 + max(L, R)
 
-        diameter(root)
-        return self.largest_diameter
+        traverse(root)
+        return self.diameter
 
 
 # Create an instance of the class

@@ -20,6 +20,10 @@ The number of nodes in the subRoot tree is in the range [1, 1000].
 -104 <= subRoot.val <= 104
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from typing import Optional
 from data_structures.binary_search_tree import TreeNode, insert_no_order
@@ -48,8 +52,9 @@ class Solution:
         assert result == False, err_msg_invalid_result
         print(result)
 
-
-    def is_sub_tree(self, root: Optional[TreeNode], sub_root: Optional[TreeNode]) -> bool:
+    def is_sub_tree(
+        self, root: Optional[TreeNode], sub_root: Optional[TreeNode]
+    ) -> bool:
         if not sub_root:
             return True
 
@@ -59,20 +64,20 @@ class Solution:
         if self.is_same(root, sub_root):
             return True
 
-        return self.is_sub_tree(root.left, sub_root) or self.is_sub_tree(root.right, sub_root)
+        return self.is_sub_tree(root.left, sub_root) or self.is_sub_tree(
+            root.right, sub_root
+        )
 
-    def is_same(
-        self, root_one: Optional[TreeNode], root_two: Optional[TreeNode]
-    ) -> bool:
-        if not root_one and not root_two:
+    def is_same(self, root: Optional[TreeNode], sub_root: Optional[TreeNode]) -> bool:
+        if not root and not sub_root:
             return True
 
-        if root_one and root_two and root_one.val == root_two.val:
-            return self.is_same(root_one.left, root_two.left) and self.is_same(
-                root_one.right, root_two.right
-            )
+        if not root or not sub_root or root.val != sub_root.val:
+            return False
 
-        return False
+        return self.is_same(root.left, sub_root.left) and self.is_same(
+            root.right, sub_root.right
+        )
 
 
 # Create an instance of the class

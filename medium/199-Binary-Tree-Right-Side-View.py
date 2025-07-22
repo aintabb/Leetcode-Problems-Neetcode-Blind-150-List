@@ -21,9 +21,15 @@ The number of nodes in the tree is in the range [0, 100].
 -100 <= Node.val <= 100
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import collections
 from typing import Optional
 from data_structures.binary_search_tree import TreeNode, insert, insert_no_order
+
 
 # Time Complexity:  O(N)
 # Space Complexity: O(N)
@@ -53,25 +59,23 @@ class Solution:
         assert result == [], err_msg_invalid_result
         print(result)
 
-
     def right_side_view(self, root: Optional[TreeNode]) -> list[int]:
-        result = []
-
         if not root:
-            return result
+            return []
 
-        tree_q = collections.deque([root])
+        result = []
+        node_q = collections.deque([root])
 
-        while tree_q:
-            n = len(tree_q)
+        while node_q:
+            len_q = len(node_q)
 
-            for _ in range(n):
-                curr_node = tree_q.popleft()
+            for _ in range(len_q):
+                curr_node = node_q.popleft()
 
                 if curr_node.left:
-                    tree_q.append(curr_node.left)
+                    node_q.append(curr_node.left)
                 if curr_node.right:
-                    tree_q.append(curr_node.right)
+                    node_q.append(curr_node.right)
 
             result.append(curr_node.val)
 

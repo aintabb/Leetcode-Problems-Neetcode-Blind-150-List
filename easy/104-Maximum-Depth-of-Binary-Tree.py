@@ -19,10 +19,15 @@ The number of nodes in the tree is in the range [0, 104].
 -100 <= Node.val <= 100
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from collections import deque
 from typing import Optional
 from data_structures.binary_search_tree import TreeNode, insert, insert_no_order
+
 
 # Time Complexity:  R -> O(N), BFS -> O(N), DFS -> O(N)
 # Space Complexity: R -> O(N) ~ O(H), BFS -> O(W), DFS -> O(N) ~ O(H)
@@ -61,15 +66,13 @@ class Solution:
         assert result == 2, err_msg_invalid_result
         print(result, end=" - Iterative BFS\n")
 
-
     # Recursive
     def max_depth_recursive(self, root: Optional[TreeNode]) -> int:
         if not root:
             return 0
 
-        return max(
-            1 + self.max_depth_recursive(root.left),
-            1 + self.max_depth_recursive(root.right)
+        return 1 + max(
+            self.max_depth_recursive(root.left), self.max_depth_recursive(root.right)
         )
 
     # DFS
@@ -82,12 +85,12 @@ class Solution:
 
         max_depth = 1
 
-        while (tree_stack):
+        while tree_stack:
             node, depth = tree_stack.pop()
 
-            if (node.left):
+            if node.left:
                 tree_stack.append((node.left, depth + 1))
-            if (node.right):
+            if node.right:
                 tree_stack.append((node.right, depth + 1))
 
             max_depth = max(max_depth, depth)
@@ -103,7 +106,7 @@ class Solution:
 
         max_depth = 0
 
-        while (tree_queue):
+        while tree_queue:
             n = len(tree_queue)
             for _ in range(n):
                 node = tree_queue.popleft()

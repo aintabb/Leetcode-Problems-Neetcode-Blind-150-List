@@ -21,9 +21,20 @@ The number of nodes in the tree is in the range [0, 100].
 -100 <= Node.val <= 100
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from typing import Optional
-from data_structures.binary_search_tree import TreeNode, insert, insert_no_order, compare_trees, print_tree
+from data_structures.binary_search_tree import (
+    TreeNode,
+    insert,
+    insert_no_order,
+    compare_trees,
+    print_tree,
+)
+
 
 # Time Complexity:  R -> O(N), I -> O(N)
 # Space Complexity: R -> O(N), I -> O(N)
@@ -84,7 +95,6 @@ class Solution:
         assert compare_trees(None, result) == True, err_msg_invalid_result
         print_tree(result)
 
-
     def invert_tree_recursive(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         if not root:
             return root
@@ -100,18 +110,23 @@ class Solution:
         if not root:
             return root
 
-        tree_stack = [root]
-        while (tree_stack):
-            tree_node = tree_stack.pop()
-            if not tree_node:
+        node_stack = [root]
+
+        while node_stack:
+            curr_node = node_stack.pop()
+            if not curr_node:
                 continue
 
-            tree_node.left, tree_node.right = tree_node.right, tree_node.left
+            curr_node = self.swap_nodes(curr_node)
 
-            tree_stack.append(tree_node.left)
-            tree_stack.append(tree_node.right)
+            node_stack.append(curr_node.left)
+            node_stack.append(curr_node.right)
 
         return root
+
+    def swap_nodes(self, node: TreeNode) -> TreeNode:
+        node.left, node.right = node.right, node.left
+        return node
 
 
 # Create an instance of the class

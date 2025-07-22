@@ -23,11 +23,17 @@ The number of nodes in the tree is in the range [1, 104].
 -231 <= Node.val <= 231 - 1
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from typing import Optional
 from data_structures.binary_search_tree import TreeNode, insert, insert_no_order
 
+
 # Time Complexity:  O(N)
-# Space Complexity: O(N)
+# Space Complexity: O(H)
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
@@ -48,21 +54,24 @@ class Solution:
         assert result == False, err_msg_invalid_result
         print(result)
 
-
     def is_valid_bst(self, root: Optional[TreeNode]) -> bool:
+        if not root:
+            return True
 
-        def traverse(tree_node: Optional[TreeNode], left_val: float, right_val: float) -> bool:
-            # An empty tree is basically BST still
-            if not tree_node:
+        def check_validity(
+            curr_node: Optional[TreeNode], left_val: float, right_val: float
+        ) -> bool:
+            if not curr_node:
                 return True
-            if not (tree_node.val > left_val and tree_node.val < right_val):
+
+            if curr_node.val <= left_val or curr_node.val >= right_val:
                 return False
 
-            return (
-                    traverse(tree_node.left, left_val, tree_node.val) and traverse(tree_node.right, tree_node.val, right_val)
-            )
+            return check_validity(
+                curr_node.left, left_val, curr_node.val
+            ) and check_validity(curr_node.right, curr_node.val, right_val)
 
-        return traverse(root, -float("inf"), float("inf"))
+        return check_validity(root, float("-inf"), float("inf"))
 
 
 # Create an instance of the class

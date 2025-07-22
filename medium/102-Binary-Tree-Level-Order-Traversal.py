@@ -20,10 +20,15 @@ The number of nodes in the tree is in the range [0, 2000].
 -1000 <= Node.val <= 1000
 """
 
+import sys, os
+
+# Add the parent directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import collections
 from typing import Optional
 from data_structures.binary_search_tree import TreeNode, insert_no_order
+
 
 # Time Complexity:  O(N) -> number of nodes, same for both recursion and bfs
 # Space Complexity: O(N) -> same for both recursion and bfs
@@ -63,18 +68,17 @@ class Solution:
         assert result == [], err_msg_invalid_result
         print(result)
 
-
     def level_order_recursion(self, root: Optional[TreeNode]) -> list[list[int]]:
         result = []
 
         if not root:
             return result
 
-        def traverse(root: Optional[TreeNode], level = 0) -> None:
+        def traverse(root: Optional[TreeNode], level=0) -> None:
             if not root:
                 return
 
-            if (len(result) == level):
+            if len(result) == level:
                 result.append([root.val])
             else:
                 result[level].append(root.val)
@@ -87,27 +91,26 @@ class Solution:
         return result
 
     def level_order_bfs(self, root: Optional[TreeNode]) -> list[list[int]]:
-        result = []
-
         if not root:
-            return result
+            return []
 
-        tree_q = collections.deque([root])
+        result = []
+        node_q = collections.deque([root])
 
-        while tree_q:
-            n = len(tree_q)
-            vals = []
+        while node_q:
+            len_q = len(node_q)
+            curr_level = []
 
-            for _ in range(n):
-                tree_node = tree_q.popleft()
-                vals.append(tree_node.val)
+            for _ in range(len_q):
+                curr_node = node_q.popleft()
+                curr_level.append(curr_node.val)
 
-                if tree_node.left:
-                    tree_q.append(tree_node.left)
-                if tree_node.right:
-                    tree_q.append(tree_node.right)
+                if curr_node.left:
+                    node_q.append(curr_node.left)
+                if curr_node.right:
+                    node_q.append(curr_node.right)
 
-            result.append(vals)
+            result.append(curr_level)
 
         return result
 

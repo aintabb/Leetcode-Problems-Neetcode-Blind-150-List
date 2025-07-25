@@ -37,8 +37,8 @@ At most 104 calls will be made to addWord and search.
 
 class TrieNode:
     def __init__(self) -> None:
-        self.end_word = False
         self.children = {}
+        self.end_word = False
 
 
 class WordDictionary:
@@ -46,38 +46,44 @@ class WordDictionary:
         self.root = TrieNode()
 
     def addWord(self, word: str) -> None:
-        curr = self.root
+        if not word:
+            return
+
+        curr_node = self.root
 
         for ch in word:
-            if ch not in curr.children:
-                curr.children[ch] = TrieNode()
+            if ch not in curr_node.children:
+                curr_node.children[ch] = TrieNode()
 
-            curr = curr.children[ch]
+            curr_node = curr_node.children[ch]
 
-        curr.end_word = True
+        curr_node.end_word = True
 
     def search(self, word: str) -> bool:
-        def dfs(j: int, root: TrieNode) -> bool:
-            curr = root
+        if not word:
+            return False
 
-            for i in range(j, len(word)):
-                ch = word[i]
+        len_word = len(word)
 
-                if ch == ".":
-                    for child in curr.children.values():
-                        if dfs(i + 1, child):
+        def dfs(curr_node: TrieNode, j: int) -> bool:
+            for idx in range(j, len_word):
+                curr_ch = word[idx]
+
+                if curr_ch == ".":
+                    for child_node in curr_node.children.values():
+                        if dfs(child_node, idx + 1):
                             return True
 
                     return False
                 else:
-                    if ch not in curr.children:
+                    if curr_ch not in curr_node.children:
                         return False
 
-                    curr = curr.children[ch]
+                curr_node = curr_node.children[curr_ch]
 
-            return curr.end_word
+            return curr_node.end_word
 
-        return dfs(0, self.root)
+        return dfs(self.root, 0)
 
 
 # Your WordDictionary object will be instantiated and called as such:

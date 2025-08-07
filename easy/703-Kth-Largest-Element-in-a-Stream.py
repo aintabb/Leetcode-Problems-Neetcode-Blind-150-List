@@ -1,4 +1,4 @@
-'''
+"""
 Design a class to find the kth largest element in a stream. Note that it is the kth largest element in the sorted order, not the kth distinct element.
 
 Implement KthLargest class:
@@ -32,31 +32,29 @@ Constraints:
 -104 <= val <= 104
 At most 104 calls will be made to add.
 It is guaranteed that there will be at least k elements in the array when you search for the kth element.
-'''
-
+"""
 
 # Time Complexity:  O(n) -> for the constructor, O(log(k)) -> for the add method
 # Space Complexity: O(k)
-
 import heapq
+
+
 class KthLargest:
 
     def __init__(self, k: int, nums: list[int]):
-      self.min_heap, self.k = nums, k
-      heapq.heapify(self.min_heap)
+        self.min_heap, self.k = nums, k
+        heapq.heapify(self.min_heap)
 
-      while (len(self.min_heap) > k):
-        heapq.heappop(self.min_heap)
-
+        while len(self.min_heap) > k:
+            heapq.heappop(self.min_heap)
 
     def add(self, val: int) -> int:
-      heapq.heappush(self.min_heap, val)
+        heapq.heappush(self.min_heap, val)
 
-      if (len(self.min_heap) > self.k):
-        heapq.heappop(self.min_heap)
+        if len(self.min_heap) > self.k:
+            heapq.heappop(self.min_heap)
 
-      return self.min_heap[0]
-
+        return self.min_heap[0]
 
 
 # Your KthLargest object will be instantiated and called as such:
@@ -72,10 +70,10 @@ vals = [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
 expected_results = [None, 4, 5, 5, 8, 8]
 
 for op, val, expected_result in zip(ops, vals, expected_results):
-  if op == "KthLargest":
-    kth_largest = KthLargest(val[0], val[1])
-  elif (op == "add"):
-    result = kth_largest.add(val[0])
+    if op == "KthLargest":
+        kth_largest = KthLargest(val[0], val[1])
+    elif op == "add":
+        result = kth_largest.add(val[0])
 
-    assert result == expected_result, err_msg_invalid_result
-    print(result)
+        assert result == expected_result, err_msg_invalid_result
+        print(result)

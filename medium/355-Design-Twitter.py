@@ -34,57 +34,49 @@ All the tweets have unique IDs.
 At most 3 * 104 calls will be made to postTweet, getNewsFeed, follow, and unfollow.
 """
 
-import heapq
-from collections import defaultdict
-
-# Time Complexity:  O(N) -> getNewsFeed(), number of followers of a given user id
-# Space Complexity: O(N) -> getNewsFeed()
+# Time Complexity:  O(N*log(N)) -> getNewsFeed(), number of followers of a given user id
+# Space Complexity: O(N+M) -> the Twitter class in general |
+# N -> number of tweets, M -> number of follow relationships
 ## Time and Space complexity for all other functions is ""O(1)""
+import collections
+import heapq
+
+
 class Twitter:
 
-    def __init__(self) -> None:
+    def __init__(self):
+        self.tweet_map = collections.defaultdict(
+            list
+        )  # {userId: [time_stamp, tweet_id]}
+        self.follow_map = collections.defaultdict(
+            set
+        )  # {follower_id: set(followee_id)}
         self.time_stamp = 0
-        self.tweet_map = defaultdict(list) # pair of [time_stamp, tweet_id]
-        self.follow_map = defaultdict(set) # [follower_id, followee_id]
 
     def postTweet(self, userId: int, tweetId: int) -> None:
         self.tweet_map[userId].append([self.time_stamp, tweetId])
-        self.time_stamp -= 1
+        self.time_stamp += 1
 
     def getNewsFeed(self, userId: int) -> list[int]:
-        result, min_heap = [], []
+        followees = self.follow_map[userId]
+        followees.add(userId)
 
-        # Users should be able to see their posts
-        self.follow_map[userId].add(userId)
+        max_heap = []
+        for followee in followees:
+            for time_stamp, tweet_id in self.tweet_map[followee]:
+                heapq.heappush(max_heap, [-time_stamp, tweet_id])
 
-        for followee_id in self.follow_map[userId]:
-            # If the followee has any tweets
-            if followee_id in self.tweet_map:
-                # Get the most recent tweet's index
-                index_of_last = len(self.tweet_map[followee_id]) - 1
-                time_stamp, tweet_id = self.tweet_map[followee_id][index_of_last]
-
-                min_heap.append([time_stamp, tweet_id, followee_id, index_of_last - 1])
-
-        heapq.heapify(min_heap)
-
-        while min_heap and len(result) < 10:
-            time_stamp, tweet_id, followee_id, index_of_last = heapq.heappop(min_heap)
-            result.append(tweet_id)
-
-            if (index_of_last >= 0):
-                time_stamp, tweet_id = self.tweet_map[followee_id][index_of_last]
-                heapq.heappush(min_heap, [time_stamp, tweet_id, followee_id, index_of_last - 1])
+        result = []
+        while max_heap and len(result) < 10:
+            result.append(heapq.heappop(max_heap)[1])
 
         return result
 
-
     def follow(self, followerId: int, followeeId: int) -> None:
-       self.follow_map[followerId].add(followeeId)
+        self.follow_map[followerId].add(followeeId)
 
     def unfollow(self, followerId: int, followeeId: int) -> None:
-        if followeeId in self.follow_map[followerId]:
-            self.follow_map[followerId].remove(followeeId)
+        self.follow_map[followerId].discard(followeeId)
 
 
 # Your Twitter object will be instantiated and called as such:
@@ -95,20 +87,29 @@ class Twitter:
 # obj.unfollow(followerId,followeeId)
 
 ops_dict = {
-  "Twitter": Twitter,
-  "postTweet": Twitter.postTweet,
-  "getNewsFeed": Twitter.getNewsFeed,
-  "follow": Twitter.follow,
-  "unfollow": Twitter.unfollow
+    "Twitter": Twitter,
+    "postTweet": Twitter.postTweet,
+    "getNewsFeed": Twitter.getNewsFeed,
+    "follow": Twitter.follow,
+    "unfollow": Twitter.unfollow,
 }
 
-err_msg_invalid_result = "Provided result is not correct for the given function. Something is wrong!"
-
-test_cases  = []
+err_msg_invalid_result = (
+    "Provided result is not correct for the given function. Something is wrong!"
+)
 
 # Test Case - 1
-ops_one   = ["Twitter", "postTweet", "getNewsFeed", "follow", "postTweet", "getNewsFeed", "unfollow", "getNewsFeed"]
-vals_one  = [[], [1, 5], [1], [1, 2], [2, 6], [1], [1, 2], [1]]
+ops_one = [
+    "Twitter",
+    "postTweet",
+    "getNewsFeed",
+    "follow",
+    "postTweet",
+    "getNewsFeed",
+    "unfollow",
+    "getNewsFeed",
+]
+vals_one = [[], [1, 5], [1], [1, 2], [2, 6], [1], [1, 2], [1]]
 expected_results = [None, None, [5], None, None, [6, 5], None, [5]]
 
 for op, val, expected_result in zip(ops_one, vals_one, expected_results):
@@ -118,7 +119,7 @@ for op, val, expected_result in zip(ops_one, vals_one, expected_results):
         ops_dict[op] = twitter
         continue
 
-    if (op == "getNewsFeed"):
+    if op == "getNewsFeed":
         result = ops_dict[op](twitter, val[0])
     else:
         result = ops_dict[op](twitter, val[0], val[1])

@@ -32,60 +32,66 @@ tasks[i] is an uppercase English letter.
 0 <= n <= 100
 """
 
-
 # Time Complexity:  O(T*log(T)) -> "T" is the task count
 # Space Complexity: O(T)
 from collections import deque
 import heapq
-from typing import Counter
 
 
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        tasks, n = ["A","A","A","B","B","B"], 2
+        tasks, n = ["A", "A", "A", "B", "B", "B"], 2
 
         result = self.least_interval(tasks, n)
         assert result == 8, err_msg_invalid_result
         print(result)
 
-        tasks, n = ["A","C","A","B","D","B"], 1
+        tasks, n = ["A", "C", "A", "B", "D", "B"], 1
 
         result = self.least_interval(tasks, n)
         assert result == 6, err_msg_invalid_result
         print(result)
 
-        tasks, n = ["A","A","A", "B","B","B"], 3
+        tasks, n = ["A", "A", "A", "B", "B", "B"], 3
 
         result = self.least_interval(tasks, n)
         assert result == 10, err_msg_invalid_result
         print(result)
 
-
-
     def least_interval(self, tasks: list[str], n: int) -> int:
-        counter = Counter(tasks)
-        max_heap = [-count for count in counter.values()]
-        heapq.heapify(max_heap)
+        if not tasks:
+            return 0
 
-        q = deque() # pair of (freq, idle_time)
+        freq_map = {}
+        for task in tasks:
+            freq_map[task] = 1 + freq_map.get(task, 0)
+
+        # We use max heap here because we want to process tasks as soon as possible to minimize
+        # the total time spent.
+        max_heap = []
+        for freq in freq_map.values():
+            heapq.heappush(max_heap, -freq)
+
         time_spent = 0
+        task_q = deque()
 
-        while q or max_heap:
+        while task_q or max_heap:
             time_spent += 1
 
             if max_heap:
+                # Decrease the freq by one since we negate frequencies to have max heap property
                 freq = 1 + heapq.heappop(max_heap)
 
                 if freq:
-                    q.append([freq, n + time_spent])
+                    idle_time = n + time_spent
+                    task_q.append([freq, idle_time])
 
-            if q and q[0][1] == time_spent:
-                heapq.heappush(max_heap, q.popleft()[0])
+            if task_q and task_q[0][1] == time_spent:
+                heapq.heappush(max_heap, task_q.popleft()[0])
 
         return time_spent
-
 
 
 # Create an instance of the class

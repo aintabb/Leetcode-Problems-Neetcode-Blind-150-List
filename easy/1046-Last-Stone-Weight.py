@@ -30,10 +30,10 @@ Constraints:
 1 <= stones[i] <= 1000
 """
 
-
-# Time Complexity:  O(n*log(n))
-# Space Complexity: O(n)
+# Time Complexity:  O(N*log(N))
+# Space Complexity: O(N)
 import heapq
+
 
 class Solution:
     def __init__(self) -> None:
@@ -51,24 +51,32 @@ class Solution:
         assert result == 1, err_msg_invalid_result
         print(result)
 
+        stones = [2, 2]
+
+        result = self.last_stone_weight(stones)
+        assert result == 0, err_msg_invalid_result
+        print(result)
 
     def last_stone_weight(self, stones: list[int]) -> int:
-        if (len(stones) == 1):
+        if not stones:
+            return 0
+
+        if len(stones) == 1:
             return stones[0]
 
         # Construct a max heap
-        stones = [-s for s in stones]
-        heapq.heapify(stones)
+        max_heap = []
+        for stone in stones:
+            heapq.heappush(max_heap, -stone)
 
-        while (len(stones) != 1):
-            x = -heapq.heappop(stones)
-            y = -heapq.heappop(stones)
+        while len(max_heap) > 1:
+            stone_one = -heapq.heappop(max_heap)
+            stone_two = -heapq.heappop(max_heap)
 
-            if (x >= y):
-                # We try to keep max heap feature. That's why we do (y - x) to have a negative value
-                heapq.heappush(stones, y - x)
+            new_stone = abs(stone_one - stone_two)
+            heapq.heappush(max_heap, -new_stone)
 
-        return -stones[0]
+        return -max_heap[0]
 
 
 # Create an instance of the class

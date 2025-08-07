@@ -27,38 +27,38 @@ Constraints:
 -104 <= xi, yi <= 104
 """
 
-
 # Time Complexity:  O(N*log(N))
 # Space Complexity: O(N)
 from math import sqrt
 import heapq
 
+
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        points, k = [[1,3],[-2,2]], 1
+        points, k = [[1, 3], [-2, 2]], 1
 
         result = self.k_closest(points, k)
         assert result == [[-2, 2]], err_msg_invalid_result
         print(result)
 
-        points, k = [[3,3],[5,-1],[-2,4]], 2
+        points, k = [[3, 3], [5, -1], [-2, 4]], 2
 
         result = self.k_closest(points, k)
         assert result == [[3, 3], [-2, 4]], err_msg_invalid_result
         print(result)
 
-
     def k_closest(self, points: list[list[int]], k: int) -> list[list[int]]:
-        result, min_heap = [], []
+        if not points or k == 0:
+            return []
 
+        min_heap = []
         for x, y in points:
-            dist = sqrt((x ** 2) + (y ** 2))
-            min_heap.append((dist, x, y))
+            dist_to_orgn = sqrt(x**2 + y**2)
+            heapq.heappush(min_heap, (dist_to_orgn, x, y))
 
-        heapq.heapify(min_heap)
-
+        result = []
         for _ in range(k):
             _, x, y = heapq.heappop(min_heap)
             result.append([x, y])

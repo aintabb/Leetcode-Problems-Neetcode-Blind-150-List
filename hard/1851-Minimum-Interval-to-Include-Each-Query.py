@@ -35,6 +35,8 @@ intervals[i].length == 2
 """
 
 import heapq
+from re import A
+from unittest import result
 
 
 # Time Complexity:  O(N*logN + M*logM)
@@ -57,6 +59,10 @@ class Solution:
         print(result)
 
     def minInterval(self, intervals: list[list[int]], queries: list[int]) -> list[int]:
+        # Input: intervals = [[2,3],[2,5],[1,8],[20,25]], queries = [2,19,5,22]
+        if not intervals and not queries:
+            return []
+
         if not intervals:
             return [-1] * len(queries)
 
@@ -65,9 +71,9 @@ class Solution:
 
         intervals.sort()
 
-        idx = 0
-        result = {}
         min_heap = []
+        size_map = {}
+        idx = 0
 
         for q in sorted(queries):
             while idx < len(intervals) and intervals[idx][0] <= q:
@@ -78,9 +84,9 @@ class Solution:
             while min_heap and min_heap[0][1] < q:
                 heapq.heappop(min_heap)
 
-            result[q] = min_heap[0][0] if min_heap else -1
+            size_map[q] = min_heap[0][0] if min_heap else -1
 
-        return [result[q] for q in queries]
+        return [size_map[q] for q in queries]
 
 
 # Create an instance of the class

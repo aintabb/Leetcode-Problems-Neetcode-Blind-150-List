@@ -65,18 +65,19 @@ class Solution:
         print(result)
 
     def erase_overlap_intervals_sort_by_end(self, intervals: list[list[int]]) -> int:
-        if not intervals or len(intervals) == 1:
+        if not intervals or len(intervals) < 2:
             return 0
 
-        intervals.sort(key=lambda i: i[1])
-        end = intervals[0][1]
         count = 0
 
+        intervals.sort(key=lambda x: x[1])
+        prev_end = intervals[0][1]
+
         for idx in range(1, len(intervals)):
-            if end > intervals[idx][0]:
+            if prev_end > intervals[idx][0]:
                 count += 1
             else:
-                end = intervals[idx][1]
+                prev_end = intervals[idx][1]
 
         return count
 

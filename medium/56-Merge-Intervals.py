@@ -22,7 +22,6 @@ intervals[i].length == 2
 
 # Time Complexity:  O(N*logN)
 # Space Complexity: O(N)
-from unittest import result
 
 
 class Solution:
@@ -45,13 +44,18 @@ class Solution:
         if not intervals:
             return []
 
-        intervals.sort(key=lambda i: i[0])
+        # Sort the intervals by start time
+        intervals.sort(key=lambda x: x[0])
+
         result = [intervals[0]]
 
         for idx in range(1, len(intervals)):
+            # If the current interval overlaps with the last interval in the result,
+            # merge them
             if result[-1][1] >= intervals[idx][0]:
                 result[-1][1] = max(result[-1][1], intervals[idx][1])
             else:
+                # Otherwise, add the current interval to the result
                 result.append(intervals[idx])
 
         return result

@@ -35,34 +35,47 @@ class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        intervals, new_intervals = [[1, 3], [6, 9]], [2, 5]
+        intervals, new_interval = [[1, 3], [6, 9]], [2, 5]
 
-        result = self.insert_greedy(intervals, new_intervals)
+        result = self.insert_greedy(intervals, new_interval)
         assert result == [[1, 5], [6, 9]], err_msg_invalid_result
         print(result)
 
-        result = self.insert_linear(intervals, new_intervals)
+        result = self.insert_linear(intervals, new_interval)
         assert result == [[1, 5], [6, 9]], err_msg_invalid_result
         print(result)
 
-        intervals, new_intervals = [[1, 2], [3, 5], [6, 7], [8, 10], [12, 16]], [4, 8]
+        intervals, new_interval = [[1, 2], [3, 5], [6, 7], [8, 10], [12, 16]], [4, 8]
 
-        result = self.insert_greedy(intervals, new_intervals)
+        result = self.insert_greedy(intervals, new_interval)
         assert result == [[1, 2], [3, 10], [12, 16]], err_msg_invalid_result
         print(result)
 
-        result = self.insert_linear(intervals, new_intervals)
+        result = self.insert_linear(intervals, new_interval)
         assert result == [[1, 2], [3, 10], [12, 16]], err_msg_invalid_result
+        print(result)
+
+        intervals = [[1, 5]]
+        new_interval = [2, 3]
+
+        result = self.insert_greedy(intervals, new_interval)
+        assert result == [[1, 5]], err_msg_invalid_result
+        print(result)
+
+        result = self.insert_linear(intervals, new_interval)
+        assert result == [[1, 5]], err_msg_invalid_result
         print(result)
 
     def insert_greedy(
         self, intervals: list[list[int]], new_interval: list[int]
     ) -> list[list[int]]:
+        if not new_interval:
+            return intervals
+
         if not intervals:
             return [new_interval]
 
         result = []
-
         for idx, interval in enumerate(intervals):
             if new_interval[1] < interval[0]:
                 result.append(new_interval)
@@ -71,11 +84,11 @@ class Solution:
                 result.append(interval)
             else:
                 new_interval = [
-                    min(new_interval[0], interval[0]),
-                    max(new_interval[1], interval[1]),
+                    min(interval[0], new_interval[0]),
+                    max(interval[1], new_interval[1]),
                 ]
-        result.append(new_interval)
 
+        result.append(new_interval)
         return result
 
     def insert_linear(
@@ -88,17 +101,23 @@ class Solution:
         idx = 0
         len_intervals = len(intervals)
 
+        # Add all intervals that come before the newInterval
         while idx < len_intervals and new_interval[0] > intervals[idx][1]:
             result.append(intervals[idx])
             idx += 1
 
         # Merge all overlapping intervals with new_interval
         while idx < len_intervals and new_interval[1] >= intervals[idx][0]:
-            new_interval[0] = min(new_interval[0], intervals[idx][0])
-            new_interval[1] = max(new_interval[1], intervals[idx][1])
+            new_interval = [
+                min(intervals[idx][0], new_interval[0]),
+                max(intervals[idx][1], new_interval[1]),
+            ]
             idx += 1
+
+        # Add the newInterval
         result.append(new_interval)
 
+        # Add all remaining intervals
         while idx < len_intervals:
             result.append(intervals[idx])
             idx += 1

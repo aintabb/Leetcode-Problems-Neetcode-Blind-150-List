@@ -45,15 +45,20 @@ class Solution:
         print(result)
 
     def min_meeting_rooms(self, intervals: list[list[int]]) -> int:
+        if not intervals or len(intervals) < 1:
+            return 0
+
         if len(intervals) == 1:
             return 1
 
-        intervals = sorted(intervals, key=lambda i: i[0])
+        intervals.sort(key=lambda x: x[0])
+
         min_heap = []
 
         for interval in intervals:
             if min_heap and min_heap[0] <= interval[0]:
                 heapq.heappop(min_heap)
+
             heapq.heappush(min_heap, interval[1])
 
         return len(min_heap)

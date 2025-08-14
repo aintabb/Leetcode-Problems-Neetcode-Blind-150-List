@@ -46,14 +46,14 @@ class Solution:
         print(result)
 
     def can_attend_meetings(self, intervals: list[list[int]]) -> bool:
-        if not intervals or len(intervals) == 0:
+        if not intervals or len(intervals) < 2:
             return True
 
-        intervals.sort(key=lambda i: i[0])
+        intervals.sort(key=lambda x: x[0])
 
-        for i in range(1, len(intervals)):
-            first = intervals[i - 1]
-            second = intervals[i]
+        for idx in range(1, len(intervals)):
+            first = intervals[idx - 1]
+            second = intervals[idx]
 
             if first[1] > second[0]:
                 return False

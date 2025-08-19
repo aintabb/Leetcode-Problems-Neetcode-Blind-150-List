@@ -58,20 +58,19 @@ class Solution:
         print(result)
 
     def can_complete_circuit_greedy(self, gas: list[int], cost: list[int]) -> int:
-        if sum(gas) < sum(cost):
-            return -1
+        total_gas = sum(gas)
+        total_cost = sum(cost)
 
-        total = 0
-        result = 0
+        start = 0
+        tank = 0
 
-        for i in range(len(gas)):
-            total += gas[i] - cost[i]
+        for idx in range(len(gas)):
+            tank += gas[idx] - cost[idx]
+            if tank < 0:
+                start = idx + 1
+                tank = 0
 
-            if total < 0:
-                total = 0
-                result = i + 1
-
-        return result
+        return start
 
 
 # Create an instance of the class

@@ -50,7 +50,7 @@ class Solution:
         assert result == True, err_msg_invalid_result
         print(result)
 
-        result = self.merge_triplets_optimal(triplets, target)
+        result = self.merge_triplets_bitwise(triplets, target)
         assert result == True, err_msg_invalid_result
         print(result)
 
@@ -60,7 +60,7 @@ class Solution:
         assert result == False, err_msg_invalid_result
         print(result)
 
-        result = self.merge_triplets_optimal(triplets, target)
+        result = self.merge_triplets_bitwise(triplets, target)
         assert result == False, err_msg_invalid_result
         print(result)
 
@@ -70,28 +70,25 @@ class Solution:
         assert result == True, err_msg_invalid_result
         print(result)
 
-        result = self.merge_triplets_optimal(triplets, target)
+        result = self.merge_triplets_bitwise(triplets, target)
         assert result == True, err_msg_invalid_result
         print(result)
 
     def merge_triplets(self, triplets: list[list[int]], target: list[int]) -> bool:
-        valid_set = set()
+        if not triplets or not target:
+            return False
 
-        for triplet in triplets:
-            x = triplet[0]
-            y = triplet[1]
-            z = triplet[2]
+        x = y = z = 0
 
-            if x > target[0] or y > target[1] or z > target[2]:
-                continue
+        for a, b, c in triplets:
+            if a <= target[0] and b <= target[1] and c <= target[2]:
+                x = max(a, x)
+                y = max(b, y)
+                z = max(c, z)
 
-            for idx, val in enumerate(triplet):
-                if target[idx] == val:
-                    valid_set.add(idx)
+        return [x, y, z] == target
 
-        return len(valid_set) == 3
-
-    def merge_triplets_optimal(
+    def merge_triplets_bitwise(
         self, triplets: list[list[int]], target: list[int]
     ) -> bool:
         x = y = z = False

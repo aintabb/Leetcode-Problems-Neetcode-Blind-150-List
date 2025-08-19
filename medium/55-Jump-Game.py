@@ -102,16 +102,17 @@ class Solution:
         return dp[0]
 
     def can_jump_greedy(self, nums: list[int]) -> bool:
-        if not nums:
+        if not nums or len(nums) < 2:
             return True
 
         len_nums = len(nums)
-        goal = len_nums - 1
-        for i in range(len_nums - 2, -1, -1):
-            if i + nums[i] >= goal:
-                goal = i
+        last_pos = len_nums - 1
 
-        return goal == 0
+        for idx in range(len_nums - 1, -1, -1):
+            if idx + nums[idx] >= last_pos:
+                last_pos = idx
+
+        return last_pos == 0
 
 
 # Create an instance of the class

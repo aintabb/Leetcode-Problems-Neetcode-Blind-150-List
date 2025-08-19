@@ -26,8 +26,8 @@ Constraints:
 Note: This question is the same as 1296: https://leetcode.com/problems/divide-array-in-sets-of-k-consecutive-numbers/
 """
 
-# Time Complexity:  O(N**2) -> for both memo and dp, O(N) -> for the greedy
-# Space Complexity: O(N) -> for both memo and dp, O(1) -> for the greedy
+# Time Complexity:  O(N*logN)
+# Space Complexity: O(N)
 
 import collections
 
@@ -56,21 +56,26 @@ class Solution:
 
     # There are many ways to solve this. I will use sorting only
     def is_n_straight_hand(self, hand: list[int], group_size: int) -> bool:
-        if len(hand) % group_size != 0:
+        if (
+            not hand
+            or group_size < 1
+            or len(hand) < group_size
+            or len(hand) % group_size != 0
+        ):
             return False
 
         hand.sort()
+
         freq_map = collections.defaultdict(int)
+        for num in hand:
+            freq_map[num] += 1
 
         for num in hand:
-            freq_map[num] = 1 + freq_map.get(num, 0)
-
-        for num in hand:
-            if freq_map[num]:
-                for next_num in range(num, num + group_size):
-                    if not freq_map[next_num]:
+            if freq_map[num] > 0:
+                for start in range(num, num + group_size):
+                    if not freq_map[start]:
                         return False
-                    freq_map[next_num] -= 1
+                    freq_map[start] -= 1
 
         return True
 

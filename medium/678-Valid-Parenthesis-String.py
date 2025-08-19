@@ -85,6 +85,16 @@ class Solution:
         assert result == False, err_msg_invalid_result
         print(result)
 
+        s = "("
+
+        result = self.check_valid_string_stack(s)
+        assert result == False, err_msg_invalid_result
+        print(result)
+
+        result = self.check_valid_string_greedy(s)
+        assert result == False, err_msg_invalid_result
+        print(result)
+
     def check_valid_string_stack(self, s: str) -> bool:
         if not s:
             return False
@@ -114,23 +124,29 @@ class Solution:
     def check_valid_string_greedy(self, s: str) -> bool:
         if not s:
             return False
-
-        left_min, left_max = 0, 0
-
+        # We use two variables lo and hi to keep track of the minimum and
+        # maximum possible number of open parentheses.
+        low = high = 0
         for ch in s:
-            if ch == "(":
-                left_min, left_max = left_min + 1, left_max + 1
-            elif ch == ")":
-                left_min, left_max = left_min - 1, left_max - 1
-            else:
-                left_min, left_max = left_min - 1, left_max + 1
+            # If the character is '(', we increment both lo and hi by 1.
+            # If the character is ')', we decrement both lo and hi by 1.
+            # If the character is '', we increment hi by 1 (because '' can be treated as a '(') and
+            # decrement lo by 1 (because '*' can be treated as a ')')
+            low += 1 if ch == "(" else -1
+            high += 1 if ch != ")" else -1
 
-            if left_max < 0:
+            # If hi ever becomes negative, it means that we have more ')' than '(' and '*' combined,
+            # so we return False.
+            if high < 0:
                 return False
-            if left_min < 0:
-                left_min = 0
 
-        return left_min == 0
+            # we also make sure that lo does not go below 0, because we cannot have a negative number of
+            # open parentheses.
+            low = max(low, 0)
+
+        # we return True if lo is 0, which means that we have exactly the right number of '(' and ')' to match
+        # each other.
+        return low == 0
 
 
 # Create an instance of the class

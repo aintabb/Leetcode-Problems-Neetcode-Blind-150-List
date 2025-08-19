@@ -47,16 +47,18 @@ class Solution:
         print(result)
 
     def partition_labels(self, s: str) -> list[int]:
-        len_s = len(s)
-        if not s or len_s == 1:
+        if not s:
+            return [0]
+
+        if len(s) == 1:
             return [1]
 
         last_index_map = {}
         for idx, ch in enumerate(s):
             last_index_map[ch] = idx
 
+        end = size = 0
         result = []
-        size = end = 0
 
         for idx, ch in enumerate(s):
             size += 1

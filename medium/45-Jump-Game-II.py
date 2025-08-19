@@ -103,17 +103,17 @@ class Solution:
         return dp[0]
 
     def jump_greedy(self, nums: list[int]) -> int:
-        if not nums:
+        if not nums or len(nums) < 2:
             return 0
 
-        len_nums = len(nums)
         min_steps = 0
         left = right = 0
+        len_nums = len(nums)
 
         while right < len_nums - 1:
             farthest = 0
-            for i in range(left, right + 1):
-                farthest = max(farthest, i + nums[i])
+            for idx in range(left, right + 1):
+                farthest = max(farthest, idx + nums[idx])
 
             left = right + 1
             right = farthest

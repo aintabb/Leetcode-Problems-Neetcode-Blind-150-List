@@ -28,7 +28,7 @@ class Solution:
         s = "aab"
 
         result = self.partition(s)
-        assert result == [["a","a","b"],["aa","b"]], err_msg_invalid_result
+        assert result == [["a", "a", "b"], ["aa", "b"]], err_msg_invalid_result
         print(result)
 
         s = "a"
@@ -37,31 +37,42 @@ class Solution:
         assert result == [["a"]], err_msg_invalid_result
         print(result)
 
+        s = "efe"
+
+        result = self.partition(s)
+        assert result == [["e", "f", "e"], ["efe"]]
+        print(result)
 
     def partition(self, s: str) -> list[list[str]]:
-        result, part = [], []
-        n = len(s)
+        if not s:
+            return [[]]
 
-        def backtrack(idx: int) -> None:
-            if (idx == n):
+        result = []
+        part = []
+
+        len_s = len(s)
+
+        def backtrack(start: int) -> None:
+            if start == len_s:
                 result.append(part[:])
                 return
 
-            for i in range(idx, n):
-                if (self.is_palindrome(s, idx, i)):
-                    part.append(s[idx:i+1])
-                    backtrack(i + 1)
+            for end in range(start, len_s):
+                if self.is_palindrome(s, start, end):
+                    part.append(s[start : end + 1])
+                    backtrack(end + 1)
                     part.pop()
 
         backtrack(0)
         return result
 
-    def is_palindrome(self, s: str, l: int, r: int) -> bool:
-        while (l < r):
-            if (s[l] != s[r]):
+    def is_palindrome(self, s: str, left: int, right: int) -> bool:
+        while left < right:
+            if s[left] != s[right]:
                 return False
 
-            l, r = l + 1, r - 1
+            left = left + 1
+            right = right - 1
 
         return True
 

@@ -39,38 +39,44 @@ class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        candidates, target = [10,1,2,7,6,1,5], 8
+        candidates, target = [10, 1, 2, 7, 6, 1, 5], 8
 
         result = self.combination_sum_two(candidates, target)
-        assert result == [[1,1,6], [1,2,5], [1,7], [2,6]], err_msg_invalid_result
+        assert result == [[1, 1, 6], [1, 2, 5], [1, 7], [2, 6]], err_msg_invalid_result
         print(result)
 
-        candidates, target = [2,5,2,1,2], 5
+        candidates, target = [2, 5, 2, 1, 2], 5
 
         result = self.combination_sum_two(candidates, target)
-        assert result == [[1,2,2], [5]], err_msg_invalid_result
+        assert result == [[1, 2, 2], [5]], err_msg_invalid_result
         print(result)
 
+    def combination_sum_two(
+        self, candidates: list[int], target: int
+    ) -> list[list[int]]:
+        if not candidates or target < 1:
+            return [[]]
 
-    def combination_sum_two(self, candidates: list[int], target: int) -> list[list[int]]:
-        result, candidate = [], []
-        n = len(candidates)
+        result = []
+        candidate = []
 
+        len_cand = len(candidates)
         candidates.sort()
 
         def backtrack(idx: int, total: int) -> None:
-            if (total == target):
+            if total == target:
                 result.append(candidate[:])
                 return
 
-            if (idx >= n or total > target):
+            if idx == len_cand or total > target:
                 return
 
             candidate.append(candidates[idx])
             backtrack(idx + 1, total + candidates[idx])
+
             candidate.pop()
 
-            while (idx + 1 < n and candidates[idx] == candidates[idx + 1]):
+            while idx + 1 < len_cand and candidates[idx] == candidates[idx + 1]:
                 idx += 1
 
             backtrack(idx + 1, total)

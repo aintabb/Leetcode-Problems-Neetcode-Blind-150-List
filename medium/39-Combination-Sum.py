@@ -57,24 +57,27 @@ class Solution:
         assert result == [], err_msg_invalid_result
         print(result)
 
-
     def combination_sum(self, candidates: list[int], target: int) -> list[list[int]]:
-        result, candidate =  [], []
+        if not candidates or target < 1:
+            return [[]]
+
+        result = []
+        candidate = []
 
         def backtrack(idx: int, total: int) -> None:
-            if (total == target):
+            if total == target:
                 result.append(candidate[:])
                 return
 
-            if (idx >= len(candidates) or total > target):
+            if idx == len(candidates) or total > target:
                 return
 
             candidate.append(candidates[idx])
+            # We don't increase the index to allow using the same number multiple times
             backtrack(idx, total + candidates[idx])
 
             candidate.pop()
             backtrack(idx + 1, total)
-
 
         backtrack(0, 0)
         return result

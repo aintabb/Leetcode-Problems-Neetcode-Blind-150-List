@@ -27,6 +27,7 @@ digits[i] is a digit in the range ['2', '9'].
 
 # Time Complexity:  O(4^N)
 # Space Complexity: O(N*(4^N))
+## In the worst case, each digit can map to 4 letters (e.g., "7" maps to "pqrs").
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
@@ -34,7 +35,17 @@ class Solution:
         digits = "23"
 
         result = self.letter_combinations(digits)
-        assert result == ["ad","ae","af","bd","be","bf","cd","ce","cf"], err_msg_invalid_result
+        assert result == [
+            "ad",
+            "ae",
+            "af",
+            "bd",
+            "be",
+            "bf",
+            "cd",
+            "ce",
+            "cf",
+        ], err_msg_invalid_result
         print(result)
 
         digits = ""
@@ -49,34 +60,33 @@ class Solution:
         assert result == ["a", "b", "c"], err_msg_invalid_result
         print(result)
 
-
     def letter_combinations(self, digits: str) -> list[str]:
-        result = []
-        n = len(digits)
+        if not digits:
+            return []
 
-        digit_to_letter_map = {
+        result = []
+
+        len_digits = len(digits)
+        letter_to_digit_map = {
             "2": "abc",
             "3": "def",
             "4": "ghi",
             "5": "jkl",
             "6": "mno",
-            "7": "qprs",
+            "7": "pqrs",
             "8": "tuv",
-            "9": "wxyz"
+            "9": "wxyz",
         }
 
         def backtrack(idx: int, curr_str: str) -> None:
-            if (len(curr_str) == n):
+            if len(curr_str) == len_digits:
                 result.append(curr_str)
                 return
 
-            for ch in digit_to_letter_map[digits[idx]]:
+            for ch in letter_to_digit_map[digits[idx]]:
                 backtrack(idx + 1, curr_str + ch)
 
-
-        if digits:
-            backtrack(0, "")
-
+        backtrack(0, "")
         return result
 
 

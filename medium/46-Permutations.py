@@ -32,7 +32,14 @@ class Solution:
         nums = [1, 2, 3]
 
         result = self.permute(nums)
-        assert result == [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]], err_msg_invalid_result
+        assert result == [
+            [1, 2, 3],
+            [1, 3, 2],
+            [2, 1, 3],
+            [2, 3, 1],
+            [3, 1, 2],
+            [3, 2, 1],
+        ], err_msg_invalid_result
         print(result)
 
         nums = [0, 1]
@@ -47,13 +54,21 @@ class Solution:
         assert result == [[1]], err_msg_invalid_result
         print(result)
 
-
     def permute(self, nums: list[int]) -> list[list[int]]:
-        result, perm = [], []
-        n = len(nums)
+        if not nums:
+            return [[]]
+
+        len_nums = len(nums)
+        if len_nums == 1:
+            return [nums]
+
+        result = []
+        perm = []
+
+        nums.sort()
 
         def backtrack() -> None:
-            if (len(perm) == n):
+            if len(perm) == len_nums:
                 result.append(perm[:])
                 return
 
@@ -65,6 +80,7 @@ class Solution:
 
         backtrack()
         return result
+
 
 # Create an instance of the class
 solution = Solution()

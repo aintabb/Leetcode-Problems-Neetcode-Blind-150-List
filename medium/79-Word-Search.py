@@ -30,25 +30,37 @@ Follow up: Could you use search pruning to make your solution faster with a larg
 """
 
 
-# Time Complexity:  O((m*n)**2)
+# Time Complexity:  O((m*n)^2)
 # Space Complexity: O(W) -> "W" is the word length
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        board, word = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "ABCCED"
+        board, word = [
+            ["A", "B", "C", "E"],
+            ["S", "F", "C", "S"],
+            ["A", "D", "E", "E"],
+        ], "ABCCED"
 
         result = self.exist(board, word)
         assert result == True, err_msg_invalid_result
         print(result)
 
-        board, word = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "SEE"
+        board, word = [
+            ["A", "B", "C", "E"],
+            ["S", "F", "C", "S"],
+            ["A", "D", "E", "E"],
+        ], "SEE"
 
         result = self.exist(board, word)
         assert result == True, err_msg_invalid_result
         print(result)
 
-        board, word = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "ABCB"
+        board, word = [
+            ["A", "B", "C", "E"],
+            ["S", "F", "C", "S"],
+            ["A", "D", "E", "E"],
+        ], "ABCB"
 
         result = self.exist(board, word)
         assert result == False, err_msg_invalid_result
@@ -61,36 +73,42 @@ class Solution:
         print(result)
 
     def exist(self, board: list[list[str]], word: str) -> bool:
-        rows, cols, word_l = len(board), len(board[0]), len(word)
-
-        if (rows == 1 and cols == 1):
-            return board[0][0] == word
-
-        def backtrack(pos: tuple, idx: int) -> bool:
-            row, col = pos
-
-            if (idx == word_l):
-                return True
-
-            if (board[row][col] != word[idx]):
-                return False
-
-            curr_ch = board[row][col]
-            board[row][col] = '#'
-            for row_off, col_off in ((0, 1), (1, 0), (-1, 0), (0, -1)):
-                r, c = row + row_off, col + col_off
-
-                if (0 <= r < rows and 0 <= c < cols):
-                    if (backtrack((r, c), idx + 1)):
-                        return True
-
-            board[row][col] = curr_ch
+        if not board or not word:
             return False
 
+        ROWS = len(board)
+        COLS = len(board[0])
+        len_word = len(word)
 
-        for row in range(rows):
-            for col in range(cols):
-                if (backtrack((row, col), 0)):
+        if ROWS == 1 and COLS == 1:
+            return board[0][0] == word
+
+        visited = set()
+
+        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+
+        def backtrack(row: int, col: int, idx: int) -> bool:
+            if idx == len_word:
+                return True
+
+            if (row, col) in visited or board[row][col] != word[idx]:
+                return False
+
+            visited.add((row, col))
+            for dx, dy in dirs:
+                new_row = row + dx
+                new_col = col + dy
+
+                if 0 <= new_row < ROWS and 0 <= new_col < COLS:
+                    if backtrack(new_row, new_col, idx + 1):
+                        return True
+
+            visited.discard((row, col))
+            return False
+
+        for row in range(ROWS):
+            for col in range(COLS):
+                if board[row][col] == word[0] and backtrack(row, col, 0):
                     return True
 
         return False

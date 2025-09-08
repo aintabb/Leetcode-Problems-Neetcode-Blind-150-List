@@ -22,8 +22,9 @@ s consists of lowercase English letters.
 """
 
 
-# Time Complexity:  O(N**2)
+# Time Complexity:  O(N^2)
 # Space Complexity: O(1)
+### This should have been under the Two-Pointers section.
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
@@ -40,17 +41,18 @@ class Solution:
         assert result == 6, err_msg_invalid_result
         print(result)
 
-
     def count_substrings(self, s: str) -> int:
         if not s:
             return 0
 
         len_s = len(s)
+        if len_s == 1:
+            return 1
 
         def expand_around_center(left: int, right: int) -> int:
             count = 0
 
-            while (left >= 0 and right < len_s and s[left] == s[right]):
+            while left >= 0 and right < len_s and s[left] == s[right]:
                 left -= 1
                 right += 1
                 count += 1
@@ -58,10 +60,9 @@ class Solution:
             return count
 
         result = 0
-
-        for i in range(len_s):
-            result += expand_around_center(i, i)
-            result += expand_around_center(i, i + 1)
+        for idx in range(len_s):
+            result += expand_around_center(idx, idx)
+            result += expand_around_center(idx, idx + 1)
 
         return result
 

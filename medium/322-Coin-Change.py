@@ -34,77 +34,82 @@ class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        coins = [1,2,5]
+        coins = [1, 2, 5]
         amount = 11
 
-        result = self.coin_change_tabulation(coins, amount)
+        result = self.coin_change_tabulation_bottom_up(coins, amount)
         assert result == 3, err_msg_invalid_result
         print(result)
 
-        result = self.coin_change_memoization(coins, amount)
+        result = self.coin_change_memoization_top_down(coins, amount)
         assert result == 3, err_msg_invalid_result
         print(result)
 
         coins = [2]
         amount = 3
 
-        result = self.coin_change_tabulation(coins, amount)
+        result = self.coin_change_tabulation_bottom_up(coins, amount)
         assert result == -1, err_msg_invalid_result
         print(result)
 
-        result = self.coin_change_memoization(coins, amount)
+        result = self.coin_change_memoization_top_down(coins, amount)
         assert result == -1, err_msg_invalid_result
         print(result)
 
         coins = [1]
         amount = 0
 
-        result = self.coin_change_tabulation(coins, amount)
+        result = self.coin_change_tabulation_bottom_up(coins, amount)
         assert result == 0, err_msg_invalid_result
         print(result)
 
-        result = self.coin_change_memoization(coins, amount)
+        result = self.coin_change_memoization_top_down(coins, amount)
         assert result == 0, err_msg_invalid_result
         print(result)
 
+    def coin_change_memoization_top_down(self, coins: list[int], amount: int) -> int:
+        if not coins or not amount:
+            return 0
 
-    def coin_change_memoization(self, coins: list[int], amount: int) -> int:
         # Define a cache to store the results of sub-problems
-        cache = {}
+        coin_cache = {}
 
-        def dfs(rem):
-            # If the remaining amount is less than 0, return -1 (invalid case)
-            if rem < 0:
-                return -1
+        def helper(rem: int) -> int:
             # If the remaining amount is 0, return 0 (no coins needed)
             if rem == 0:
                 return 0
+
+            # If the remaining amount is less than 0, return -1 (invalid case)
+            if rem < 0:
+                return -1
+
             # If the result is already in the cache, return it
-            if rem in cache:
-                return cache[rem]
+            if rem in coin_cache:
+                return coin_cache[rem]
 
             # Initialize the minimum number of coins to a large value
-            min_coins = float('inf')
+            min_coins = float("inf")
             for coin in coins:
-                result = dfs(rem - coin)
+                result = helper(rem - coin)
                 if result >= 0:  # If result is valid
                     min_coins = min(min_coins, result + 1)
 
             # Cache the result
-            cache[rem] = min_coins if min_coins != float('inf') else -1
-            return cache[rem]
+            coin_cache[rem] = min_coins if min_coins != float("inf") else -1
+            return coin_cache[rem]
 
-        return dfs(amount)
+        return helper(amount)
 
+    def coin_change_tabulation_bottom_up(self, coins: list[int], amount: int) -> int:
+        if not coins or not amount:
+            return 0
 
-    def coin_change_tabulation(self, coins: list[int], amount: int) -> int:
-        # Max value could be either [inf] or [amount + 1]
         dp = [amount + 1] * (amount + 1)
         dp[0] = 0
 
         for coin in coins:
-            for a in range(coin, amount + 1):
-                dp[a] = min(dp[a], 1 + dp[a - coin])
+            for rem in range(coin, amount + 1):
+                dp[rem] = min(dp[rem], 1 + dp[rem - coin])
 
         return dp[amount] if dp[amount] != amount + 1 else -1
 

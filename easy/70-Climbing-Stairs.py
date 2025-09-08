@@ -68,35 +68,55 @@ class Solution:
 
     # Possible Time limit exceeding issue
     def climb_stairs_recursive(self, n: int) -> int:
-        # Base Case
-        if (n == 0):
-            return 1
-
-        if (n < 0):
+        if not n:
             return 0
 
-        return (self.climb_stairs_recursive(n - 1) + self.climb_stairs_recursive(n - 2))
+        if n == 1:
+            return 1
+
+        def helper(step: int) -> int:
+            if step == 0:
+                return 1
+
+            if step < 0:
+                return 0
+
+            return helper(step - 1) + helper(step - 2)
+
+        return helper(n)
 
     def climb_stairs_tabulation_with_memory(self, n: int) -> int:
+        if not n:
+            return 0
+
+        if n == 1:
+            return 1
+
         dp = [0] * (n + 1)
         dp[0] = 1
         dp[1] = 1
 
-        for i in range(2, n + 1):
-            dp[i] = dp[i - 1] + dp[i - 2]
+        for step in range(2, n + 1):
+            dp[step] = dp[step - 1] + dp[step - 2]
 
         return dp[n]
 
     def climb_stairs_tabulation_no_memory(self, n: int) -> int:
-        second = 1
-        first = 1
+        if not n:
+            return 0
+
+        if n == 1:
+            return 1
+
+        first_step = 1
+        second_step = 1
 
         for _ in range(2, n + 1):
-            num_of_steps = second + first
-            first = second
-            second = num_of_steps
+            num_of_steps = first_step + second_step
+            first_step = second_step
+            second_step = num_of_steps
 
-        return num_of_steps
+        return second_step
 
 
 # Create an instance of the class

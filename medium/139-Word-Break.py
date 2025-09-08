@@ -30,76 +30,83 @@ All the strings of wordDict are unique.
 """
 
 
-# Time Complexity:  O(N**2) -> for both
+# Time Complexity:  O(N^2) -> for both
 # Space Complexity: O(N) -> for both
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        s, word_dict = "leetcode", ["leet","code"]
+        s, word_dict = "leetcode", ["leet", "code"]
 
-        result = self.word_break_tabulation(s, word_dict)
+        result = self.word_break_tabulation_bottom_up(s, word_dict)
         assert result == True, err_msg_invalid_result
         print(result)
 
-        result = self.word_break_memoization(s, word_dict)
+        result = self.word_break_memoization_top_down(s, word_dict)
         assert result == True, err_msg_invalid_result
         print(result)
 
-        s, word_dict = "applepenapple", ["apple","pen"]
+        s, word_dict = "applepenapple", ["apple", "pen"]
 
-        result = self.word_break_tabulation(s, word_dict)
+        result = self.word_break_tabulation_bottom_up(s, word_dict)
         assert result == True, err_msg_invalid_result
         print(result)
 
-        result = self.word_break_memoization(s, word_dict)
+        result = self.word_break_memoization_top_down(s, word_dict)
         assert result == True, err_msg_invalid_result
         print(result)
 
-        s, word_dict = "catsandog", ["cats","dog","sand","and","cat"]
+        s, word_dict = "catsandog", ["cats", "dog", "sand", "and", "cat"]
 
-        result = self.word_break_tabulation(s, word_dict)
+        result = self.word_break_tabulation_bottom_up(s, word_dict)
         assert result == False, err_msg_invalid_result
         print(result)
 
-        result = self.word_break_memoization(s, word_dict)
+        result = self.word_break_memoization_top_down(s, word_dict)
         assert result == False, err_msg_invalid_result
         print(result)
 
-    def word_break_tabulation(self, s: str, word_dict: list[str]) -> bool:
-            word_set = set(word_dict)  # Convert list to set for O(1) look-up
-            dp = [False] * (len(s) + 1)
-            dp[0] = True  # Base case: empty string is considered segmented
-
-            for i in range(1, len(s) + 1):
-                for j in range(i):
-                    if dp[j] and s[j:i] in word_set:
-                        dp[i] = True
-                        break
-
-            return dp[len(s)]
-
-    def word_break_memoization(self, s: str, word_dict: list[str]) -> bool:
-        word_set = set(word_dict)
-        memo = {}
-        len_s = len(s)
-
-        def can_segment(start: int) -> bool:
-            if (start == len_s):
-                return True
-
-            if (start in memo):
-                return memo[start]
-
-            for end in range(start + 1, len_s + 1):
-                if (s[start:end] in word_set and can_segment(end)):
-                    memo[start] = True
-                    return True
-
-            memo[start] = False
+    def word_break_memoization_top_down(self, s: str, word_dict: list[str]) -> bool:
+        if not s or not word_dict:
             return False
 
-        return can_segment(0)
+        len_s = len(s)
+        word_set = set(word_dict)
+        word_cache = {}
+
+        def helper(start: int) -> bool:
+            if start == len_s:
+                return True
+
+            if start in word_cache:
+                return word_cache[start]
+
+            for end in range(start + 1, len_s + 1):
+                if s[start:end] in word_set and helper(end):
+                    word_cache[start] = True
+                    return True
+
+            word_cache[start] = False
+            return False
+
+        return helper(0)
+
+    def word_break_tabulation_bottom_up(self, s: str, word_dict: list[str]) -> bool:
+        if not s or not word_dict:
+            return False
+
+        len_s = len(s)
+        word_set = set(word_dict)
+        dp = [False] * (len_s + 1)
+        dp[0] = True
+
+        for i in range(1, len_s + 1):
+            for j in range(i):
+                if s[j:i] in word_set and dp[j]:
+                    dp[i] = True
+                    break
+
+        return dp[-1]
 
 
 # Create an instance of the class

@@ -61,79 +61,85 @@ class Solution:
 
         s = "12"
 
-        result = self.num_decodings_memo(s)
+        result = self.num_decodings_memo_top_down(s)
         assert result == 2, err_msg_invalid_result
         print(result)
 
-        result = self.num_decodings_tabulation(s)
+        result = self.num_decodings_tabulation_bottom_up(s)
         assert result == 2, err_msg_invalid_result
         print(result)
 
         s = "226"
 
-        result = self.num_decodings_memo(s)
+        result = self.num_decodings_memo_top_down(s)
         assert result == 3, err_msg_invalid_result
         print(result)
 
-        result = self.num_decodings_tabulation(s)
+        result = self.num_decodings_tabulation_bottom_up(s)
         assert result == 3, err_msg_invalid_result
         print(result)
 
         s = "06"
 
-        result = self.num_decodings_memo(s)
+        result = self.num_decodings_memo_top_down(s)
         assert result == 0, err_msg_invalid_result
         print(result)
 
-        result = self.num_decodings_tabulation(s)
+        result = self.num_decodings_tabulation_bottom_up(s)
         assert result == 0, err_msg_invalid_result
         print(result)
 
-
-    def num_decodings_memo(self, s: str) -> int:
-        if not s:
-            return 1
-
-        len_s = len(s)
-        decode_cache = {}
-
-        def dfs(idx: int) -> int:
-            if (idx >= len_s):
-                return 1
-
-            if (s[idx] == '0'):
-                return 0
-
-            if (idx in decode_cache):
-                return decode_cache[idx]
-
-            ways = dfs(idx + 1)
-
-            if (idx < len_s - 1 and '10' <= s[idx:idx + 2] <= '26'):
-                ways += dfs(idx + 2)
-
-            decode_cache[idx] = ways
-            return decode_cache[idx]
-
-        return dfs(0)
-
-    def num_decodings_tabulation(self, s: str) -> int:
-        if not s or s[0] == '0':
+    # Time Limit Exceeded
+    def num_decodings_memo_top_down(self, s: str) -> int:
+        if not s or s[0] == "0":
             return 0
 
         len_s = len(s)
+        if len_s == 1:
+            return 1
+
+        decode_cache = {}
+
+        def helper(idx: int) -> int:
+            if idx == len_s:
+                return 1
+
+            if idx in decode_cache:
+                return decode_cache[idx]
+
+            if s[idx] == "0":
+                return 0
+
+            ways = helper(idx + 1)
+
+            if idx < len_s - 1 and "10" <= s[idx : idx + 2] <= "26":
+                ways += helper(idx + 2)
+
+            decode_cache[idx] = ways
+            return ways
+
+        return helper(0)
+
+    def num_decodings_tabulation_bottom_up(self, s: str) -> int:
+        if not s or s[0] == "0":
+            return 0
+
+        len_s = len(s)
+        if len_s == 1:
+            return 1
+
         dp = [0] * (len_s + 1)
         dp[0] = 1
-        dp[1] = 0 if s[0] == '0' else 1
+        dp[1] = 1
 
-        for i in range(2, len_s + 1):
-            if (s[i - 1] != '0'):
-                dp[i] += dp[i - 1]
+        for idx in range(2, len_s + 1):
+            if s[idx - 1] != "0":
+                dp[idx] += dp[idx - 1]
 
-            if ('10' <= s[i - 2:i] <= '26'):
-                dp[i] += dp[i - 2]
+            if "10" <= s[idx - 2 : idx] <= "26":
+                dp[idx] += dp[idx - 2]
 
-        return dp[len_s]
+        return dp[-1]
 
 
 # Create an instance of the class

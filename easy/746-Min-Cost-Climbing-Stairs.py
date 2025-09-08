@@ -32,9 +32,10 @@ Constraints:
 0 <= cost[i] <= 999
 """
 
-
 # Time Complexity:  O(2^N) -> R # O(N) -> M, T, T no space
 # Space Complexity: O(N) -> R, M, T # O(1) - T no space
+
+
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
@@ -57,7 +58,7 @@ class Solution:
         assert result == 15, err_msg_invalid_result
         print(result)
 
-        cost = [1,100,1,1,1,100,1,1,100,1]
+        cost = [1, 100, 1, 1, 1, 100, 1, 1, 100, 1]
 
         result = self.min_cost_climbing_stairs_recursive(cost)
         assert result == 6, err_msg_invalid_result
@@ -75,69 +76,85 @@ class Solution:
         assert result == 6, err_msg_invalid_result
         print(result)
 
-
     def min_cost_climbing_stairs_recursive(self, cost: list[int]) -> int:
-        def min_cost_helper(curr_step: int) -> int:
+        if not cost:
+            return 0
+
+        len_cost = len(cost)
+        if len_cost == 1:
+            return cost[0]
+
+        def helper(step: int) -> int:
             # Base Cases: if we're at the first or second step, return it's cost
-            if curr_step <= 1:
-                return cost[curr_step]
+            if step <= 1:
+                return cost[step]
 
-            return cost[curr_step] + min(
-                min_cost_helper(curr_step - 1), min_cost_helper(curr_step - 2)
-            )
-
-        n = len(cost)
+            return cost[step] + min(helper(step - 1), helper(step - 2))
 
         # Minimum of the two possibilities
-        return min(min_cost_helper(n - 1), min_cost_helper(n - 2))
+        return min(helper(len_cost - 1), helper(len_cost - 2))
 
     def min_cost_climbing_stairs_memoization(self, cost: list[int]) -> int:
-        def min_cost_helper_memo(curr_step: int) -> int:
-            if curr_step <= 1:
-                return cost[curr_step]
+        if not cost:
+            return 0
 
-            cache[curr_step] = cost[curr_step] + min(
-                min_cost_helper_memo(curr_step - 1), min_cost_helper_memo(curr_step - 2)
-            )
+        len_cost = len(cost)
+        if len_cost == 1:
+            return cost[0]
 
-            return cache[curr_step]
-
-        n = len(cost)
         cache = {}
 
-        return min(min_cost_helper_memo(n - 1), min_cost_helper_memo(n - 2))
+        def helper(step: int) -> int:
+            if step <= 1:
+                return cost[step]
+
+            cache[step] = cost[step] + min(helper(step - 1), helper(step - 2))
+
+            return cache[step]
+
+        return min(helper(len_cost - 1), helper(len_cost - 2))
 
     def min_cost_climbing_stairs_tabulation_with_memory(self, cost: list[int]) -> int:
-        n = len(cost)
+        if not cost:
+            return 0
 
-        dp = [0] * (n + 1)
+        len_cost = len(cost)
+        if len_cost == 1:
+            return cost[0]
+
+        dp = [0] * (len_cost + 1)
 
         # Base cases: the cost of reaching the first two steps is their respective costs
         dp[0] = cost[0]
         dp[1] = cost[1]
 
-        for i in range(2, n):
-            dp[i] = min(dp[i - 1], dp[i - 2]) + cost[i]
+        for step in range(2, len_cost):
+            dp[step] = min(dp[step - 1], dp[step - 2]) + cost[step]
 
         # The final step is the top of the floor, which can be reached either
         # from the last step or the second to last step
-        dp[n] = min(dp[n - 1], dp[n - 2])
+        dp[len_cost] = min(dp[len_cost - 1], dp[len_cost - 2])
 
-        return dp[n]
+        return dp[len_cost]
 
     def min_cost_climbing_stairs_tabulation_no_memory(self, cost: list[int]) -> int:
-        n = len(cost)
+        if not cost:
+            return 0
+
+        len_cost = len(cost)
+        if len_cost == 1:
+            return cost[0]
 
         # Base cases: the cost of reaching the first two steps is their respective costs
-        prev = cost[0]
-        curr = cost[1]
+        first_step = cost[0]
+        second_step = cost[1]
 
-        for i in range(2, n):
-            temp = min(prev, curr) + cost[i]
-            prev = curr
-            curr = temp
+        for step in range(2, len_cost):
+            min_cost = min(first_step, second_step) + cost[step]
+            first_step = second_step
+            second_step = min_cost
 
-        return min(prev, curr)
+        return min(first_step, second_step)
 
 
 # Create an instance of the class

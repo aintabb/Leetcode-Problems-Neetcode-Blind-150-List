@@ -30,60 +30,64 @@ class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        nums = [1,2,3,1]
+        nums = [1, 2, 3, 1]
 
-        result = self.rob(nums)
+        result = self.rob_space_optimized(nums)
         assert result == 4, err_msg_invalid_result
         print(result)
 
-        result = self.rob_tabulation_with_memory(nums)
+        result = self.rob_tabulation_bottom_up(nums)
         assert result == 4, err_msg_invalid_result
         print(result)
 
-        nums = [2,7,9,3,1]
+        nums = [2, 7, 9, 3, 1]
 
-        result = self.rob(nums)
+        result = self.rob_space_optimized(nums)
         assert result == 12, err_msg_invalid_result
         print(result)
 
-        result = self.rob_tabulation_with_memory(nums)
+        result = self.rob_tabulation_bottom_up(nums)
         assert result == 12, err_msg_invalid_result
         print(result)
 
-
-    def rob(self, nums: list[int]) -> int:
-        if not nums:
-            return 0
-
-        rob_one, rob_two = 0, 0
-        max_rob = 0
-
-        for num in nums:
-            max_rob = max(num + rob_one, rob_two)
-            rob_one = rob_two
-            rob_two = max_rob
-
-        return max_rob
-
-    def rob_tabulation_with_memory(self, nums: list[int]) -> int:
+    def rob_space_optimized(self, nums: list[int]) -> int:
         if not nums:
             return 0
 
         len_nums = len(nums)
-        if (len_nums == 1):
+        if len_nums == 1:
             return nums[0]
 
-        if (len_nums == 2):
-            return max(nums)
+        if len_nums == 2:
+            return max(nums[0], nums[1])
+
+        first_rob = 0
+        second_rob = 0
+        max_rob = 0
+
+        for num in nums:
+            max_rob = max(num + first_rob, second_rob)
+            first_rob = second_rob
+            second_rob = max_rob
+
+        return max_rob
+
+    def rob_tabulation_bottom_up(self, nums: list[int]) -> int:
+        if not nums:
+            return 0
+
+        len_nums = len(nums)
+        if len_nums == 1:
+            return nums[0]
 
         dp = [0] * len_nums
         dp[0] = nums[0]
         dp[1] = max(nums[0], nums[1])
 
-        for i in range(2, len_nums):
-            dp[i] = max(nums[i] + dp[i - 2], dp[i - 1])
+        for house in range(2, len_nums):
+            dp[house] = max(nums[house] + dp[house - 2], dp[house - 1])
 
-        return dp[-1]
+        return dp[len_nums - 1]
 
 
 # Create an instance of the class

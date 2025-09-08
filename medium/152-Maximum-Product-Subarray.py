@@ -29,38 +29,34 @@ class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        nums = [2,3,-2,4]
+        nums = [2, 3, -2, 4]
 
         result = self.max_product(nums)
         assert result == 6, err_msg_invalid_result
         print(result)
 
-        nums = [-2,0,-1]
+        nums = [-2, 0, -1]
 
         result = self.max_product(nums)
         assert result == 0, err_msg_invalid_result
         print(result)
 
-
     def max_product(self, nums: list[int]) -> int:
         if not nums:
             return 0
 
-        if (len(nums) == 1):
+        if len(nums) == 1:
             return nums[0]
 
-        result = nums[0]
-        max_so_far = nums[0]
-        min_so_far = nums[0]
+        result = max_prod = min_prod = nums[0]
 
-        for i in range(1, len(nums)):
-            curr = nums[i]
+        for idx in range(1, len(nums)):
+            if nums[idx] < 0:
+                min_prod, max_prod = max_prod, min_prod
 
-            temp_max = max(curr, curr * max_so_far, curr * min_so_far)
-            min_so_far = min(curr, curr * max_so_far, curr * min_so_far)
-            max_so_far = temp_max
-
-            result = max(result, max_so_far)
+            min_prod = min(nums[idx], min_prod * nums[idx])
+            max_prod = max(nums[idx], max_prod * nums[idx])
+            result = max(result, max_prod)
 
         return result
 

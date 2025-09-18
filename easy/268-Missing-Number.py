@@ -56,7 +56,7 @@ class Solution:
         assert result == 2, err_msg_invalid_result
         print(result)
 
-        nums = [9,6,4,2,3,5,7,0,1]
+        nums = [9, 6, 4, 2, 3, 5, 7, 0, 1]
 
         result = self.missing_number_solution_one(nums)
         assert result == 8, err_msg_invalid_result
@@ -66,22 +66,28 @@ class Solution:
         assert result == 8, err_msg_invalid_result
         print(result)
 
-
     def missing_number_solution_one(self, nums: list[int]) -> int:
-        result = len(nums)
+        if not nums:
+            return -1
 
-        for i in range(len(nums)):
-            result += i - nums[i]
+        len_nums = len(nums)
+        result = len_nums
+
+        for idx in range(len_nums):
+            result += idx - nums[idx]
 
         return result
 
     def missing_number_solution_two(self, nums: list[int]) -> int:
-        n = len(nums)
+        if not nums:
+            return -1
 
-        nums_sum = sum(nums)
-        total = n * (n + 1) // 2
+        curr_sum = sum(nums)
+        len_nums = len(nums)
+        expected_sum = len_nums * (len_nums + 1) // 2
 
-        return total - nums_sum
+        return expected_sum - curr_sum
+
 
 # Create an instance of the class
 solution = Solution()

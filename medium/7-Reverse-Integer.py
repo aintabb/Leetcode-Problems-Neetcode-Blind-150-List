@@ -19,7 +19,7 @@ Output: 21
 
 
 Constraints:
--231 <= x <= 231 - 1
+-2^31 <= x <= 2^31 - 1
 """
 
 
@@ -47,16 +47,15 @@ class Solution:
         assert result == 21, err_msg_invalid_result
         print(result)
 
-
     def reverse(self, x: int) -> int:
-        reversed_str = str(abs(x))[::-1]
-
-        result = int(reversed_str) * (-1 if x < 0 else 1)
+        reversed_x = str(abs(x))[::-1]
+        int_x = int(reversed_x) * (1 if x > 0 else -1)
         int_limit = 2**31 - 1
 
-        if (result > int_limit or result < -int_limit):
+        if int_x > int_limit or int_x < -int_limit:
             return 0
-        return result
+
+        return int_x
 
 
 # Create an instance of the class

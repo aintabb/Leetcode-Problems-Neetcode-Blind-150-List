@@ -18,7 +18,8 @@ Explanation: The input binary string 11111111111111111111111111111101 represents
 
 
 Constraints:
-The input must be a binary string of length 32
+0 <= n <= 231 - 2
+n is even.
 
 
 Follow up: If this function is called many times, how would you optimize it?
@@ -31,29 +32,26 @@ class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        n = int('0b00000010100101000001111010011100', 2)
+        n = int("0b00000010100101000001111010011100", 2)
 
         result = self.reverse_bits(n)
         assert result == 964176192, err_msg_invalid_result
         print(result)
 
-        n = int('0b11111111111111111111111111111101', 2)
+        n = int("0b11111111111111111111111111111101", 2)
         result = self.reverse_bits(n)
         assert result == 3221225471, err_msg_invalid_result
         print(result)
 
-
     def reverse_bits(self, n: int) -> int:
-        result = 0
+        if n is None:
+            return -1
 
+        result = 0
         for i in range(32):
-            '''
-            Shifts the bits of n to the right by i positions, effectively isolating the bit at the i-th position.
-            Uses the bitwise AND operation with 1 to keep only the least significant bit (i.e., the bit at the i-th position) and discards all other bits. This gives us the i-th bit of n.
-            '''
-            bit_to_reverse = (n >> i) & 1
-            # Shifts the bit_to_reverse left by (31 - i) positions. This places the i-th bit of n in its reversed position.
-            result |= (bit_to_reverse << (31 - i))
+            curr_bit = n % 2
+            result |= curr_bit << (31 - i)
+            n = n >> 1
 
         return result
 

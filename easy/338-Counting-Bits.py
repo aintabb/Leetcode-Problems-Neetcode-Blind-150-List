@@ -53,21 +53,20 @@ class Solution:
         assert result == [0, 1, 1, 2, 1, 2], err_msg_invalid_result
         print(result)
 
-
     def count_bits(self, n: int) -> list[int]:
-        if (n == 0):
+        if not n:
             return [0]
 
-        if (n == 1):
+        if n == 1:
             return [0, 1]
 
         result = [0, 1]
 
-        for i in range(2, n + 1):
-            if (i % 2 == 0):
-                result.append(result[i // 2])
+        for num in range(2, n + 1):
+            if num % 2 == 0:
+                result.append(result[num // 2])
             else:
-                result.append(result[i // 2] + 1)
+                result.append(result[num // 2] + 1)
 
         return result
 

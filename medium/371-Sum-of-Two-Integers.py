@@ -35,15 +35,15 @@ class Solution:
         assert result == 5, err_msg_invalid_result
         print(result)
 
-
     def get_sum(self, a: int, b: int) -> int:
         mask = 0xFFFFFFF
 
-        while (b != 0):
+        while b != 0:
             carry = (a & b) & mask
             a = (a ^ b) & mask
             b = (carry << 1) & mask
 
+        # This is done to handle the case where the sum overflows and results in a negative number
         return a if a < 0x7FFFFFF else ~(a ^ mask)
 
 

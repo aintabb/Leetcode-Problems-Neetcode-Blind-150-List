@@ -46,10 +46,11 @@ class Solution:
         assert result == 1, err_msg_invalid_result
         print(result)
 
-
     def single_number(self, nums: list[int]) -> int:
-        result = 0
+        if not nums:
+            return -3 * 10**4 - 1
 
+        result = 0
         for num in nums:
             result ^= num
 

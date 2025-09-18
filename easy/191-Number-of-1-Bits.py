@@ -72,20 +72,22 @@ class Solution:
         assert result == 30, err_msg_invalid_result
         print(result)
 
-
     def hamming_weight_shifting(self, n: int) -> int:
-        result = 0
+        if not n:
+            return 0
 
+        result = 0
         while n:
             result += n % 2
             n = n >> 1
 
         return result
 
-
     def hamming_weight_subtraction_with_and_operator(self, n: int) -> int:
-        result = 0
+        if not n:
+            return 0
 
+        result = 0
         while n:
             n &= n - 1
             result += 1

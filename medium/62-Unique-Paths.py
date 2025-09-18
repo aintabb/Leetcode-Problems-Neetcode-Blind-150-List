@@ -35,42 +35,65 @@ class Solution:
 
         # DP - Tabulation
         m, n = 1, 1
-        result = self.unique_paths_tabulation(m, n)
+        result = self.unique_paths_tabulation_bottom_up(m, n)
         assert result == 1, err_msg_invalid_result
         print(result)
 
         # DP - Memoization
         m, n = 1, 1
-        result = self.unique_paths_memoization(m, n)
+        result = self.unique_paths_memoization_top_down(m, n)
         assert result == 1, err_msg_invalid_result
         print(result)
 
         # DP - Tabulation
         m, n = 3, 7
-        result = self.unique_paths_tabulation(m, n)
+        result = self.unique_paths_tabulation_bottom_up(m, n)
         assert result == 28, err_msg_invalid_result
         print(result)
 
         # DP - Memoization
         m, n = 3, 7
-        result = self.unique_paths_memoization(m, n)
+        result = self.unique_paths_memoization_top_down(m, n)
         assert result == 28, err_msg_invalid_result
         print(result)
 
         # DP - Tabulation
         m, n = 3, 2
-        result = self.unique_paths_tabulation(m, n)
+        result = self.unique_paths_tabulation_bottom_up(m, n)
         assert result == 3, err_msg_invalid_result
         print(result)
 
         # DP - Memoization
         m, n = 3, 2
-        result = self.unique_paths_memoization(m, n)
+        result = self.unique_paths_memoization_top_down(m, n)
         assert result == 3, err_msg_invalid_result
         print(result)
 
+    def unique_paths_memoization_top_down(self, m: int, n: int) -> int:
+        if not m and not n:
+            return 0
 
-    def unique_paths_tabulation(self, m: int, n: int) -> int:
+        path_cache = {}
+
+        def helper(row: int, col: int) -> int:
+            if row == 0 or col == 0:
+                return 1
+
+            if row < 0 or col < 0:
+                return 0
+
+            if (row, col) in path_cache:
+                return path_cache[(row, col)]
+
+            path_cache[(row, col)] = helper(row - 1, col) + helper(row, col - 1)
+            return path_cache[(row, col)]
+
+        return helper(m - 1, n - 1)
+
+    def unique_paths_tabulation_bottom_up(self, m: int, n: int) -> int:
+        if not m and not n:
+            return 0
+
         dp = [[1 for _ in range(n)] for _ in range(m)]
 
         for row in range(1, m):
@@ -78,26 +101,6 @@ class Solution:
                 dp[row][col] = dp[row - 1][col] + dp[row][col - 1]
 
         return dp[m - 1][n - 1]
-
-
-    def unique_paths_memoization(self, m: int, n: int) -> int:
-        def memo_helper(row: int, col: int) -> int:
-            # Base Cases
-            if (row == 0 or col == 0):
-                return 1
-
-            if (row < 0 or col < 0):
-                return 0
-
-            if ((row, col) in cache):
-                return cache[(row, col)]
-
-            cache[(row, col)] = memo_helper(row - 1, col) + memo_helper(row, col - 1)
-
-            return cache[(row, col)]
-
-        cache = {}
-        return memo_helper(m - 1, n - 1)
 
 
 # Create an instance of the class

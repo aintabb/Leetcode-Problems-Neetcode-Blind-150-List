@@ -37,9 +37,9 @@ class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        nums, target = [1,1,1,1,1], 3
+        nums, target = [1, 1, 1, 1, 1], 3
 
-        result = self.find_target_sum_ways_memo(nums, target)
+        result = self.find_target_sum_ways_memo_top_down(nums, target)
         assert result == 5, err_msg_invalid_result
         print(result)
 
@@ -49,7 +49,7 @@ class Solution:
 
         nums, target = [1], 1
 
-        result = self.find_target_sum_ways_memo(nums, target)
+        result = self.find_target_sum_ways_memo_top_down(nums, target)
         assert result == 1, err_msg_invalid_result
         print(result)
 
@@ -57,43 +57,46 @@ class Solution:
         assert result == 1, err_msg_invalid_result
         print(result)
 
-
-    def find_target_sum_ways_memo(self, nums: list[int], target: int) -> int:
-        total = sum(nums)
-        if (abs(target) > total or (total + target) % 2 != 0):
+    def find_target_sum_ways_memo_top_down(self, nums: list[int], target: int) -> int:
+        if not nums:
             return 0
 
-        memo = {}
+        total_sum = sum(nums)
+        if total_sum < abs(target) or (total_sum + target) % 2 != 0:
+            return 0
 
-        def dfs(idx: int, total: int) -> int:
-            memo_key = (idx, total)
-            if (memo_key in memo):
-                return memo[memo_key]
+        sum_cache = {}
 
-            if (idx == len(nums)):
-                return 1 if total == 0 else 0
+        def helper(idx: int, total_so_far: int) -> int:
+            if idx == len(nums):
+                return 1 if total_so_far == 0 else 0
 
-            add = dfs(idx + 1, total + nums[idx])
-            subtract = dfs(idx + 1, total - nums[idx])
+            if (idx, total_so_far) in sum_cache:
+                return sum_cache[(idx, total_so_far)]
 
-            memo[memo_key] = add + subtract
-            return memo[memo_key]
+            add = helper(idx + 1, total_so_far + nums[idx])
+            subtract = helper(idx + 1, total_so_far - nums[idx])
 
-        return dfs(0, target)
+            sum_cache[(idx, total_so_far)] = add + subtract
+            return sum_cache[(idx, total_so_far)]
+
+        return helper(0, target)
 
     def find_target_sum_ways_tabulation(self, nums: list[int], target: int) -> int:
-        total = sum(nums)
-        if (abs(target) > total or (total + target) % 2 != 0):
+        if not nums:
             return 0
 
-        target = (total + target) // 2
+        total_sum = sum(nums)
+        if total_sum < abs(target) or (total_sum + target) % 2 != 0:
+            return 0
 
+        target = (total_sum + target) // 2
         dp = [0] * (target + 1)
         dp[0] = 1
 
         for num in nums:
-            for i in range(target, num - 1, -1):
-                dp[i] += dp[i - num]
+            for curr_sum in range(target, num - 1, -1):
+                dp[curr_sum] += dp[curr_sum - num]
 
         return dp[target]
 

@@ -35,77 +35,80 @@ All the values of coins are unique.
 0 <= amount <= 5000
 """
 
+
 # Time Complexity:  O(amount * len(coins)) -> for both
 # Space Complexity: O(amount) -> for both
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        amount, coins = 5, [1,2,5]
+        amount, coins = 5, [1, 2, 5]
 
-        result = self.coin_change_two_memo(amount, coins)
+        result = self.coin_change_two_memo_top_down(amount, coins)
         assert result == 4, err_msg_invalid_result
         print(result)
 
-        result = self.coin_change_two_tabulation(amount, coins)
+        result = self.coin_change_two_tabulation_bottom_up(amount, coins)
         assert result == 4, err_msg_invalid_result
         print(result)
 
         amount, coins = 3, [2]
 
-        result = self.coin_change_two_memo(amount, coins)
+        result = self.coin_change_two_memo_top_down(amount, coins)
         assert result == 0, err_msg_invalid_result
         print(result)
 
-        result = self.coin_change_two_memo(amount, coins)
+        result = self.coin_change_two_memo_top_down(amount, coins)
         assert result == 0, err_msg_invalid_result
         print(result)
 
         amount, coins = 10, [10]
 
-        result = self.coin_change_two_memo(amount, coins)
+        result = self.coin_change_two_memo_top_down(amount, coins)
         assert result == 1, err_msg_invalid_result
         print(result)
 
-        result = self.coin_change_two_memo(amount, coins)
+        result = self.coin_change_two_memo_top_down(amount, coins)
         assert result == 1, err_msg_invalid_result
         print(result)
 
+    def coin_change_two_memo_top_down(self, amount: int, coins: list[int]) -> int:
+        if not coins or amount < 0:
+            return 0
 
-    def coin_change_two_memo(self, amount: int, coins: list[int]) -> int:
-        memo = {}
+        cache = {}
 
-        def dfs(idx: int, rem: int) -> int:
+        def helper(idx: int, rem: int) -> int:
             if rem == 0:
                 return 1
-            if rem < 0 or idx == len(coins):
+
+            if idx == len(coins) or rem < 0:
                 return 0
 
-            # Include current coin
-            include = dfs(idx, rem - coins[idx])
-            # Exclude current coin
-            exclude = dfs(idx + 1, rem)
+            if (idx, rem) in cache:
+                return cache[(idx, rem)]
 
-            memo[(idx, rem)] = include + exclude
-            return memo[(idx, rem)]
+            include = helper(idx, rem - coins[idx])
+            exclude = helper(idx + 1, rem)
 
-        return dfs(0, amount)
+            cache[(idx, rem)] = include + exclude
+            return cache[(idx, rem)]
 
-    def coin_change_two_tabulation(self, amount: int, coins: list[int]) -> int:
-        # Initialize dp array
+        return helper(0, amount)
+
+    def coin_change_two_tabulation_bottom_up(
+        self, amount: int, coins: list[int]
+    ) -> int:
+        if not coins or amount < 0:
+            return 0
+
         dp = [0] * (amount + 1)
-
-        # Base case: there's one way to make amount 0
         dp[0] = 1
 
-        # Iterate through all coins
         for coin in coins:
-            # For each amount from coin value up to target amount
-            for i in range(coin, amount + 1):
-                # Add the number of combinations for (current amount - coin value)
-                dp[i] += dp[i - coin]
+            for curr_amount in range(coin, amount + 1):
+                dp[curr_amount] += dp[curr_amount - coin]
 
-        # Return the number of combinations for the target amount
         return dp[amount]
 
 

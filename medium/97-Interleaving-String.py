@@ -48,102 +48,86 @@ class Solution:
 
         s1, s2, s3 = "aabcc", "dbbca", "aadbbcbcac"
 
-        result = self.is_interleave_memo(s1, s2, s3)
+        result = self.is_interleave_memo_top_down(s1, s2, s3)
         assert result == True, err_msg_invalid_result
         print(result)
 
-        result = self.is_interleave_tabulation(s1, s2, s3)
+        result = self.is_interleave_tabulation_bottom_up(s1, s2, s3)
         assert result == True, err_msg_invalid_result
         print(result)
 
         s1, s2, s3 = "aabcc", "dbbca", "aadbbbaccc"
 
-        result = self.is_interleave_memo(s1, s2, s3)
+        result = self.is_interleave_memo_top_down(s1, s2, s3)
         assert result == False, err_msg_invalid_result
         print(result)
 
-        result = self.is_interleave_tabulation(s1, s2, s3)
+        result = self.is_interleave_tabulation_bottom_up(s1, s2, s3)
         assert result == False, err_msg_invalid_result
         print(result)
 
         s1, s2, s3 = "", "", ""
 
-        result = self.is_interleave_memo(s1, s2, s3)
+        result = self.is_interleave_memo_top_down(s1, s2, s3)
         assert result == True, err_msg_invalid_result
         print(result)
 
-        result = self.is_interleave_tabulation(s1, s2, s3)
+        result = self.is_interleave_tabulation_bottom_up(s1, s2, s3)
         assert result == True, err_msg_invalid_result
         print(result)
 
-
-    def is_interleave_memo(self, s1: str, s2: str, s3: str) -> bool:
+    def is_interleave_memo_top_down(self, s1: str, s2: str, s3: str) -> bool:
         len_s1, len_s2, len_s3 = len(s1), len(s2), len(s3)
 
-        # If the lengths don't match, it's impossible to interleave
         if len_s1 + len_s2 != len_s3:
             return False
 
-        # Use memoization to optimize recursive calls
-        memo = {}
+        cache = {}
 
-        def dfs(i, j, k):
-            # If we've reached the end of s3, we're done
+        def helper(i: int, j: int, k: int) -> bool:
             if k == len_s3:
                 return i == len_s1 and j == len_s2
 
-            # If we've seen this state before, return the memoized result
-            if (i, j) in memo:
-                return memo[(i, j)]
-
-            # If we've used all the characters from both string without getting s3, return False
-            if (i + j > k):
+            if i + j > k:
                 return False
 
+            if (i, j) in cache:
+                return cache[(i, j)]
+
             result = False
-            # Check if we can use a character from s1 or s2
-            if (i < len_s1 and s1[i] == s3[k]):
-                result = dfs(i + 1, j, k + 1)
+            if i < len_s1 and s1[i] == s3[k]:
+                result = helper(i + 1, j, k + 1)
 
-            if (not result and j < len_s2 and s2[j] == s3[k]):
-                result = dfs(i, j + 1, k + 1)
+            if not result and j < len_s2 and s2[j] == s3[k]:
+                result = helper(i, j + 1, k + 1)
 
-            # Memoize the result for this state
-            memo[(i, j)] = result
+            cache[(i, j)] = result
             return result
 
-        return dfs(0, 0, 0)
+        return helper(0, 0, 0)
 
-    def is_interleave_tabulation(self, s1: str, s2: str, s3: str) -> bool:
-        len_s1, len_s2, len_s3 = len(s1), len(s2), len(s3)
+    def is_interleave_tabulation_bottom_up(self, s1: str, s2: str, s3: str) -> bool:
+        ROWS, COLS, len_s3 = len(s1), len(s2), len(s3)
 
-        # If the lengths don't match, it's impossible to interleave
-        if len_s1 + len_s2 != len_s3:
+        if ROWS + COLS != len_s3:
             return False
 
-        # Create a 2D DP table
-        dp = [[False] * (len_s2 + 1) for _ in range(len_s1 + 1)]
-
-        # Initialize the first cell
+        dp = [[False for _ in range(COLS + 1)] for _ in range(ROWS + 1)]
         dp[0][0] = True
 
-        # Initialize the first row
-        for j in range(1, len_s2 + 1):
-            dp[0][j] = dp[0][j-1] and s2[j-1] == s3[j-1]
+        for col in range(1, COLS + 1):
+            dp[0][col] = dp[0][col - 1] and s2[col - 1] == s3[col - 1]
 
-        # Initialize the first column
-        for i in range(1, len_s1 + 1):
-            dp[i][0] = dp[i-1][0] and s1[i-1] == s3[i-1]
+        for row in range(1, ROWS + 1):
+            dp[row][0] = dp[row - 1][0] and s1[row - 1] == s3[row - 1]
 
-        # Fill the DP table
-        for i in range(1, len_s1 + 1):
-            for j in range(1, len_s2 + 1):
-                dp[i][j] = (dp[i - 1][j] and s1[i - 1] == s3[i + j - 1]) or (
-                    dp[i][j - 1] and s2[j - 1] == s3[i + j - 1]
-                )
+        for row in range(1, ROWS + 1):
+            for col in range(1, COLS + 1):
+                dp[row][col] = (
+                    dp[row - 1][col] and s1[row - 1] == s3[row + col - 1]
+                ) or (dp[row][col - 1] and s2[col - 1] == s3[row + col - 1])
 
-        # The final cell gives us the answer
-        return dp[len_s1][len_s2]
+        return dp[ROWS][COLS]
 
 
 # Create an instance of the class

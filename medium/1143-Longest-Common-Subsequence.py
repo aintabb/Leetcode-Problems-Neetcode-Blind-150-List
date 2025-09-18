@@ -36,75 +36,89 @@ class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        text1, text2  = "abcde", "ace"
+        text1, text2 = "abcde", "ace"
 
-        result = self.longest_common_subsequence_memo(text1, text2)
+        result = self.longest_common_subsequence_memo_top_down(text1, text2)
         assert result == 3, err_msg_invalid_result
         print(result)
 
-        result = self.longest_common_subsequence_tabulation(text1, text2)
+        result = self.longest_common_subsequence_tabulation_bottom_up(text1, text2)
         assert result == 3, err_msg_invalid_result
         print(result)
 
         text1, text2 = "abc", "abc"
 
-        result = self.longest_common_subsequence_memo(text1, text2)
+        result = self.longest_common_subsequence_memo_top_down(text1, text2)
         assert result == 3, err_msg_invalid_result
         print(result)
 
-        result = self.longest_common_subsequence_tabulation(text1, text2)
+        result = self.longest_common_subsequence_tabulation_bottom_up(text1, text2)
         assert result == 3, err_msg_invalid_result
         print(result)
 
         text1, text2 = "abc", "def"
 
-        result = self.longest_common_subsequence_memo(text1, text2)
+        result = self.longest_common_subsequence_memo_top_down(text1, text2)
         assert result == 0, err_msg_invalid_result
         print(result)
 
-        result = self.longest_common_subsequence_tabulation(text1, text2)
+        result = self.longest_common_subsequence_tabulation_bottom_up(text1, text2)
         assert result == 0, err_msg_invalid_result
         print(result)
 
+    def longest_common_subsequence_memo_top_down(self, text1: str, text2: str) -> int:
+        if not text1 or not text2:
+            return 0
 
-    def longest_common_subsequence_memo(self, text1: str, text2: str) -> int:
-        def lcs(i: int, j: int) -> int:
-            # Base case: if we've reached the end of either string
-            if i == len(text1) or j == len(text2):
+        if text1 == text2:
+            return len(text1)
+
+        lcm_cache = {}
+
+        def helper(i: int, j: int) -> int:
+            # Base case: if we've reached the beginning of either string
+            if i < 0 or j < 0:
                 return 0
+
+            if (i, j) in lcm_cache:
+                return lcm_cache[(i, j)]
 
             # If characters match, include this character and recur for the rest
             if text1[i] == text2[j]:
-                return 1 + lcs(i + 1, j + 1)
-
+                result = 1 + helper(i - 1, j - 1)
             # If characters don't match, return the max of two possibilities:
             # 1. Exclude current character of text1 and recur
             # 2. Exclude current character of text2 and recur
             else:
-                return max(lcs(i + 1, j), lcs(i, j + 1))
+                result = max(helper(i - 1, j), helper(i, j - 1))
 
-        # Start the recursion from the beginning of both strings
-        return lcs(0, 0)
+            lcm_cache[(i, j)] = result
+            return result
 
-    def longest_common_subsequence_tabulation(self, text1: str, text2: str) -> int:
-        rows, cols = len(text1), len(text2)
+        # Start the recursion from the end of both strings
+        return helper(len(text1) - 1, len(text2) - 1)
 
-        if (text1 == text2):
-            return rows
+    def longest_common_subsequence_tabulation_bottom_up(
+        self, text1: str, text2: str
+    ) -> int:
+        if not text1 or not text2:
+            return 0
 
-        # Create a 2D DP table
-        dp = [[0] * (cols + 1) for _ in range(rows + 1)]
+        if text1 == text2:
+            return len(text1)
 
-        # Fill the DP table
-        for row in range(1, rows + 1):
-            for col in range(1, cols + 1):
-                if (text1[row - 1] == text2[col - 1]):
+        ROWS = len(text1)
+        COLS = len(text2)
+        dp = [[0 for _ in range(COLS + 1)] for _ in range(ROWS + 1)]
+
+        for row in range(1, ROWS + 1):
+            for col in range(1, COLS + 1):
+                if text1[row - 1] == text2[col - 1]:
                     dp[row][col] = 1 + dp[row - 1][col - 1]
                 else:
                     dp[row][col] = max(dp[row - 1][col], dp[row][col - 1])
 
-        # The bottom-right cell contains the length of the LCS
-        return dp[rows][cols]
+        return dp[ROWS][COLS]
 
 
 # Create an instance of the class

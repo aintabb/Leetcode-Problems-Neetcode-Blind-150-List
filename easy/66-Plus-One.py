@@ -64,15 +64,15 @@ class Solution:
         assert result == [1, 0, 0, 0], err_msg_invalid_result
         print(result)
 
-
     def plus_one(self, digits: list[int]) -> list[int]:
-        len_digits = len(digits)
+        if not digits:
+            return [0]
 
-        for i in range(len_digits - 1, -1, -1):
-            if (digits[i] + 1 == 10):
-                digits[i] = 0
+        for idx in range(len(digits) - 1, -1, -1):
+            if digits[idx] + 1 == 10:
+                digits[idx] = 0
             else:
-                digits[i] += 1
+                digits[idx] += 1
                 return digits
 
         return [1] + digits

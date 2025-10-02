@@ -39,32 +39,31 @@ class Solution:
         assert result == "56088", err_msg_invalid_result
         print(result)
 
-
     def multiply(self, num1: str, num2: str) -> str:
         if "0" in [num1, num2]:
             return "0"
 
-        len_num1, len_num2 = len(num1), len(num2)
+        len_num1 = len(num1)
+        len_num2 = len(num2)
 
         num1 = num1[::-1]
         num2 = num2[::-1]
-        result = [0] * (len_num1 + len_num2)
+        digits = [0] * (len_num1 + len_num2)
 
         for i in range(len_num1):
             for j in range(len_num2):
-                digit = int(num1[i]) * int(num2[j])
-                result[i + j] += digit
-                result[i + j + 1] += result[i + j] // 10
-                result[i + j] = result[i + j] % 10
+                digits[i + j] += int(num1[i]) * int(num2[j])
+                digits[i + j + 1] += digits[i + j] // 10
+                digits[i + j] = digits[i + j] % 10
 
-        result = result[::-1]
-        beginning = 0
+        digits = digits[::-1]
+        beg_idx = 0
 
-        while (beginning < len(result) and result[beginning] == 0):
-            beginning += 1
+        while beg_idx < len(digits) and digits[beg_idx] == 0:
+            beg_idx += 1
 
-        result = map(str, result[beginning:])
-        return "".join(result)
+        str_digits = map(str, digits[beg_idx:])
+        return "".join(str_digits)
 
 
 # Create an instance of the class

@@ -49,25 +49,21 @@ class DetectSquares:
 
     def __init__(self):
         self.points_map = collections.defaultdict(int)
+        self.points = []
 
     def add(self, point: list[int]) -> None:
         self.points_map[tuple(point)] += 1
+        self.points.append(point)
 
     def count(self, point: list[int]) -> int:
         px, py = point
         result = 0
 
-        points = list(self.points_map.keys())
-
-        for x, y in points:
-            if abs(px - x) != abs(py - y) or x == px or y == py:
+        for x, y in self.points:
+            if abs(x - px) != abs(y - py) or x == px or y == py:
                 continue
 
-            result += (
-                self.points_map[(x, y)]
-                * self.points_map[(x, py)]
-                * self.points_map[(px, y)]
-            )
+            result += self.points_map[(x, py)] * self.points_map[(px, y)]
 
         return result
 
@@ -80,9 +76,7 @@ class DetectSquares:
 
 # Create an instance of the class
 detect_squares = DetectSquares()
-
 err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
-
 
 # Test Case
 ops = ["DetectSquares", "add", "add", "add", "count", "count", "add", "count"]

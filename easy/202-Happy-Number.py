@@ -65,12 +65,17 @@ class Solution:
         assert result == True, err_msg_invalid_result
         print(result)
 
-
     def is_happy_with_set(self, n: int) -> bool:
-        visited = set()
+        if not n:
+            return False
 
-        while n not in visited:
-            visited.add(n)
+        if n == 1:
+            return True
+
+        visited_set = set()
+
+        while n not in visited_set:
+            visited_set.add(n)
 
             n = self.sum_of_digits(n)
 
@@ -79,24 +84,32 @@ class Solution:
 
         return False
 
-    def sum_of_digits(self, n: int) -> int:
-        output = 0
+    def sum_of_digits(self, num: int) -> int:
+        result = 0
 
-        while n:
-            output += (n % 10) ** 2
-            n = n // 10
+        while num:
+            result += (num % 10) ** 2
+            num = num // 10
 
-        return output
+        return result
 
     def is_happy_with_floyds_cycle_algorithm(self, n: int) -> bool:
-        slow, fast = n, self.sum_of_digits(n)
+        if not n:
+            return False
 
-        while (slow != fast):
+        if n == 1:
+            return True
+
+        slow = n
+        fast = self.sum_of_digits(n)
+
+        while slow != fast:
             slow = self.sum_of_digits(slow)
             fast = self.sum_of_digits(fast)
             fast = self.sum_of_digits(fast)
 
-        return True if fast == 1 else False
+        return True if slow == 1 else False
+
 
 # Create an instance of the class
 solution = Solution()

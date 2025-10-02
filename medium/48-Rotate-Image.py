@@ -21,26 +21,33 @@ n == matrix.length == matrix[i].length
 """
 
 
-# Time Complexity:  O(N**2)
+# Time Complexity:  O(N^2)
 # Space Complexity: O(1)
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        matrix = [[1,2,3],[4,5,6],[7,8,9]]
+        matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 
         self.rotate(matrix)
-        assert matrix == [[7,4,1],[8,5,2],[9,6,3]], err_msg_invalid_result
+        assert matrix == [[7, 4, 1], [8, 5, 2], [9, 6, 3]], err_msg_invalid_result
         print(matrix)
 
-        matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]
+        matrix = [[5, 1, 9, 11], [2, 4, 8, 10], [13, 3, 6, 7], [15, 14, 12, 16]]
 
         self.rotate(matrix)
-        assert matrix == [[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]], err_msg_invalid_result
+        assert matrix == [
+            [15, 13, 2, 5],
+            [14, 3, 4, 1],
+            [12, 6, 8, 9],
+            [16, 7, 10, 11],
+        ], err_msg_invalid_result
         print(matrix)
-
 
     def rotate(self, matrix: list[list[int]]) -> None:
+        if not matrix or not matrix[0]:
+            return
+
         len_matrix = len(matrix)
 
         # Step 1: Transpose the matrix

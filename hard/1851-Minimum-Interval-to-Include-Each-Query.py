@@ -35,8 +35,6 @@ intervals[i].length == 2
 """
 
 import heapq
-from re import A
-from unittest import result
 
 
 # Time Complexity:  O(N*logN + M*logM)

@@ -3,7 +3,7 @@ You are given an m x n grid rooms initialized with these three possible values.
 
 - -1 A wall or an obstacle.
 - 0 A gate.
-- INF Infinity means an empty room. We use the value 231 - 1 = 2147483647 to represent INF as you may assume that the distance to a gate is less than 2147483647.
+- INF Infinity means an empty room. We use the value 2^31 - 1 = 2147483647 to represent INF as you may assume that the distance to a gate is less than 2147483647.
 Fill each empty room with the distance to its nearest gate. If it is impossible to reach a gate, it should be filled with INF.
 
 
@@ -26,7 +26,7 @@ rooms[i][j] is -1, 0, or 2**31 - 1.
 
 # Time Complexity:  O(m*n)
 # Space Complexity: O(m*n)
-from collections import deque
+import collections
 
 
 class Solution:
@@ -527,29 +527,34 @@ class Solution:
 
     # 0 -> gate, -1 -> A wall or an obstacle, INF -> empty room
     def walls_and_gates(self, rooms: list[list[int]]) -> None:
-        GATE, EMPTY = 0, 2**31 - 1
-        rows, cols = len(rooms), len(rooms[0])
+        if not rooms or not rooms[0]:
+            return
 
-        queue = deque()
+        ROWS, COLS = len(rooms), len(rooms[0])
+        GATE = 0
+        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
-        for row in range(rows):
-            for col in range(cols):
+        cell_q = collections.deque()
+
+        for row in range(ROWS):
+            for col in range(COLS):
                 if rooms[row][col] == GATE:
-                    queue.appendleft((row, col, 0))
+                    cell_q.append([row, col, 0])
 
-        while queue:
-            row, col, dist = queue.pop()
+        while cell_q:
+            row, col, dist = cell_q.pop()
 
-            for r_offset, c_offset in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
-                new_r, new_c = row + r_offset, col + c_offset
+            for dx, dy in dirs:
+                new_row = row + dx
+                new_col = col + dy
 
                 if (
-                    0 <= new_r < rows
-                    and 0 <= new_c < cols
-                    and dist + 1 < rooms[new_r][new_c]
+                    0 <= new_row < ROWS
+                    and 0 <= new_col < COLS
+                    and dist + 1 < rooms[new_row][new_col]
                 ):
-                    rooms[new_r][new_c] = dist + 1
-                    queue.append((new_r, new_c, dist + 1))
+                    rooms[new_row][new_col] = dist + 1
+                    cell_q.append([new_row, new_col, dist + 1])
 
 
 # Create an instance of the class

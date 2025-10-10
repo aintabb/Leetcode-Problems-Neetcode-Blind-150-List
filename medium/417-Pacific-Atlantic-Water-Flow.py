@@ -78,42 +78,44 @@ class Solution:
     # top, left -> pacific
     # bottom, right -> atlantic
     def pacific_atlantic(self, heights: list[list[int]]) -> list[list[int]]:
+        if not heights or not heights[0]:
+            return [[]]
+
+        ROWS, COLS = len(heights), len(heights[0])
+        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+
+        pacific_set = set()
+        atlantic_set = set()
         result = []
 
-        if not heights or not heights[0]:
-            return result
-
-        rows, cols = len(heights), len(heights[0])
-        pacific_set, atlantic_set = set(), set()
-        dirs = [(0, 1), (1, 0), (-1, 0), (0, -1)]
-
-        def dfs(row: int, col: int, flow_set: set, prev_height: int) -> None:
-            if (
-                row < 0
-                or row == rows
-                or col < 0
-                or col == cols
-                or (row, col) in flow_set
-                or heights[row][col] < prev_height
+        def helper(row: int, col: int, flow_set: set, prev_height: int) -> None:
+            if not (
+                0 <= row < ROWS
+                and 0 <= col < COLS
+                and (row, col) not in flow_set
+                and prev_height <= heights[row][col]
             ):
                 return
 
             flow_set.add((row, col))
+            prev_height = heights[row][col]
 
-            for r_offset, c_offset in dirs:
-                new_row, new_col = row + r_offset, col + c_offset
-                dfs(new_row, new_col, flow_set, heights[row][col])
+            for dx, dy in dirs:
+                new_row = row + dx
+                new_col = col + dy
 
-        for row in range(rows):
-            dfs(row, 0, pacific_set, heights[row][0])
-            dfs(row, cols - 1, atlantic_set, heights[row][cols - 1])
+                helper(new_row, new_col, flow_set, prev_height)
 
-        for col in range(cols):
-            dfs(0, col, pacific_set, heights[0][col])
-            dfs(rows - 1, col, atlantic_set, heights[rows - 1][col])
+        for row in range(ROWS):
+            helper(row, 0, pacific_set, heights[row][0])
+            helper(row, COLS - 1, atlantic_set, heights[row][COLS - 1])
 
-        for row in range(rows):
-            for col in range(cols):
+        for col in range(COLS):
+            helper(0, col, pacific_set, heights[0][col])
+            helper(ROWS - 1, col, atlantic_set, heights[ROWS - 1][col])
+
+        for row in range(ROWS):
+            for col in range(COLS):
                 if (row, col) in pacific_set and (row, col) in atlantic_set:
                     result.append([row, col])
 

@@ -39,10 +39,10 @@ class Solution:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
         grid = [
-            ["1","1","1","1","0"],
-            ["1","1","0","1","0"],
-            ["1","1","0","0","0"],
-            ["0","0","0","0","0"]
+            ["1", "1", "1", "1", "0"],
+            ["1", "1", "0", "1", "0"],
+            ["1", "1", "0", "0", "0"],
+            ["0", "0", "0", "0", "0"],
         ]
 
         result = self.num_islands_with_set(grid)
@@ -54,10 +54,10 @@ class Solution:
         print(result)
 
         grid = [
-            ["1","1","0","0","0"],
-            ["1","1","0","0","0"],
-            ["0","0","1","0","0"],
-            ["0","0","0","1","1"]
+            ["1", "1", "0", "0", "0"],
+            ["1", "1", "0", "0", "0"],
+            ["0", "0", "1", "0", "0"],
+            ["0", "0", "0", "1", "1"],
         ]
 
         result = self.num_islands_with_set(grid)
@@ -67,7 +67,6 @@ class Solution:
         result = self.num_islands_without_set(grid)
         assert result == 3, err_msg_invalid_result
         print(result)
-
 
     def num_islands_without_set(self, grid: list[list[str]]) -> int:
         if not grid:
@@ -100,31 +99,33 @@ class Solution:
         if not grid or not grid[0]:
             return 0
 
-        rows, cols = len(grid), len(grid[0])
+        ROWS, COLS = len(grid), len(grid[0])
+        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
         visited_set = set()
 
-        def traverse(row: int, col: int) -> None:
-            for row_offset, col_offset in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
-                new_r, new_c = row + row_offset, col + col_offset
+        def helper(row: int, col: int) -> None:
+            for dx, dy in dirs:
+                new_row = row + dx
+                new_col = col + dy
 
                 if (
-                    0 <= new_r < rows
-                    and 0 <= new_c < cols
-                    and grid[new_r][new_c] == "1"
-                    and (new_r, new_c) not in visited_set
+                    0 <= new_row < ROWS
+                    and 0 <= new_col < COLS
+                    and grid[new_row][new_col] == "1"
+                    and (new_row, new_col) not in visited_set
                 ):
-                    visited_set.add((new_r, new_c))
-                    traverse(new_r, new_c)
+                    visited_set.add((new_row, new_col))
+                    helper(new_row, new_col)
 
-        num_of_islands = 0
-        for row in range(rows):
-            for col in range(cols):
+        result = 0
+        for row in range(ROWS):
+            for col in range(COLS):
                 if grid[row][col] == "1" and (row, col) not in visited_set:
                     visited_set.add((row, col))
-                    num_of_islands += 1
-                    traverse(row, col)
+                    result += 1
+                    helper(row, col)
 
-        return num_of_islands
+        return result
 
 
 # Create an instance of the class

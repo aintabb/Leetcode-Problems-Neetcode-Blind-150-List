@@ -27,8 +27,8 @@ The given graph is connected.
 """
 
 
-# Time Complexity:  O(V)
-# Space Complexity: O(V)
+# Time Complexity:  O(N)
+# Space Complexity: O(N)
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
@@ -67,10 +67,10 @@ class Solution:
             return []
 
         len_edges = len(edges)
-        parents = [i for i in range(len_edges + 1)]
+        parents = list(range(len_edges + 1))
         ranks = [1] * (len_edges + 1)
 
-        def find(node: int) -> int:
+        def find_parent(node: int) -> int:
             while node != parents[node]:
                 parents[node] = parents[parents[node]]
                 node = parents[node]
@@ -78,17 +78,18 @@ class Solution:
             return node
 
         def union(node_one: int, node_two: int) -> bool:
-            parent_one, parent_two = find(node_one), find(node_two)
+            p_one = find_parent(node_one)
+            p_two = find_parent(node_two)
 
-            if parent_one == parent_two:
+            if p_one == p_two:
                 return False
 
-            if ranks[parent_one] > ranks[parent_two]:
-                ranks[parent_one] += ranks[parent_two]
-                parents[parent_two] = parent_one
+            if ranks[p_one] > ranks[p_two]:
+                ranks[p_one] += ranks[p_two]
+                parents[p_two] = p_one
             else:
-                ranks[parent_two] += ranks[parent_one]
-                parents[parent_one] = parent_two
+                ranks[p_two] += ranks[p_one]
+                parents[p_one] = p_two
 
             return True
 

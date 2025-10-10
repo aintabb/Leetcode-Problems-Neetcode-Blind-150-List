@@ -32,8 +32,14 @@ class Solution:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
         grid = [
-            [0,0,1,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,1,1,0,1,0,0,0,0,0,0,0,0],[0,1,0,0,1,1,0,0,1,0,1,0,0],
-            [0,1,0,0,1,1,0,0,1,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,1,1,0,0,0,0]
+            [0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+            [0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0],
+            [0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
         ]
 
         result = self.max_area_of_island_with_set(grid)
@@ -44,7 +50,7 @@ class Solution:
         assert result == 6, err_msg_invalid_result
         print(result)
 
-        grid = [[0,0,0,0,0,0,0,0]]
+        grid = [[0, 0, 0, 0, 0, 0, 0, 0]]
 
         result = self.max_area_of_island_with_set(grid)
         assert result == 0, err_msg_invalid_result
@@ -53,7 +59,6 @@ class Solution:
         result = self.max_area_of_island_without_set(grid)
         assert result == 0, err_msg_invalid_result
         print(result)
-
 
     def max_area_of_island_without_set(self, grid: list[list[int]]) -> int:
         if not grid:
@@ -82,19 +87,19 @@ class Solution:
 
         return max_area
 
-
     def max_area_of_island_with_set(self, grid: list[list[int]]) -> int:
-        if not grid:
+        if not grid or not grid[0]:
             return 0
 
-        rows, cols = len(grid), len(grid[0])
+        ROWS, COLS = len(grid), len(grid[0])
+        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
         visited_set = set()
 
-        def traverse(row: int, col: int) -> int:
+        def helper(row: int, col: int) -> int:
             if not (
-                0 <= row < rows and
-                0 <= col < cols and
-                grid[row][col] == 1
+                0 <= row < ROWS
+                and 0 <= col < COLS
+                and grid[row][col] == 1
                 and (row, col) not in visited_set
             ):
                 return 0
@@ -102,17 +107,18 @@ class Solution:
             visited_set.add((row, col))
 
             max_area = 1
-
-            for r_offset, c_offset in (0, 1), (1, 0), (0, -1), (-1, 0):
-                next_r, next_c = row + r_offset, col + c_offset
-                max_area += traverse(next_r, next_c)
+            for dx, dy in dirs:
+                new_row = row + dx
+                new_col = col + dy
+                max_area += helper(new_row, new_col)
 
             return max_area
 
         max_area = 0
-        for row in range(rows):
-            for col in range(cols):
-                max_area = max(max_area, traverse(row, col))
+        for row in range(ROWS):
+            for col in range(COLS):
+                if grid[row][col] == 1:
+                    max_area = max(max_area, helper(row, col))
 
         return max_area
 

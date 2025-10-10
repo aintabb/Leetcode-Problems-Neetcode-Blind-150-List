@@ -41,52 +41,66 @@ class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        num_courses, prerequisites = 2, [[1, 0]]
+        num_courses = 2
+        prerequisites = [[1, 0]]
 
         result = self.find_order(num_courses, prerequisites)
+        result.sort()
         assert result == [0, 1], err_msg_invalid_result
         print(result)
 
-        num_courses, prerequisites = 4, [[1, 0], [2, 0], [3, 1], [3, 2]]
+        num_courses = 4
+        prerequisites = [[1, 0], [2, 0], [3, 1], [3, 2]]
 
         result = self.find_order(num_courses, prerequisites)
+        result.sort()
         assert result == [0, 1, 2, 3], err_msg_invalid_result
         print(result)
 
-    def find_order(self, num_courses: int, prerequisites: list[list[int]]) -> list[int]:
-        graph = collections.defaultdict(list)
-        for course, prereq in prerequisites:
-            graph[prereq].append(course)
+        num_courses = 1
+        prereq = []
 
-        order = []
+        result = self.find_order(num_courses, prereq)
+        assert result == [0], err_msg_invalid_result
+        print(result)
+
+    def find_order(self, num_courses: int, prereq: list[list[int]]) -> list[int]:
+        if (not prereq or not prereq[0]) and num_courses < 1:
+            return []
+
+        adj_list = collections.defaultdict(list)
+        for course, pr in prereq:
+            adj_list[pr].append(course)
 
         UNVISITED = 0
         VISITING = 1
         VISITED = 2
 
-        visit = [UNVISITED] * num_courses
+        order_list = []
+        visit_list = [UNVISITED] * num_courses
 
-        def dfs(course: int) -> bool:
-            if visit[course] == VISITING:
-                return False
-            if visit[course] == VISITED:
+        def helper(course: int) -> bool:
+            if visit_list[course] == VISITED:
                 return True
 
-            visit[course] = VISITING
-            for neigh in graph[course]:
-                if not dfs(neigh):
+            if visit_list[course] == VISITING:
+                return False
+
+            visit_list[course] = VISITING
+
+            for neigh in adj_list[course]:
+                if not helper(neigh):
                     return False
-            visit[course] = VISITED
 
-            order.append(course)
-
+            order_list.append(course)
+            visit_list[course] = VISITED
             return True
 
         for course in range(num_courses):
-            if not dfs(course):
+            if not helper(course):
                 return []
 
-        return order[::-1]
+        return order_list[::-1]
 
 
 # Create an instance of the class

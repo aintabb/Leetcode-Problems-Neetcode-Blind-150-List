@@ -52,25 +52,32 @@ class Solution:
     """
 
     def valid_tree(self, n: int, edges: list[list[int]]) -> bool:
+        if n < 0 or not edges:
+            return True
+
         if len(edges) != n - 1:
             return False
 
-        graph = collections.defaultdict(list)
+        adj_list = collections.defaultdict(list)
         for u, v in edges:
-            graph[u].append(v)
-            graph[v].append(u)
+            adj_list[u].append(v)
+            adj_list[v].append(u)
 
-        visited = set()
+        visited_set = set()
 
-        def dfs(node: int) -> None:
-            visited.add(node)
+        def helper(node: int) -> None:
+            if node in visited_set:
+                return
 
-            for neigh in graph[node]:
-                if neigh not in visited:
-                    dfs(neigh)
+            visited_set.add(node)
 
-        dfs(0)
-        return len(visited) == n
+            for neigh in adj_list[node]:
+                helper(neigh)
+
+            return
+
+        helper(0)
+        return len(visited_set) == n
 
 
 # Create an instance of the class

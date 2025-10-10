@@ -55,36 +55,38 @@ class Solution:
         assert result == True, err_msg_invalid_result
         print(result)
 
-    def can_finish(self, num_courses: int, prerequisites: list[list[int]]) -> bool:
-        if not prerequisites or not prerequisites[0]:
+    def can_finish(self, num_courses: int, prereq: list[list[int]]) -> bool:
+        if not prereq or not prereq[0]:
             return True
 
-        graph = collections.defaultdict(list)
-        for course, prereq in prerequisites:
-            graph[prereq].append(course)
+        adj_list = collections.defaultdict(list)
+        for course, pr in prereq:
+            adj_list[pr].append(course)
 
         UNVISITED = 0
         VISITING = 1
         VISITED = 2
 
-        visit = [UNVISITED] * num_courses
+        visit_list = [UNVISITED] * num_courses
 
-        def dfs(course: int) -> bool:
-            if visit[course] == VISITING:
-                return False
-            if visit[course] == VISITED:
+        def helper(course: int) -> bool:
+            if visit_list[course] == VISITED:
                 return True
 
-            visit[course] = VISITING
-            for neigh in graph[course]:
-                if not dfs(neigh):
-                    return False
-            visit[course] = VISITED
+            if visit_list[course] == VISITING:
+                return False
 
+            visit_list[course] = VISITING
+
+            for neigh in adj_list[course]:
+                if not helper(neigh):
+                    return False
+
+            visit_list[course] = VISITED
             return True
 
         for course in range(num_courses):
-            if not dfs(course):
+            if not helper(course):
                 return False
 
         return True

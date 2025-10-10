@@ -23,50 +23,55 @@ ai != bi
 There are no repeated edges.
 """
 
-
-# Time Complexity:  O(V+E)
-# Space Complexity: O(V+E)
+# Time Complexity:  O(N)
+# Space Complexity: O(N)
 
 import collections
+
+
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
-        n, edges = 5, [[0,1],[1,2],[3,4]]
+        n, edges = 5, [[0, 1], [1, 2], [3, 4]]
 
         result = self.count_components(n, edges)
         assert result == 2, err_msg_invalid_result
         print(result)
 
-        n, edges = 5, [[0,1],[1,2],[2,3],[3,4]]
+        n, edges = 5, [[0, 1], [1, 2], [2, 3], [3, 4]]
 
         result = self.count_components(n, edges)
         assert result == 1, err_msg_invalid_result
         print(result)
 
-
     def count_components(self, n: int, edges: list[list[int]]) -> int:
-        graph_map = collections.defaultdict(list)
+        if n == 0:
+            return 0
 
-        for node, edge in edges:
-            graph_map[node].append(edge)
-            graph_map[edge].append(node)
+        adj_list = collections.defaultdict(list)
+        for u, v in edges:
+            adj_list[u].append(v)
+            adj_list[v].append(u)
 
         result = 0
         visited_set = set()
 
-        def dfs(node: int) -> None:
+        def helper(node: int) -> None:
+            if node in visited_set:
+                return
+
             visited_set.add(node)
 
-            for neighbor in graph_map[node]:
-                if neighbor not in visited_set:
-                    dfs(neighbor)
+            for neigh in adj_list[node]:
+                helper(neigh)
 
+            return
 
         for node in range(n):
             if node not in visited_set:
-                dfs(node)
                 result += 1
+                helper(node)
 
         return result
 

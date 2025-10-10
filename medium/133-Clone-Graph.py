@@ -103,8 +103,8 @@ class Solution:
             clone_node = Node(node_to_clone.val)
             old_to_new_map[node_to_clone] = clone_node
 
-            for neighbor in node_to_clone.neighbors:
-                clone_node.neighbors.append(clone(neighbor))
+            for neigh in node_to_clone.neighbors:
+                clone_node.neighbors.append(clone(neigh))
 
             return clone_node
 

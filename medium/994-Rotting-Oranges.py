@@ -63,17 +63,17 @@ class Solution:
         if not grid or not grid[0]:
             return 0
 
-        rows, cols = len(grid), len(grid[0])
+        ROWS, COLS = len(grid), len(grid[0])
         FRESH, ROTTEN = 1, 2
-        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-
-        queue = collections.deque()
+        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
         fresh_count = 0
 
-        for row in range(rows):
-            for col in range(cols):
+        cell_q = collections.deque()
+
+        for row in range(ROWS):
+            for col in range(COLS):
                 if grid[row][col] == ROTTEN:
-                    queue.appendleft((row, col, 0))
+                    cell_q.appendleft([row, col, 0])
                 elif grid[row][col] == FRESH:
                     fresh_count += 1
 
@@ -81,22 +81,23 @@ class Solution:
             return 0
 
         min_minutes_spent = 0
-        while queue and fresh_count > 0:
-            row, col, minutes_spent = queue.pop()
+        while cell_q and fresh_count > 0:
+            row, col, minutes_spent = cell_q.pop()
 
-            for dy, dx in dirs:
-                new_row, new_col = row + dy, col + dx
+            for dx, dy in dirs:
+                new_row = row + dx
+                new_col = col + dy
 
                 if (
-                    0 <= new_row < rows
-                    and 0 <= new_col < cols
+                    0 <= new_row < ROWS
+                    and 0 <= new_col < COLS
                     and grid[new_row][new_col] == FRESH
                 ):
                     grid[new_row][new_col] = ROTTEN
-                    queue.appendleft((new_row, new_col, minutes_spent + 1))
                     fresh_count -= 1
-
                     min_minutes_spent = minutes_spent + 1
+
+                    cell_q.appendleft([new_row, new_col, minutes_spent + 1])
 
         return min_minutes_spent if fresh_count == 0 else -1
 

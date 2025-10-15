@@ -26,32 +26,41 @@ Constraints:
 All pairs (xi, yi) are distinct.
 """
 
+# Time Complexity:  O(N^2*logN) -> same for both
+# Space Complexity: O(N^2) -> same for both
+import heapq
 
-# Time Complexity:  O(n**2*log(n))
-# Space Complexity: O(n**2)
+
 class Solution:
     def __init__(self) -> None:
         err_msg_invalid_result = "Provided result is not correct. Something is wrong!"
 
         points = [[0, 0], [2, 2], [3, 10], [5, 2], [7, 0]]
 
-        result = self.min_cost_connect_points(points)
+        result = self.min_cost_connect_points_kruskals_algo(points)
+        assert result == 20, err_msg_invalid_result
+        print(result)
+
+        result = self.min_cost_connect_points_prims_algo(points)
         assert result == 20, err_msg_invalid_result
         print(result)
 
         points = [[3, 12], [-2, 5], [-4, 1]]
 
-        result = self.min_cost_connect_points(points)
+        result = self.min_cost_connect_points_kruskals_algo(points)
         assert result == 18, err_msg_invalid_result
         print(result)
 
-    def min_cost_connect_points(self, points: list[list[int]]) -> int:
+        result = self.min_cost_connect_points_prims_algo(points)
+        assert result == 18, err_msg_invalid_result
+        print(result)
+
+    def min_cost_connect_points_kruskals_algo(self, points: list[list[int]]) -> int:
         if not points or not points[0]:
             return 0
 
-        # Union-Find part
         len_points = len(points)
-        parents = [i for i in range(len_points + 1)]
+        parents = list(range(len_points + 1))
         ranks = [1] * (len_points + 1)
 
         def find(node: int) -> int:
@@ -62,7 +71,9 @@ class Solution:
             return node
 
         def union(node_one: int, node_two: int) -> bool:
-            parent_one, parent_two = find(node_one), find(node_two)
+            parent_one = find(node_one)
+            parent_two = find(node_two)
+
             if parent_one == parent_two:
                 return False
 
@@ -77,20 +88,55 @@ class Solution:
 
         edges = []
         for i in range(len_points):
-            xi_one, yi_one = points[i]
+            x1, y1 = points[i]
             for j in range(i + 1, len_points):
-                xi_two, yi_two = points[j]
-                dist = abs(xi_one - xi_two) + abs(yi_one - yi_two)
+                x2, y2 = points[j]
+                dist = abs(x1 - x2) + abs(y1 - y2)
                 edges.append([dist, i, j])
 
         edges.sort()
 
-        min_cost = 0
-        for dist, u, v in edges:
-            if union(u, v):
-                min_cost += dist
+        result = 0
+        for dist, i, j in edges:
+            if union(i, j):
+                result += dist
 
-        return min_cost
+        return result
+
+    def min_cost_connect_points_prims_algo(self, points: list[list[int]]) -> int:
+        if not points or not points[0]:
+            return 0
+
+        len_points = len(points)
+        adj_list = {idx: [] for idx in range(len_points)}  # i : list of [cost, node]
+
+        for i in range(len_points):
+            x1, y1 = points[i]
+            for j in range(i + 1, len_points):
+                x2, y2 = points[j]
+                dist = abs(x1 - x2) + abs(y1 - y2)
+                adj_list[i].append([dist, j])
+                adj_list[j].append([dist, i])
+
+        # Prim's algo
+        result = 0
+        visited_set = set()
+        min_heap = [[0, 0]]  # [cost, point]
+
+        while len(visited_set) < len_points:
+            curr_cost, curr_node = heapq.heappop(min_heap)
+
+            if curr_node in visited_set:
+                continue
+
+            visited_set.add(curr_node)
+            result += curr_cost
+
+            for neigh_cost, neigh in adj_list[curr_node]:
+                if neigh not in visited_set:
+                    heapq.heappush(min_heap, [neigh_cost, neigh])
+
+        return result
 
 
 # Create an instance of the class

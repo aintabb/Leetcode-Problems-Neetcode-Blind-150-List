@@ -40,8 +40,9 @@ There will not be any multiple flights between two cities.
 src != dst
 """
 
-# Time Complexity:  O((V+E)*logV)
-# Space Complexity: O(V)
+# Time Complexity:  O((V+E)*logV) -> for the regular, O(n*k) -> for the modified
+# Space Complexity: O(V) -> for the regular, O(n+m) -> for the modified
+## Where n is the number of cities, m is the number of flights and k is the number of stops.
 import collections
 import heapq
 
@@ -56,7 +57,11 @@ class Solution:
         dst = 3
         k = 1
 
-        result = self.find_cheapest_price(n, flights, src, dst, k)
+        result = self.find_cheapest_price_dijkstra(n, flights, src, dst, k)
+        assert result == 700, err_msg_invalid_result
+        print(result)
+
+        result = self.find_cheapest_price_dijkstra_modified(n, flights, src, dst, k)
         assert result == 700, err_msg_invalid_result
         print(result)
 
@@ -66,7 +71,11 @@ class Solution:
         dst = 2
         k = 1
 
-        result = self.find_cheapest_price(n, flights, src, dst, k)
+        result = self.find_cheapest_price_dijkstra(n, flights, src, dst, k)
+        assert result == 200, err_msg_invalid_result
+        print(result)
+
+        result = self.find_cheapest_price_dijkstra_modified(n, flights, src, dst, k)
         assert result == 200, err_msg_invalid_result
         print(result)
 
@@ -76,20 +85,24 @@ class Solution:
         dst = 2
         k = 0
 
-        result = self.find_cheapest_price(n, flights, src, dst, k)
+        result = self.find_cheapest_price_dijkstra(n, flights, src, dst, k)
         assert result == 500, err_msg_invalid_result
         print(result)
 
-    def find_cheapest_price(
+        result = self.find_cheapest_price_dijkstra_modified(n, flights, src, dst, k)
+        assert result == 500, err_msg_invalid_result
+        print(result)
+
+    def find_cheapest_price_dijkstra(
         self, n: int, flights: list[list[int]], src: int, dst: int, k: int
     ) -> int:
-        if not flights:
+        if not flights or not flights[0] or n < 1:
             return -1
 
         # Step 1: Build the graph
-        graph = collections.defaultdict(list)
+        adj_list = collections.defaultdict(list)
         for u, v, w in flights:
-            graph[u].append((v, w))
+            adj_list[u].append((v, w))
 
         # Step 2: Priority queue to store (cost, current_city, stops)
         min_heap = [(0, src, 0)]  # (cost, city, stops)
@@ -106,7 +119,7 @@ class Solution:
 
             # If stops are within limits, explore neighbors
             if stops <= k:
-                for neigh, price in graph[city]:
+                for neigh, price in adj_list[city]:
                     new_cost = cost + price
                     dict_key = (neigh, stops + 1)
                     if dict_key not in min_cost or new_cost < min_cost[dict_key]:
@@ -115,6 +128,34 @@ class Solution:
 
         # If destination is not reachable within k stops
         return -1
+
+    def find_cheapest_price_dijkstra_modified(
+        self, n: int, flights: list[list[int]], src: int, dst: int, k: int
+    ) -> int:
+        if not flights or not flights[0] or n < 1:
+            return -1
+
+        prices = [float("inf")] * n
+        prices[src] = 0
+
+        adj_list = collections.defaultdict(list)
+        for u, v, w in flights:
+            adj_list[u].append([v, w])  # {from : [to, cost]}
+
+        q = collections.deque([(0, src, 0)])  # (cost, city, stops)
+
+        while q:
+            curr_cost, curr_city, stops = q.pop()
+
+            if stops > k:
+                continue
+
+            for neigh, cost in adj_list[curr_city]:
+                next_cost = curr_cost + cost
+                prices[neigh] = next_cost
+                q.appendleft((next_cost, neigh, stops + 1))
+
+        return int(prices[dst] if prices[dst] != float("inf") else -1)
 
 
 # Create an instance of the class
